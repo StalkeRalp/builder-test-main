@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TDE Group - Building • Powering • Connecting the Future</title>
+    <meta name="description"
+        content="TDE Group is a multi-disciplinary services company delivering reliable, innovative, and cost-effective solutions." />
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="./src/style.css" />
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body class="bg-gray-50 text-slate-800 font-sans antialiased overflow-x-hidden">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-white/90 backdrop-blur-md border-b border-tde-light transition-all duration-300 shadow-sm"
+        id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-24 items-center">
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="index.html" class="flex items-center gap-3 group">
+                        <!-- Logo Icon with Gradient -->
+                        <div
+                            class="bg-premium-gradient text-white p-2.5 rounded-xl shadow-lg transform group-hover:scale-105 transition-transform duration-300">
+                            <i data-lucide="building-2" class="w-6 h-6"></i>
+                        </div>
+                        <div class="flex flex-col">
+                            <span
+                                class="font-display font-bold text-2xl text-slate-900 tracking-tight leading-none group-hover:text-tde-secondary transition-colors">TDE
+                                Group</span>
+                            <span
+                                class="text-[10px] font-medium text-tde-accent tracking-widest uppercase">Multi-Services</span>
+                        </div>
+                    </a>
+                </div>
+                <!-- Desktop Menu -->
+                <div
+                    class="hidden md:flex space-x-1 items-center bg-white/50 p-1 rounded-full border border-gray-100 shadow-sm">
+                    <a href="index.html"
+                        class="px-5 py-2.5 rounded-full text-tde-secondary font-medium bg-tde-light/50 transition-all">Home</a>
+                    <div class="relative group">
+                        <button
+                            class="px-5 py-2.5 rounded-full text-slate-600 font-medium hover:text-tde-secondary hover:bg-white transition-all flex items-center gap-1">
+                            Services <i data-lucide="chevron-down" class="w-4 h-4 mt-0.5"></i>
+                        </button>
+                        <!-- Dropdown -->
+                        <div
+                            class="absolute left-1/2 -translate-x-1/2 mt-4 w-64 bg-white/95 backdrop-blur-xl rounded-2xl shadow-xl border border-gray-100 py-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top overflow-hidden">
+                            <a href="construction.html"
+                                class="flex items-center gap-3 px-4 py-3 hover:bg-tde-light group/item">
+                                <span
+                                    class="bg-blue-50 p-2 rounded-lg text-blue-600 group-hover/item:bg-blue-600 group-hover/item:text-white transition-colors"><i
+                                        data-lucide="hard-hat" class="w-4 h-4"></i></span>
+                                <span
+                                    class="text-sm font-medium text-slate-700 group-hover/item:text-blue-700">Construction</span>
+                            </a>
+                            <a href="energy.html"
+                                class="flex items-center gap-3 px-4 py-3 hover:bg-tde-light group/item">
+                                <span
+                                    class="bg-amber-50 p-2 rounded-lg text-amber-600 group-hover/item:bg-amber-500 group-hover/item:text-white transition-colors"><i
+                                        data-lucide="zap" class="w-4 h-4"></i></span>
+                                <span class="text-sm font-medium text-slate-700 group-hover/item:text-amber-700">Energy
+                                    Solutions</span>
+                            </a>
+                            <a href="it-services.html"
+                                class="flex items-center gap-3 px-4 py-3 hover:bg-tde-light group/item">
+                                <span
+                                    class="bg-indigo-50 p-2 rounded-lg text-indigo-600 group-hover/item:bg-indigo-600 group-hover/item:text-white transition-colors"><i
+                                        data-lucide="monitor" class="w-4 h-4"></i></span>
+                                <span class="text-sm font-medium text-slate-700 group-hover/item:text-indigo-700">IT
+                                    Services</span>
+                            </a>
+                            <a href="supply.html"
+                                class="flex items-center gap-3 px-4 py-3 hover:bg-tde-light group/item">
+                                <span
+                                    class="bg-emerald-50 p-2 rounded-lg text-emerald-600 group-hover/item:bg-emerald-600 group-hover/item:text-white transition-colors"><i
+                                        data-lucide="package" class="w-4 h-4"></i></span>
+                                <span
+                                    class="text-sm font-medium text-slate-700 group-hover/item:text-emerald-700">General
+                                    Supply</span>
+                            </a>
+                            <a href="consultancy.html"
+                                class="flex items-center gap-3 px-4 py-3 hover:bg-tde-light group/item">
+                                <span
+                                    class="bg-rose-50 p-2 rounded-lg text-rose-600 group-hover/item:bg-rose-600 group-hover/item:text-white transition-colors"><i
+                                        data-lucide="trending-up" class="w-4 h-4"></i></span>
+                                <span
+                                    class="text-sm font-medium text-slate-700 group-hover/item:text-rose-700">Consultancy</span>
+                            </a>
+                        </div>
+                    </div>
+                    <a href="#about"
+                        class="px-5 py-2.5 rounded-full text-slate-600 font-medium hover:text-tde-secondary hover:bg-white transition-all">About</a>
+                </div>
+                <!-- CTA Button -->
+                <div class="hidden md:block">
+                    <a href="#contact"
+                        class="px-6 py-3 bg-black text-purple-50 rounded-full font-semibold shadow-lg shadow-gray-900/30 hover:shadow-gray-900/50 hover:-translate-y-0.5 transition-all duration-300">
+                        Contact Us
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn"
+                        class="text-slate-600 hover:text-tde-secondary focus:outline-none p-2 rounded-lg hover:bg-gray-100 transition-colors">
+                        <i data-lucide="menu" class="w-7 h-7"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu Panel -->
+        <div id="mobile-menu"
+            class="hidden md:hidden bg-white/95 backdrop-blur-xl border-t border-gray-100 shadow-2xl absolute w-full">
+            <div class="px-4 pt-2 pb-8 space-y-2">
+                <a href="index.html"
+                    class="block px-4 py-3 text-base font-bold text-tde-secondary bg-purple-50 rounded-xl">Home</a>
+                <div class="px-4 py-2">
+                    <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">Services</span>
+                </div>
+                <a href="construction.html"
+                    class="block px-4 py-2 text-base font-medium text-slate-600 hover:text-tde-secondary hover:pl-6 transition-all">Construction</a>
+                <a href="energy.html"
+                    class="block px-4 py-2 text-base font-medium text-slate-600 hover:text-tde-secondary hover:pl-6 transition-all">Energy
+                    & Power</a>
+                <a href="it-services.html"
+                    class="block px-4 py-2 text-base font-medium text-slate-600 hover:text-tde-secondary hover:pl-6 transition-all">IT
+                    Services</a>
+                <a href="supply.html"
+                    class="block px-4 py-2 text-base font-medium text-slate-600 hover:text-tde-secondary hover:pl-6 transition-all">Supply</a>
+                <a href="consultancy.html"
+                    class="block px-4 py-2 text-base font-medium text-slate-600 hover:text-tde-secondary hover:pl-6 transition-all">Consultancy</a>
+                <div class="border-t border-gray-100 my-2"></div>
+                <a href="#contact"
+                    class="block px-4 py-3 text-center text-base font-bold text-white bg-premium-gradient rounded-xl shadow-lg mt-4">Contact
+                    Us</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative h-screen min-h-[700px] flex items-center justify-center overflow-hidden">
+        <!-- Background with Premium Overlay -->
+        <div class="absolute inset-0 z-0">
+            <img src="/images/acceuil.jpeg" alt="TDE Group Excellence" class="w-full h-full object-cover">
+            <!-- Premium Purple Gradient Overlay -->
+            <div
+                class="absolute inset-0 bg-gradient-to-r from-tde-primary/95 via-tde-secondary/80 to-purple-900/40 mix-blend-multiply">
+            </div>
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-gray-50/90"></div>
+        </div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div
+                class="inline-block mb-6 px-4 py-1.5 rounded-full border border-white/20 bg-white/10 backdrop-blur-md animate-fade-in">
+                <span class="text-purple-200 font-medium tracking-wider text-sm">INNOVATION • INTEGRITY •
+                    EXCELLENCE</span>
+            </div>
+            <h1
+                class="font-display text-5xl sm:text-6xl md:text-8xl font-bold mb-8 text-purple-50 tracking-tight leading-tight animate-slide-up">
+                Building the <br />
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-200 to-pink-200">Future
+                    Together</span>
+            </h1>
+            <p class="text-lg sm:text-xl text-purple-100 mb-12 max-w-3xl mx-auto leading-relaxed font-light animate-slide-up"
+                style="animation-delay: 0.1s;">
+                Delivering reliable, innovative, and cost-effective multi-disciplinary solutions across construction,
+                energy, and technology.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-5 justify-center items-center animate-slide-up"
+                style="animation-delay: 0.2s;">
+                <a href="#services"
+                    class="px-8 py-4 bg-white text-tde-secondary font-bold rounded-full shadow-2xl hover:shadow-white/20 hover:scale-105 transition-all duration-300 min-w-[180px]">
+                    Explore Services
+                </a>
+                <a href="#contact"
+                    class="px-8 py-4 bg-transparent border border-white/40 text-white font-semibold rounded-full hover:bg-white/10 hover:border-white transition-all min-w-[180px] backdrop-blur-sm">
+                    Contact Us
+                </a>
+            </div>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce opacity-70">
+            <div class="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center p-1">
+                <div class="w-1 h-2 bg-white rounded-full"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Who We Are (Glassmorphism) -->
+    <section id="about" class="py-24 bg-gray-50 relative overflow-hidden">
+        <!-- Decorational blobs -->
+        <div
+            class="absolute top-0 right-0 w-[500px] h-[500px] bg-purple-200/30 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4">
+        </div>
+        <div
+            class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-200/30 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4">
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div class="order-2 md:order-1">
+                    <div class="relative group">
+                        <div
+                            class="absolute -inset-4 bg-premium-gradient rounded-[2rem] opacity-30 group-hover:opacity-40 blur-xl transition duration-500">
+                        </div>
+                        <div class="relative rounded-[2rem] overflow-hidden shadow-2xl h-[500px]">
+                            <!-- Using a business-like image or placeholder -->
+                            <img src="/images/acceuil.jpeg"
+                                class="w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-700"
+                                alt="About TDE">
+                            <div class="absolute inset-0 bg-gradient-to-t from-tde-primary/60 to-transparent"></div>
+                            <div class="absolute bottom-6 left-6 right-6">
+                                <div
+                                    class="bg-white/95 backdrop-blur-md p-6 rounded-2xl shadow-lg border border-white/50">
+                                    <div class="flex items-center gap-4">
+                                        <div class="bg-purple-100 p-3 rounded-full text-tde-secondary">
+                                            <i data-lucide="award" class="w-8 h-8"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm font-bold text-tde-secondary uppercase tracking-widest">
+                                                Excellence</p>
+                                            <p class="text-slate-600 text-sm">Committed to international standards</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="order-1 md:order-2">
+                    <div
+                        class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-100 text-tde-secondary text-sm font-bold mb-6">
+                        <span class="w-2 h-2 rounded-full bg-tde-secondary"></span> WHO WE ARE
+                    </div>
+                    <h2 class="font-display text-4xl md:text-5xl font-bold text-slate-900 mb-8 leading-tight">
+                        We deliver Solutions that <span
+                            class="text-transparent bg-clip-text bg-premium-gradient">Empower Growth.</span>
+                    </h2>
+                    <p class="text-lg text-slate-600 mb-6 leading-relaxed">
+                        TDE Group is a multi-disciplinary powerhouse designed to solve complex challenges. We combine
+                        technical expertise with strategic vision to serve businesses, governments, and individuals.
+                    </p>
+                    <p class="text-lg text-slate-600 mb-10 leading-relaxed">
+                        Our approach is simple: <strong class="text-tde-secondary">Professionalism, Integrity, and
+                            Quality.</strong> We don't just finish projects; we build lasting legacies.
+                    </p>
+
+                    <div class="grid grid-cols-2 gap-6">
+                        <div
+                            class="p-4 bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                            <h4 class="font-display font-bold text-3xl text-tde-secondary mb-1">5+</h4>
+                            <p class="text-sm text-slate-500 font-medium">Core Sectors</p>
+                        </div>
+                        <div
+                            class="p-4 bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                            <h4 class="font-display font-bold text-3xl text-tde-secondary mb-1">100%</h4>
+                            <p class="text-sm text-slate-500 font-medium">Client Commitment</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-20">
+                <div
+                    class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-100 text-tde-secondary text-sm font-bold mb-6">
+                    <span class="w-2 h-2 rounded-full bg-tde-secondary"></span> OUR EXPERTISE
+                </div>
+                <h2 class="font-display text-4xl md:text-5xl font-bold text-slate-900 mb-6">Comprehensive Services</h2>
+                <p class="text-lg text-slate-600">Tailored solutions designed to meet the evolving needs of our clients
+                    across multiple industries.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Service Card 1: Construction -->
+                <a href="construction.html"
+                    class="group relative bg-gray-50 rounded-3xl overflow-hidden hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+                    <div class="h-48 overflow-hidden">
+                        <img src="/building/building.jpg"
+                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                            alt="Construction">
+                        <div class="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent"></div>
+                        <div class="absolute bottom-4 left-6">
+                            <div class="bg-blue-600 p-2.5 rounded-xl inline-block mb-2 shadow-lg">
+                                <i data-lucide="hard-hat" class="w-6 h-6 text-white"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-8">
+                        <h3
+                            class="font-display text-2xl font-bold text-slate-900 mb-3 group-hover:text-blue-600 transition-colors">
+                            Construction</h3>
+                        <p class="text-slate-600 mb-6 line-clamp-2">Building infrastructure, renovations, and
+                            engineering masterpieces that stand the test of time.</p>
+                        <div
+                            class="flex items-center text-blue-600 font-semibold text-sm group-hover:gap-2 transition-all">
+                            View Details <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Service Card 2: Energy -->
+                <a href="energy.html"
+                    class="group relative bg-gray-50 rounded-3xl overflow-hidden hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+                    <div class="h-48 overflow-hidden">
+                        <img src="/energy/energy1.jpg"
+                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                            alt="Energy">
+                        <div class="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent"></div>
+                        <div class="absolute bottom-4 left-6">
+                            <div class="bg-amber-500 p-2.5 rounded-xl inline-block mb-2 shadow-lg">
+                                <i data-lucide="zap" class="w-6 h-6 text-white"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-8">
+                        <h3
+                            class="font-display text-2xl font-bold text-slate-900 mb-3 group-hover:text-amber-600 transition-colors">
+                            Energy Solutions</h3>
+                        <p class="text-slate-600 mb-6 line-clamp-2">Sustainable power, solar systems, and electrical
+                            installations for a brighter future.</p>
+                        <div
+                            class="flex items-center text-amber-600 font-semibold text-sm group-hover:gap-2 transition-all">
+                            View Details <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Service Card 3: IT -->
+                <a href="it-services.html"
+                    class="group relative bg-gray-50 rounded-3xl overflow-hidden hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+                    <div class="h-48 overflow-hidden">
+                        <img src="/IT/secu1.jpg"
+                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                            alt="IT">
+                        <div class="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent"></div>
+                        <div class="absolute bottom-4 left-6">
+                            <div class="bg-indigo-600 p-2.5 rounded-xl inline-block mb-2 shadow-lg">
+                                <i data-lucide="monitor" class="w-6 h-6 text-white"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-8">
+                        <h3
+                            class="font-display text-2xl font-bold text-slate-900 mb-3 group-hover:text-indigo-600 transition-colors">
+                            IT Services</h3>
+                        <p class="text-slate-600 mb-6 line-clamp-2">Cutting-edge technology, systems integration, and
+                            network solutions for modern businesses.</p>
+                        <div
+                            class="flex items-center text-indigo-600 font-semibold text-sm group-hover:gap-2 transition-all">
+                            View Details <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Service Card 4: Supply -->
+                <a href="supply.html"
+                    class="group relative bg-gray-50 rounded-3xl overflow-hidden hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+                    <div class="h-48 overflow-hidden">
+                        <img src="/transport/trans1.jpg"
+                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                            alt="Supply">
+                        <div class="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent"></div>
+                        <div class="absolute bottom-4 left-6">
+                            <div class="bg-emerald-600 p-2.5 rounded-xl inline-block mb-2 shadow-lg">
+                                <i data-lucide="package" class="w-6 h-6 text-white"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-8">
+                        <h3
+                            class="font-display text-2xl font-bold text-slate-900 mb-3 group-hover:text-emerald-600 transition-colors">
+                            General Supply</h3>
+                        <p class="text-slate-600 mb-6 line-clamp-2">Reliable sourcing of industrial, office, and
+                            project-related materials.</p>
+                        <div
+                            class="flex items-center text-emerald-600 font-semibold text-sm group-hover:gap-2 transition-all">
+                            View Details <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Service Card 5: Consultancy -->
+                <a href="consultancy.html"
+                    class="group relative bg-gray-50 rounded-3xl overflow-hidden hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 md:col-span-2 lg:col-span-2">
+                    <div class="h-48 overflow-hidden relative">
+                        <!-- Positioning image better for wide card -->
+                        <img src="/market/maket1.jpg"
+                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                            alt="Consultancy">
+                        <div class="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent"></div>
+                        <div class="absolute bottom-4 left-6">
+                            <div class="bg-rose-600 p-2.5 rounded-xl inline-block mb-2 shadow-lg">
+                                <i data-lucide="trending-up" class="w-6 h-6 text-white"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-8">
+                        <h3
+                            class="font-display text-2xl font-bold text-slate-900 mb-3 group-hover:text-rose-600 transition-colors">
+                            Business Consultancy</h3>
+                        <p class="text-slate-600 mb-6 max-w-2xl">Strategic insights, management consulting, and
+                            marketing execution to drive your organizational growth to new heights.</p>
+                        <div
+                            class="flex items-center text-rose-600 font-semibold text-sm group-hover:gap-2 transition-all">
+                            View Details <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us (Dark Purple Section) -->
+    <section class="py-24 bg-tde-primary relative overflow-hidden">
+        <!-- Abstract shapes -->
+        <div class="absolute top-0 left-0 w-full h-full overflow-hidden opacity-20 pointer-events-none">
+            <div class="absolute -top-24 -left-24 w-96 h-96 bg-purple-500 rounded-full blur-[100px]"></div>
+            <div class="absolute bottom-0 right-0 w-[500px] h-[500px] bg-pink-500 rounded-full blur-[120px]"></div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16">
+                <h2 class="font-display text-4xl md:text-5xl font-bold text-purple-50 mb-6">Why Partner With Us?</h2>
+                <p class="text-xl text-purple-200 max-w-2xl mx-auto">We bring a unique blend of expertise and dedication
+                    to every project.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Feature 1 -->
+                <div
+                    class="bg-white/5 backdrop-blur-lg border border-white/10 p-8 rounded-2xl hover:bg-white/10 transition-colors duration-300">
+                    <div
+                        class="bg-yellow-400 w-12 h-12 rounded-lg flex items-center justify-center mb-6 shadow-lg shadow-yellow-400/20">
+                        <i data-lucide="users" class="w-6 h-6 text-yellow-900"></i>
+                    </div>
+                    <h4 class="text-purple-50 text-xl font-bold mb-3">Skilled Team</h4>
+                    <p class="text-purple-200 text-sm leading-relaxed">Experienced professionals dedicated to delivering
+                        top-tier results on every task.</p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div
+                    class="bg-white/5 backdrop-blur-lg border border-white/10 p-8 rounded-2xl hover:bg-white/10 transition-colors duration-300">
+                    <div
+                        class="bg-emerald-400 w-12 h-12 rounded-lg flex items-center justify-center mb-6 shadow-lg shadow-emerald-400/20">
+                        <i data-lucide="layers" class="w-6 h-6 text-emerald-900"></i>
+                    </div>
+                    <h4 class="text-purple-50 text-xl font-bold mb-3">One-Stop Solution</h4>
+                    <p class="text-purple-200 text-sm leading-relaxed">Integrated services from construction to IT,
+                        simplifying your project management.</p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div
+                    class="bg-white/5 backdrop-blur-lg border border-white/10 p-8 rounded-2xl hover:bg-white/10 transition-colors duration-300">
+                    <div
+                        class="bg-blue-400 w-12 h-12 rounded-lg flex items-center justify-center mb-6 shadow-lg shadow-blue-400/20">
+                        <i data-lucide="clock" class="w-6 h-6 text-blue-900"></i>
+                    </div>
+                    <h4 class="text-purple-50 text-xl font-bold mb-3">Timely Delivery</h4>
+                    <p class="text-purple-200 text-sm leading-relaxed">Respecting deadlines is our core principle,
+                        ensuring your business keeps moving.</p>
+                </div>
+
+                <!-- Feature 4 -->
+                <div
+                    class="bg-white/5 backdrop-blur-lg border border-white/10 p-8 rounded-2xl hover:bg-white/10 transition-colors duration-300">
+                    <div
+                        class="bg-rose-400 w-12 h-12 rounded-lg flex items-center justify-center mb-6 shadow-lg shadow-rose-400/20">
+                        <i data-lucide="heart" class="w-6 h-6 text-rose-900"></i>
+                    </div>
+                    <h4 class="text-purple-50 text-xl font-bold mb-3">Customer First</h4>
+                    <p class="text-purple-200 text-sm leading-relaxed">Your satisfaction is our metric for success. We
+                        tailor solutions to YOUR needs.</p>
+                </div>
+            </div>
+
+            <div
+                class="mt-20 p-8 md:p-12 rounded-3xl bg-gradient-to-r from-white/10 to-transparent border border-white/10 backdrop-blur-md relative overflow-hidden">
+                <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+                    <div class="text-left">
+                        <h3 class="text-2xl font-bold text-purple-50 mb-2 flex items-center gap-3">
+                            <i data-lucide="quote" class="text-tde-accent fill-current"></i> Our Commitment
+                        </h3>
+                        <p class="text-lg text-purple-100 italic max-w-2xl">
+                            "We are committed to delivering sustainable solutions that meet international standards
+                            while supporting growth, efficiency, and innovation for our clients."
+                        </p>
+                    </div>
+                    <div class="shrink-0">
+                        <i data-lucide="shield-check" class="w-24 h-24 text-white/10"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact" class="bg-slate-900 text-purple-100 pt-20 pb-10 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+                <!-- Brand -->
+                <div class="space-y-6">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-white/10 p-2 rounded-lg">
+                            <i data-lucide="building-2" class="w-6 h-6 text-tde-accent"></i>
+                        </div>
+                        <span class="font-display font-bold text-2xl tracking-tight">TDE Group</span>
+                    </div>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Your Trusted Partner in Construction, Energy, Technology & Business Solutions.
+                    </p>
+                    <div class="flex gap-4 pt-2">
+                        <a href="#"
+                            class="bg-slate-800 p-2 rounded-full text-slate-400 hover:bg-tde-secondary hover:text-white transition-all"><i
+                                data-lucide="facebook" class="w-5 h-5"></i></a>
+                        <a href="#"
+                            class="bg-slate-800 p-2 rounded-full text-slate-400 hover:bg-tde-secondary hover:text-white transition-all"><i
+                                data-lucide="twitter" class="w-5 h-5"></i></a>
+                        <a href="#"
+                            class="bg-slate-800 p-2 rounded-full text-slate-400 hover:bg-tde-secondary hover:text-white transition-all"><i
+                                data-lucide="linkedin" class="w-5 h-5"></i></a>
+                    </div>
+                </div>
+
+                <!-- Links -->
+                <div>
+                    <h4 class="font-bold text-lg mb-6 text-purple-50 border-l-4 border-tde-secondary pl-3">Quick Links
+                    </h4>
+                    <ul class="space-y-3 text-sm text-slate-400">
+                        <li><a href="index.html" class="hover:text-tde-accent hover:pl-1 transition-all">Home</a></li>
+                        <li><a href="#about" class="hover:text-tde-accent hover:pl-1 transition-all">About Us</a></li>
+                        <li><a href="#services" class="hover:text-tde-accent hover:pl-1 transition-all">Services</a>
+                        </li>
+                        <li><a href="#contact" class="hover:text-tde-accent hover:pl-1 transition-all">Contact</a></li>
+                    </ul>
+                </div>
+
+                <!-- Services -->
+                <div>
+                    <h4 class="font-bold text-lg mb-6 text-purple-50 border-l-4 border-tde-secondary pl-3">Our Services
+                    </h4>
+                    <ul class="space-y-3 text-sm text-slate-400">
+                        <li><a href="construction.html"
+                                class="hover:text-tde-accent hover:pl-1 transition-all">Construction</a></li>
+                        <li><a href="energy.html" class="hover:text-tde-accent hover:pl-1 transition-all">Energy &
+                                Power</a></li>
+                        <li><a href="it-services.html" class="hover:text-tde-accent hover:pl-1 transition-all">IT
+                                Solutions</a></li>
+                        <li><a href="supply.html" class="hover:text-tde-accent hover:pl-1 transition-all">General
+                                Supply</a></li>
+                        <li><a href="consultancy.html"
+                                class="hover:text-tde-accent hover:pl-1 transition-all">Consultancy</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact Info -->
+                <div>
+                    <h4 class="font-bold text-lg mb-6 text-purple-50 border-l-4 border-tde-secondary pl-3">Contact Us
+                    </h4>
+                    <ul class="space-y-4 text-sm text-slate-400">
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="map-pin" class="w-5 h-5 text-tde-accent shrink-0 mt-0.5"></i>
+                            <span>Douala, Cameroun</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div
+                class="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-500">
+                <p>&copy; 2026 TDE Group. All rights reserved.</p>
+                <div class="flex gap-6">
+                    <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+                    <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script type="module" src="/src/main.js"></script>
+    <script>
+        // Icons
+        lucide.createIcons();
+
+        // Mobile Menu
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        if (menuBtn && mobileMenu) {
+            menuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+                const icon = mobileMenu.classList.contains('hidden') ? 'menu' : 'x';
+                // Update icon strictly if this logic was robust, but for now simple toggle
+            });
+        }
+
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 20) {
+                navbar.classList.add('shadow-md');
+                navbar.classList.replace('h-24', 'h-20');
+            } else {
+                navbar.classList.remove('shadow-md');
+                navbar.classList.replace('h-20', 'h-24');
+            }
+        });
+    </script>
+</body>
+
+</html>
