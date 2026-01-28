@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>IT Services - TDE Group</title>
+    <title>Suggestions - TDE Group</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -12,6 +12,7 @@
         rel="stylesheet">
     <link rel="stylesheet" href="./src/style.css" />
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 </head>
 
 <body class="bg-gray-50 text-slate-800 font-sans antialiased overflow-x-hidden">
@@ -42,7 +43,7 @@
                         class="px-5 py-2.5 rounded-full text-slate-600 font-medium hover:text-tde-secondary hover:bg-white transition-all">Home</a>
                     <div class="relative group">
                         <button
-                            class="px-5 py-2.5 rounded-full text-tde-secondary bg-purple-50 font-medium hover:text-tde-secondary hover:bg-white transition-all flex items-center gap-1">
+                            class="px-5 py-2.5 rounded-full text-slate-600 font-medium hover:text-tde-secondary hover:bg-white transition-all flex items-center gap-1">
                             Services <i data-lucide="chevron-down" class="w-4 h-4 mt-0.5"></i>
                         </button>
                         <div
@@ -64,10 +65,12 @@
                                     Solutions</span>
                             </a>
                             <a href="it-services.html"
-                                class="flex items-center gap-3 px-4 py-3 bg-purple-50 group/item">
-                                <span class="bg-indigo-50 p-2 rounded-lg text-indigo-600"><i data-lucide="monitor"
-                                        class="w-4 h-4"></i></span>
-                                <span class="text-sm font-medium text-indigo-700">IT Services</span>
+                                class="flex items-center gap-3 px-4 py-3 hover:bg-tde-light group/item">
+                                <span
+                                    class="bg-indigo-50 p-2 rounded-lg text-indigo-600 group-hover/item:bg-indigo-600 group-hover/item:text-white transition-colors"><i
+                                        data-lucide="monitor" class="w-4 h-4"></i></span>
+                                <span class="text-sm font-medium text-slate-700 group-hover/item:text-indigo-700">IT
+                                    Services</span>
                             </a>
                             <a href="consultancy.html"
                                 class="flex items-center gap-3 px-4 py-3 hover:bg-tde-light group/item">
@@ -91,7 +94,7 @@
                     <a href="index.html#about"
                         class="px-5 py-2.5 rounded-full text-slate-600 font-medium hover:text-tde-secondary hover:bg-white transition-all">About</a>
                     <a href="suggestions.html"
-                        class="px-5 py-2.5 rounded-full text-slate-600 font-medium hover:text-tde-secondary hover:bg-white transition-all">Suggestions</a>
+                        class="px-5 py-2.5 rounded-full text-tde-secondary bg-purple-50 font-medium hover:text-tde-secondary hover:bg-white transition-all">Suggestions</a>
                 </div>
                 <div class="hidden md:block">
                     <a href="#contact"
@@ -121,14 +124,14 @@
                     class="block px-4 py-2 text-base font-medium text-slate-600 hover:text-tde-secondary hover:pl-6 transition-all">Energy
                     & Power</a>
                 <a href="it-services.html"
-                    class="block px-4 py-3 text-base font-bold text-tde-secondary bg-purple-50 rounded-xl">IT
+                    class="block px-4 py-2 text-base font-medium text-slate-600 hover:text-tde-secondary hover:pl-6 transition-all">IT
                     Services</a>
                 <a href="consultancy.html"
                     class="block px-4 py-2 text-base font-medium text-slate-600 hover:text-tde-secondary hover:pl-6 transition-all">Consultancy</a>
                 <a href="supply.html"
                     class="block px-4 py-2 text-base font-medium text-slate-600 hover:text-tde-secondary hover:pl-6 transition-all">Supply</a>
                 <a href="suggestions.html"
-                    class="block px-4 py-2 text-base font-medium text-slate-600 hover:text-tde-secondary hover:pl-6 transition-all">Suggestions</a>
+                    class="block px-4 py-3 text-base font-bold text-tde-secondary bg-purple-50 rounded-xl">Suggestions</a>
                 <a href="#contact"
                     class="block px-4 py-3 text-center text-base font-bold text-white bg-premium-gradient rounded-xl shadow-lg mt-4">Contact
                     Us</a>
@@ -137,119 +140,127 @@
     </nav>
 
     <main>
-        <!-- Service Hero -->
-        <section class="relative h-[60vh] min-h-[500px] flex items-center justify-center overflow-hidden">
-            <div class="absolute inset-0 z-0 bg-slate-900" id="headerTech">
-                <img src="/IT/secu1.jpg" alt="IT Hero" class="w-full h-full object-cover">
-                <!-- Premium Indigo/Purple Overlay for IT -->
+        <!-- Hero Section -->
+        <section class="relative h-[50vh] min-h-[400px] flex items-center justify-center overflow-hidden">
+            <div class="absolute inset-0 z-0 bg-slate-900">
+                <!-- Using a neutral/business background for suggestions if no specific one, or reuse one -->
+                <img src="/images/acceuil.jpeg" alt="Suggestions" class="w-full h-full object-cover opacity-30">
                 <div
-                    class="absolute inset-0 bg-gradient-to-r from-indigo-900/90 via-slate-900/80 to-purple-900/40 mix-blend-multiply">
+                    class="absolute inset-0 bg-gradient-to-r from-purple-900/90 via-slate-900/80 to-indigo-900/40 mix-blend-multiply">
                 </div>
             </div>
 
             <div class="relative z-10 max-w-7xl mx-auto px-4 text-center text-white">
                 <div
-                    class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-indigo-400/30 bg-indigo-900/30 backdrop-blur-md mb-6 animate-fade-in">
-                    <i data-lucide="cpu" class="w-4 h-4 text-indigo-300"></i>
-                    <span class="text-indigo-100 font-medium tracking-wider text-sm">DIGITAL TRANSFORMATION</span>
+                    class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-purple-400/30 bg-purple-900/30 backdrop-blur-md mb-6 animate-fade-in">
+                    <i data-lucide="message-square" class="w-4 h-4 text-purple-300"></i>
+                    <span class="text-purple-100 font-medium tracking-wider text-sm">FEEDBACK & IDEAS</span>
                 </div>
-                <h1 class="font-display text-5xl md:text-7xl font-bold mb-6 animate-fade-in shadow-sm leading-tight">IT
-                    & <br /><span class="text-indigo-300">Technology Services</span></h1>
-                <p class="text-xl text-indigo-50 max-w-2xl mx-auto animate-slide-up leading-relaxed">
-                    Innovative technology solutions powering your business efficiency and security.
+                <h1 class="font-display text-4xl md:text-6xl font-bold mb-6 animate-fade-in shadow-sm leading-tight">
+                    We Value <br /><span class="text-purple-300">Your Suggestions</span></h1>
+                <p class="text-xl text-purple-50 max-w-2xl mx-auto animate-slide-up leading-relaxed">
+                    Help us improve by sharing your thoughts anonymously.
                 </p>
             </div>
         </section>
 
-        <!-- Content -->
+        <!-- Form Section -->
         <section class="py-24 bg-white">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="grid lg:grid-cols-2 gap-16 items-start">
-                    <div class="space-y-12">
-                        <div>
-                            <h2 class="font-display text-3xl font-bold text-slate-900 mb-6">Our Capabilities</h2>
-                            <p class="text-slate-600 leading-relaxed text-lg">
-                                Navigating the digital landscape can be complex. We provide the hardware, software, and
-                                expertise to keep you connected and secure.
-                            </p>
+            <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="bg-white rounded-3xl shadow-2xl border border-gray-100 p-8 md:p-12">
+                    <div class="text-center mb-10">
+                        <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i data-lucide="mail-plus" class="w-8 h-8 text-tde-secondary"></i>
                         </div>
-
-                        <div class="space-y-6">
-                            <!-- Service Item 1 -->
-                            <div class="flex gap-6 group">
-                                <div
-                                    class="shrink-0 bg-indigo-50 p-4 rounded-2xl h-fit group-hover:bg-indigo-600 transition-colors duration-300">
-                                    <i data-lucide="server"
-                                        class="w-8 h-8 text-indigo-600 group-hover:text-white transition-colors duration-300"></i>
-                                </div>
-                                <div>
-                                    <h3
-                                        class="text-xl font-bold text-slate-900 mb-2 group-hover:text-indigo-600 transition-colors">
-                                        Systems Integration</h3>
-                                    <p class="text-slate-600">Unified technology ecosystems where your software and
-                                        hardware work in perfect harmony.</p>
-                                </div>
-                            </div>
-
-                            <!-- Service Item 2 -->
-                            <div class="flex gap-6 group">
-                                <div
-                                    class="shrink-0 bg-indigo-50 p-4 rounded-2xl h-fit group-hover:bg-indigo-600 transition-colors duration-300">
-                                    <i data-lucide="wifi"
-                                        class="w-8 h-8 text-indigo-600 group-hover:text-white transition-colors duration-300"></i>
-                                </div>
-                                <div>
-                                    <h3
-                                        class="text-xl font-bold text-slate-900 mb-2 group-hover:text-indigo-600 transition-colors">
-                                        Network Solutions</h3>
-                                    <p class="text-slate-600">Robust, secure, and high-speed networking setup and
-                                        maintenance for enterprise invironments.</p>
-                                </div>
-                            </div>
-
-                            <!-- Service Item 3 -->
-                            <div class="flex gap-6 group">
-                                <div
-                                    class="shrink-0 bg-indigo-50 p-4 rounded-2xl h-fit group-hover:bg-indigo-600 transition-colors duration-300">
-                                    <i data-lucide="shield-check"
-                                        class="w-8 h-8 text-indigo-600 group-hover:text-white transition-colors duration-300"></i>
-                                </div>
-                                <div>
-                                    <h3
-                                        class="text-xl font-bold text-slate-900 mb-2 group-hover:text-indigo-600 transition-colors">
-                                        Cybersecurity, Business Continuity and support</h3>
-                                    <p class="text-slate-600">Protecting your data assets and providing 24/7 technical
-                                        support to minimize downtime.</p>
-                                </div>
-                            </div>
-                        </div>
+                        <h2 class="font-display text-3xl font-bold text-slate-900 mb-4">Send a Suggestion</h2>
+                        <p class="text-slate-600">
+                            Your feedback is sent directly to our team. Please provide your email so we can verify the
+                            authenticity of the suggestion if needed.
+                        </p>
                     </div>
 
-                    <!-- Gallery / Visuals -->
-                    <div class="grid grid-cols-2 gap-4 sticky top-32">
-                        <div class="space-y-4 translate-y-8">
-                            <img src="/IT/secu2.jpg"
-                                class="rounded-2xl shadow-xl hover:shadow-2xl hover:scale-[1.02] transition-all duration-500 object-cover h-64 w-full"
-                                alt="IT Security">
-                            <img src="/IT/secu4.jpg"
-                                class="rounded-2xl shadow-xl hover:shadow-2xl hover:scale-[1.02] transition-all duration-500 object-cover h-48 w-full"
-                                alt="Network Infrastructure">
-                            <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&q=80"
-                                class="rounded-2xl shadow-xl hover:shadow-2xl hover:scale-[1.02] transition-all duration-500 object-cover h-56 w-full"
-                                alt="Server Room">
+                    <form id="suggestionForm" class="space-y-6">
+                        <!-- Name Field (Optional) -->
+                        <div class="transform transition-all duration-300 hover:scale-[1.01]">
+                            <label for="name" class="block text-sm font-medium text-slate-700 mb-2">
+                                Your Name <span class="text-gray-400 text-xs">(Optional)</span>
+                            </label>
+                            <div class="relative group">
+                                <span
+                                    class="absolute left-4 top-3.5 text-gray-400 group-focus-within:text-purple-500 transition-colors">
+                                    <i data-lucide="user" class="w-5 h-5"></i>
+                                </span>
+                                <input type="text" id="name" name="name"
+                                    class="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent focus:bg-white outline-none transition-all duration-300 placeholder-gray-400 hover:border-purple-300"
+                                    placeholder="John Doe">
+                            </div>
                         </div>
-                        <div class="space-y-4">
-                            <img src="/IT/secu3.jpg"
-                                class="rounded-2xl shadow-xl hover:shadow-2xl hover:scale-[1.02] transition-all duration-500 object-cover h-48 w-full"
-                                alt="Cybersecurity">
-                            <img src="/IT/secu5.jpg"
-                                class="rounded-2xl shadow-xl hover:shadow-2xl hover:scale-[1.02] transition-all duration-500 object-cover h-64 w-full"
-                                alt="IT Support">
-                            <img src="https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?w=800&q=80"
-                                class="rounded-2xl shadow-xl hover:shadow-2xl hover:scale-[1.02] transition-all duration-500 object-cover h-52 w-full"
-                                alt="Technology Solutions">
+
+                        <!-- Email Field -->
+                        <div class="transform transition-all duration-300 hover:scale-[1.01]">
+                            <label for="email" class="block text-sm font-medium text-slate-700 mb-2">
+                                Your Email Address <span class="text-red-500">*</span>
+                            </label>
+                            <div class="relative group">
+                                <span
+                                    class="absolute left-4 top-3.5 text-gray-400 group-focus-within:text-purple-500 transition-colors">
+                                    <i data-lucide="at-sign" class="w-5 h-5"></i>
+                                </span>
+                                <input type="email" id="email" name="email" required
+                                    class="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent focus:bg-white outline-none transition-all duration-300 placeholder-gray-400 hover:border-purple-300"
+                                    placeholder="you@example.com">
+                            </div>
                         </div>
-                    </div>
+
+                        <!-- Suggestion Field -->
+                        <div class="transform transition-all duration-300 hover:scale-[1.01]">
+                            <label for="suggestion" class="block text-sm font-medium text-slate-700 mb-2">
+                                Your Suggestion <span class="text-red-500">*</span>
+                            </label>
+                            <div class="relative group">
+                                <span
+                                    class="absolute left-4 top-3.5 text-gray-400 group-focus-within:text-purple-500 transition-colors">
+                                    <i data-lucide="message-circle" class="w-5 h-5"></i>
+                                </span>
+                                <textarea id="suggestion" name="message" rows="6" required
+                                    class="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent focus:bg-white outline-none transition-all duration-300 placeholder-gray-400 hover:border-purple-300 resize-none"
+                                    placeholder="Tell us what you think..."></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Success Message (hidden by default) -->
+                        <div id="successMessage" class="hidden">
+                            <div
+                                class="p-4 bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-200 rounded-xl transform transition-all duration-500 animate-fade-in">
+                                <div class="flex items-center gap-3 text-green-800">
+                                    <div class="animate-bounce">
+                                        <i data-lucide="check-circle" class="w-6 h-6"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-bold">Thank you!</p>
+                                        <p class="text-sm">Your suggestion has been sent successfully.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Status Message -->
+                        <p id="formStatus" class="text-center text-sm hidden transition-all duration-300"></p>
+
+                        <div class="flex justify-center">
+                            <button type="submit" id="submitBtn"
+                                class="group relative max-w-md px-10 py-4 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-bold rounded-xl shadow-lg shadow-purple-500/40 hover:shadow-purple-600/60 hover:shadow-xl hover:-translate-y-1 active:translate-y-0 transition-all duration-300 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 overflow-hidden">
+                                <!-- Animated background -->
+                                <div
+                                    class="absolute inset-0 bg-gradient-to-r from-purple-400 to-pink-400 opacity-0 group-hover:opacity-20 transition-opacity duration-300">
+                                </div>
+                                <span id="btnText" class="relative z-10">Send Suggestion</span>
+                                <i data-lucide="send"
+                                    class="w-5 h-5 relative z-10 group-hover:translate-x-1 transition-transform duration-300"
+                                    id="btnIcon"></i>
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </section>
@@ -278,6 +289,8 @@
                                 Us</a></li>
                         <li><a href="index.html#services"
                                 class="hover:text-tde-accent hover:pl-1 transition-all">Services</a></li>
+                        <li><a href="suggestions.html"
+                                class="hover:text-tde-accent hover:pl-1 transition-all">Suggestions</a></li>
                         <li><a href="#contact" class="hover:text-tde-accent hover:pl-1 transition-all">Contact</a></li>
                     </ul>
                 </div>
@@ -290,10 +303,10 @@
                                 Power</a></li>
                         <li><a href="it-services.html" class="hover:text-tde-accent hover:pl-1 transition-all">IT
                                 Solutions</a></li>
-                        <li><a href="supply.html" class="hover:text-tde-accent hover:pl-1 transition-all">General
-                                Supply</a></li>
                         <li><a href="consultancy.html"
                                 class="hover:text-tde-accent hover:pl-1 transition-all">Consultancy</a></li>
+                        <li><a href="supply.html" class="hover:text-tde-accent hover:pl-1 transition-all">General
+                                Supply</a></li>
                     </ul>
                 </div>
                 <div>
@@ -336,6 +349,94 @@
                 navbar.classList.remove('shadow-md');
                 navbar.classList.replace('h-20', 'h-24');
             }
+        });
+
+        // EmailJS initialization
+        emailjs.init("qd_1OXHxfJaEOUh7O");
+
+        // Handle form submission
+        const form = document.getElementById('suggestionForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const btnText = document.getElementById('btnText');
+        const btnIcon = document.getElementById('btnIcon');
+        const formStatus = document.getElementById('formStatus');
+        const successMessage = document.getElementById('successMessage');
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            // Disable button and show loading state with animation
+            submitBtn.disabled = true;
+            submitBtn.classList.add('scale-95');
+            btnText.textContent = 'Sending...';
+            btnIcon.setAttribute('data-lucide', 'loader');
+            btnIcon.classList.add('animate-spin');
+            lucide.createIcons();
+            formStatus.classList.add('hidden');
+            successMessage.classList.add('hidden');
+
+            // Send email using EmailJS
+            emailjs.sendForm(
+                'service_r7jr1vz',
+                'template_0dnx6fs',
+                form
+            ).then(() => {
+                // Success with enhanced animations
+                submitBtn.classList.remove('scale-95');
+                submitBtn.classList.add('scale-100');
+
+                // Show success message with fade-in
+                successMessage.classList.remove('hidden');
+                successMessage.classList.add('animate-fade-in');
+
+                formStatus.textContent = '✅ Redirecting to home page...';
+                formStatus.className = 'text-green-600 text-center text-sm mt-4 font-medium animate-pulse';
+                formStatus.classList.remove('hidden');
+
+                // Update button with success state
+                btnText.textContent = 'Sent Successfully!';
+                btnIcon.setAttribute('data-lucide', 'check-circle');
+                btnIcon.classList.remove('animate-spin');
+                btnIcon.classList.add('animate-bounce');
+                lucide.createIcons();
+
+                // Add success color to button
+                submitBtn.classList.remove('from-purple-500', 'to-purple-600');
+                submitBtn.classList.add('from-green-500', 'to-emerald-600');
+
+                // Reset form with fade out
+                setTimeout(() => {
+                    form.classList.add('opacity-50', 'pointer-events-none');
+                    form.reset();
+                }, 500);
+
+                // Redirect to index.html after 2.5 seconds
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 2500);
+            }).catch((error) => {
+                // Error with shake animation
+                submitBtn.classList.remove('scale-95');
+                submitBtn.classList.add('animate-shake');
+
+                formStatus.textContent = '❌ Failed to send. Please try again.';
+                formStatus.className = 'text-red-600 text-center text-sm mt-4 font-semibold';
+                formStatus.classList.remove('hidden');
+
+                btnText.textContent = 'Send Suggestion';
+                btnIcon.setAttribute('data-lucide', 'send');
+                btnIcon.classList.remove('animate-spin');
+                lucide.createIcons();
+
+                console.error('EmailJS Error:', error);
+
+                // Remove shake animation after it completes
+                setTimeout(() => {
+                    submitBtn.classList.remove('animate-shake');
+                }, 500);
+            }).finally(() => {
+                submitBtn.disabled = false;
+            });
         });
     </script>
 </body>
