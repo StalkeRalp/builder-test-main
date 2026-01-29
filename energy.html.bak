@@ -55,13 +55,10 @@
                                 <span
                                     class="text-sm font-medium text-slate-700 group-hover/item:text-blue-700">Construction</span>
                             </a>
-                            <a href="consultancy.html"
-                                class="flex items-center gap-3 px-4 py-3 hover:bg-tde-light group/item">
-                                <span
-                                    class="bg-rose-50 p-2 rounded-lg text-rose-600 group-hover/item:bg-rose-600 group-hover/item:text-white transition-colors"><i
-                                        data-lucide="trending-up" class="w-4 h-4"></i></span>
-                                <span
-                                    class="text-sm font-medium text-slate-700 group-hover/item:text-rose-700">Consultancy</span>
+                            <a href="energy.html" class="flex items-center gap-3 px-4 py-3 bg-purple-50 group/item">
+                                <span class="bg-amber-50 p-2 rounded-lg text-amber-600"><i data-lucide="zap"
+                                        class="w-4 h-4"></i></span>
+                                <span class="text-sm font-medium text-amber-700">Energy Solutions</span>
                             </a>
                             <a href="it-services.html"
                                 class="flex items-center gap-3 px-4 py-3 hover:bg-tde-light group/item">
@@ -71,10 +68,13 @@
                                 <span class="text-sm font-medium text-slate-700 group-hover/item:text-indigo-700">IT
                                     Services</span>
                             </a>
-                            <a href="energy.html" class="flex items-center gap-3 px-4 py-3 bg-purple-50 group/item">
-                                <span class="bg-amber-50 p-2 rounded-lg text-amber-600"><i data-lucide="zap"
-                                        class="w-4 h-4"></i></span>
-                                <span class="text-sm font-medium text-amber-700">Energy Solutions</span>
+                            <a href="consultancy.html"
+                                class="flex items-center gap-3 px-4 py-3 hover:bg-tde-light group/item">
+                                <span
+                                    class="bg-rose-50 p-2 rounded-lg text-rose-600 group-hover/item:bg-rose-600 group-hover/item:text-white transition-colors"><i
+                                        data-lucide="trending-up" class="w-4 h-4"></i></span>
+                                <span
+                                    class="text-sm font-medium text-slate-700 group-hover/item:text-rose-700">Consultancy</span>
                             </a>
                             <a href="supply.html"
                                 class="flex items-center gap-3 px-4 py-3 hover:bg-tde-light group/item">
@@ -116,14 +116,14 @@
                 </div>
                 <a href="construction.html"
                     class="block px-4 py-2 text-base font-medium text-slate-600 hover:text-tde-secondary hover:pl-6 transition-all">Construction</a>
-                <a href="consultancy.html"
-                    class="block px-4 py-2 text-base font-medium text-slate-600 hover:text-tde-secondary hover:pl-6 transition-all">Consultancy</a>
-                <a href="it-services.html"
-                    class="block px-4 py-2 text-base font-medium text-slate-600 hover:text-tde-secondary hover:pl-6 transition-all">IT
-                    Services</a>
                 <a href="energy.html"
                     class="block px-4 py-3 text-base font-bold text-tde-secondary bg-purple-50 rounded-xl">Energy &
                     Power</a>
+                <a href="it-services.html"
+                    class="block px-4 py-2 text-base font-medium text-slate-600 hover:text-tde-secondary hover:pl-6 transition-all">IT
+                    Services</a>
+                <a href="consultancy.html"
+                    class="block px-4 py-2 text-base font-medium text-slate-600 hover:text-tde-secondary hover:pl-6 transition-all">Consultancy</a>
                 <a href="supply.html"
                     class="block px-4 py-2 text-base font-medium text-slate-600 hover:text-tde-secondary hover:pl-6 transition-all">Supply</a>
                 <a href="suggestions.html"
@@ -285,14 +285,14 @@
                     <ul class="space-y-3 text-sm text-slate-400">
                         <li><a href="construction.html"
                                 class="hover:text-tde-accent hover:pl-1 transition-all">Construction</a></li>
-                        <li><a href="consultancy.html"
-                                class="hover:text-tde-accent hover:pl-1 transition-all">Consultancy</a></li>
-                        <li><a href="it-services.html" class="hover:text-tde-accent hover:pl-1 transition-all">IT
-                                Solutions</a></li>
                         <li><a href="energy.html" class="hover:text-tde-accent hover:pl-1 transition-all">Energy &
                                 Power</a></li>
+                        <li><a href="it-services.html" class="hover:text-tde-accent hover:pl-1 transition-all">IT
+                                Solutions</a></li>
                         <li><a href="supply.html" class="hover:text-tde-accent hover:pl-1 transition-all">General
                                 Supply</a></li>
+                        <li><a href="consultancy.html"
+                                class="hover:text-tde-accent hover:pl-1 transition-all">Consultancy</a></li>
                     </ul>
                 </div>
                 <div>

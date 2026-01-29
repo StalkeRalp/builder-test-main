@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Energy & Power Solutions - TDE Group</title>
+    <title>General Supply - TDE Group</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -55,13 +55,13 @@
                                 <span
                                     class="text-sm font-medium text-slate-700 group-hover/item:text-blue-700">Construction</span>
                             </a>
-                            <a href="consultancy.html"
+                            <a href="energy.html"
                                 class="flex items-center gap-3 px-4 py-3 hover:bg-tde-light group/item">
                                 <span
-                                    class="bg-rose-50 p-2 rounded-lg text-rose-600 group-hover/item:bg-rose-600 group-hover/item:text-white transition-colors"><i
-                                        data-lucide="trending-up" class="w-4 h-4"></i></span>
-                                <span
-                                    class="text-sm font-medium text-slate-700 group-hover/item:text-rose-700">Consultancy</span>
+                                    class="bg-amber-50 p-2 rounded-lg text-amber-600 group-hover/item:bg-amber-500 group-hover/item:text-white transition-colors"><i
+                                        data-lucide="zap" class="w-4 h-4"></i></span>
+                                <span class="text-sm font-medium text-slate-700 group-hover/item:text-amber-700">Energy
+                                    Solutions</span>
                             </a>
                             <a href="it-services.html"
                                 class="flex items-center gap-3 px-4 py-3 hover:bg-tde-light group/item">
@@ -71,19 +71,18 @@
                                 <span class="text-sm font-medium text-slate-700 group-hover/item:text-indigo-700">IT
                                     Services</span>
                             </a>
-                            <a href="energy.html" class="flex items-center gap-3 px-4 py-3 bg-purple-50 group/item">
-                                <span class="bg-amber-50 p-2 rounded-lg text-amber-600"><i data-lucide="zap"
-                                        class="w-4 h-4"></i></span>
-                                <span class="text-sm font-medium text-amber-700">Energy Solutions</span>
-                            </a>
-                            <a href="supply.html"
+                            <a href="consultancy.html"
                                 class="flex items-center gap-3 px-4 py-3 hover:bg-tde-light group/item">
                                 <span
-                                    class="bg-emerald-50 p-2 rounded-lg text-emerald-600 group-hover/item:bg-emerald-600 group-hover/item:text-white transition-colors"><i
-                                        data-lucide="package" class="w-4 h-4"></i></span>
+                                    class="bg-rose-50 p-2 rounded-lg text-rose-600 group-hover/item:bg-rose-600 group-hover/item:text-white transition-colors"><i
+                                        data-lucide="trending-up" class="w-4 h-4"></i></span>
                                 <span
-                                    class="text-sm font-medium text-slate-700 group-hover/item:text-emerald-700">General
-                                    Supply</span>
+                                    class="text-sm font-medium text-slate-700 group-hover/item:text-rose-700">Consultancy</span>
+                            </a>
+                            <a href="supply.html" class="flex items-center gap-3 px-4 py-3 bg-purple-50 group/item">
+                                <span class="bg-emerald-50 p-2 rounded-lg text-emerald-600"><i data-lucide="package"
+                                        class="w-4 h-4"></i></span>
+                                <span class="text-sm font-medium text-emerald-700">General Supply</span>
                             </a>
                         </div>
                     </div>
@@ -116,16 +115,16 @@
                 </div>
                 <a href="construction.html"
                     class="block px-4 py-2 text-base font-medium text-slate-600 hover:text-tde-secondary hover:pl-6 transition-all">Construction</a>
-                <a href="consultancy.html"
-                    class="block px-4 py-2 text-base font-medium text-slate-600 hover:text-tde-secondary hover:pl-6 transition-all">Consultancy</a>
+                <a href="energy.html"
+                    class="block px-4 py-2 text-base font-medium text-slate-600 hover:text-tde-secondary hover:pl-6 transition-all">Energy
+                    & Power</a>
                 <a href="it-services.html"
                     class="block px-4 py-2 text-base font-medium text-slate-600 hover:text-tde-secondary hover:pl-6 transition-all">IT
                     Services</a>
-                <a href="energy.html"
-                    class="block px-4 py-3 text-base font-bold text-tde-secondary bg-purple-50 rounded-xl">Energy &
-                    Power</a>
+                <a href="consultancy.html"
+                    class="block px-4 py-2 text-base font-medium text-slate-600 hover:text-tde-secondary hover:pl-6 transition-all">Consultancy</a>
                 <a href="supply.html"
-                    class="block px-4 py-2 text-base font-medium text-slate-600 hover:text-tde-secondary hover:pl-6 transition-all">Supply</a>
+                    class="block px-4 py-3 text-base font-bold text-tde-secondary bg-purple-50 rounded-xl">Supply</a>
                 <a href="suggestions.html"
                     class="block px-4 py-2 text-base font-medium text-slate-600 hover:text-tde-secondary hover:pl-6 transition-all">Suggestions</a>
                 <a href="#contact"
@@ -138,24 +137,24 @@
     <main>
         <!-- Service Hero -->
         <section class="relative h-[60vh] min-h-[500px] flex items-center justify-center overflow-hidden">
-            <div class="absolute inset-0 z-0 bg-slate-900" id="headerEnergy">
-                <img src="/energy/energy1.jpg" alt="Energy Hero" class="w-full h-full object-cover">
-                <!-- Premium Amber/Purple Overlay for Energy -->
+            <div class="absolute inset-0 z-0 bg-slate-900" id="headerTransport">
+                <img src="/transport/trans1.jpg" alt="Supply Hero" class="w-full h-full object-cover">
+                <!-- Premium Emerald/Purple Overlay for Supply -->
                 <div
-                    class="absolute inset-0 bg-gradient-to-r from-amber-900/90 via-slate-900/80 to-purple-900/40 mix-blend-multiply">
+                    class="absolute inset-0 bg-gradient-to-r from-emerald-900/90 via-slate-900/80 to-purple-900/40 mix-blend-multiply">
                 </div>
             </div>
 
             <div class="relative z-10 max-w-7xl mx-auto px-4 text-center text-white">
                 <div
-                    class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-amber-400/30 bg-amber-900/30 backdrop-blur-md mb-6 animate-fade-in">
-                    <i data-lucide="zap" class="w-4 h-4 text-amber-300"></i>
-                    <span class="text-amber-100 font-medium tracking-wider text-sm">POWERING TOMORROW</span>
+                    class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-emerald-400/30 bg-emerald-900/30 backdrop-blur-md mb-6 animate-fade-in">
+                    <i data-lucide="container" class="w-4 h-4 text-emerald-300"></i>
+                    <span class="text-emerald-100 font-medium tracking-wider text-sm">LOGISTICS EXCELLENCE</span>
                 </div>
                 <h1 class="font-display text-5xl md:text-7xl font-bold mb-6 animate-fade-in shadow-sm leading-tight">
-                    Energy & <br /><span class="text-amber-300">Power Solutions</span></h1>
-                <p class="text-xl text-amber-50 max-w-2xl mx-auto animate-slide-up leading-relaxed">
-                    Sustainable energy systems and electrical engineering for a reliable future.
+                    General <br /><span class="text-emerald-300">Supply Chain</span></h1>
+                <p class="text-xl text-emerald-50 max-w-2xl mx-auto animate-slide-up leading-relaxed">
+                    Dependable procurement and logistics services to keep your operations running smooth.
                 </p>
             </div>
         </section>
@@ -168,8 +167,8 @@
                         <div>
                             <h2 class="font-display text-3xl font-bold text-slate-900 mb-6">Our Capabilities</h2>
                             <p class="text-slate-600 leading-relaxed text-lg">
-                                From large-scale solar installations to residential electrical wiring, we prioritize
-                                safety, efficiency, and sustainability.
+                                We source, deliver, and manage everything from daily office essentials to specialized
+                                project materials, ensuring quality and timeliness every time.
                             </p>
                         </div>
 
@@ -177,48 +176,48 @@
                             <!-- Service Item 1 -->
                             <div class="flex gap-6 group">
                                 <div
-                                    class="shrink-0 bg-amber-50 p-4 rounded-2xl h-fit group-hover:bg-amber-500 transition-colors duration-300">
-                                    <i data-lucide="plug"
-                                        class="w-8 h-8 text-amber-600 group-hover:text-white transition-colors duration-300"></i>
+                                    class="shrink-0 bg-emerald-50 p-4 rounded-2xl h-fit group-hover:bg-emerald-600 transition-colors duration-300">
+                                    <i data-lucide="printer"
+                                        class="w-8 h-8 text-emerald-600 group-hover:text-white transition-colors duration-300"></i>
                                 </div>
                                 <div>
                                     <h3
-                                        class="text-xl font-bold text-slate-900 mb-2 group-hover:text-amber-600 transition-colors">
-                                        Electrical Installation</h3>
-                                    <p class="text-slate-600">Comprehensive wiring, maintenance, and compliance testing
-                                        for all facility types.</p>
+                                        class="text-xl font-bold text-slate-900 mb-2 group-hover:text-emerald-600 transition-colors">
+                                        Office & Industrial Supplies</h3>
+                                    <p class="text-slate-600">Equipping your workplace with top-grade consumables and
+                                        durable machinery.</p>
                                 </div>
                             </div>
 
                             <!-- Service Item 2 -->
                             <div class="flex gap-6 group">
                                 <div
-                                    class="shrink-0 bg-amber-50 p-4 rounded-2xl h-fit group-hover:bg-amber-500 transition-colors duration-300">
-                                    <i data-lucide="sun"
-                                        class="w-8 h-8 text-amber-600 group-hover:text-white transition-colors duration-300"></i>
+                                    class="shrink-0 bg-emerald-50 p-4 rounded-2xl h-fit group-hover:bg-emerald-600 transition-colors duration-300">
+                                    <i data-lucide="tag"
+                                        class="w-8 h-8 text-emerald-600 group-hover:text-white transition-colors duration-300"></i>
                                 </div>
                                 <div>
                                     <h3
-                                        class="text-xl font-bold text-slate-900 mb-2 group-hover:text-amber-600 transition-colors">
-                                        Solar Energy Systems</h3>
-                                    <p class="text-slate-600">Green energy solutions to reduce your carbon footprint and
-                                        energy costs.</p>
+                                        class="text-xl font-bold text-slate-900 mb-2 group-hover:text-emerald-600 transition-colors">
+                                        Branding & Merchandise</h3>
+                                    <p class="text-slate-600">Custom promotional items to boost your brand visibility
+                                        and corporate identity.</p>
                                 </div>
                             </div>
 
                             <!-- Service Item 3 -->
                             <div class="flex gap-6 group">
                                 <div
-                                    class="shrink-0 bg-amber-50 p-4 rounded-2xl h-fit group-hover:bg-amber-500 transition-colors duration-300">
-                                    <i data-lucide="battery-charging"
-                                        class="w-8 h-8 text-amber-600 group-hover:text-white transition-colors duration-300"></i>
+                                    class="shrink-0 bg-emerald-50 p-4 rounded-2xl h-fit group-hover:bg-emerald-600 transition-colors duration-300">
+                                    <i data-lucide="globe"
+                                        class="w-8 h-8 text-emerald-600 group-hover:text-white transition-colors duration-300"></i>
                                 </div>
                                 <div>
                                     <h3
-                                        class="text-xl font-bold text-slate-900 mb-2 group-hover:text-amber-600 transition-colors">
-                                        Power Backup</h3>
-                                    <p class="text-slate-600">Ensuring operational continuity with robust backup
-                                        generators and UPS systems.</p>
+                                        class="text-xl font-bold text-slate-900 mb-2 group-hover:text-emerald-600 transition-colors">
+                                        Global Sourcing</h3>
+                                    <p class="text-slate-600">Procuring hard-to-find materials for specialized projects
+                                        from trusted international partners.</p>
                                 </div>
                             </div>
                         </div>
@@ -227,26 +226,26 @@
                     <!-- Gallery / Visuals -->
                     <div class="grid grid-cols-2 gap-4 sticky top-32">
                         <div class="space-y-4 translate-y-8">
-                            <img src="/energy/energy2.jpg"
+                            <img src="/transport/tran2.jpg"
                                 class="rounded-2xl shadow-xl hover:shadow-2xl hover:scale-[1.02] transition-all duration-500 object-cover h-64 w-full"
-                                alt="Energy 1">
-                            <img src="/energy/energy4.jpg"
+                                alt="Transport Logistics">
+                            <img src="/transport/trans4.jpg"
                                 class="rounded-2xl shadow-xl hover:shadow-2xl hover:scale-[1.02] transition-all duration-500 object-cover h-48 w-full"
-                                alt="Energy 2">
-                            <img src="/energy/energy7.jpg"
+                                alt="Supply Chain">
+                            <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&q=80"
                                 class="rounded-2xl shadow-xl hover:shadow-2xl hover:scale-[1.02] transition-all duration-500 object-cover h-56 w-full"
-                                alt="Energy 5">
+                                alt="Warehouse Management">
                         </div>
                         <div class="space-y-4">
-                            <img src="/energy/energy3.jpg"
+                            <img src="/transport/trans3.jpg"
                                 class="rounded-2xl shadow-xl hover:shadow-2xl hover:scale-[1.02] transition-all duration-500 object-cover h-48 w-full"
-                                alt="Energy 3">
-                            <img src="/energy/energy5.jpg"
+                                alt="Freight Transport">
+                            <img src="https://images.unsplash.com/photo-1566576721346-d4a3b4eaeb55?w=800&q=80"
                                 class="rounded-2xl shadow-xl hover:shadow-2xl hover:scale-[1.02] transition-all duration-500 object-cover h-64 w-full"
-                                alt="Energy 4">
-                            <img src="/energy/energy8.jpg"
+                                alt="Logistics Solutions">
+                            <img src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=800&q=80"
                                 class="rounded-2xl shadow-xl hover:shadow-2xl hover:scale-[1.02] transition-all duration-500 object-cover h-52 w-full"
-                                alt="Energy 6">
+                                alt="Global Supply">
                         </div>
                     </div>
                 </div>
@@ -285,14 +284,14 @@
                     <ul class="space-y-3 text-sm text-slate-400">
                         <li><a href="construction.html"
                                 class="hover:text-tde-accent hover:pl-1 transition-all">Construction</a></li>
-                        <li><a href="consultancy.html"
-                                class="hover:text-tde-accent hover:pl-1 transition-all">Consultancy</a></li>
-                        <li><a href="it-services.html" class="hover:text-tde-accent hover:pl-1 transition-all">IT
-                                Solutions</a></li>
                         <li><a href="energy.html" class="hover:text-tde-accent hover:pl-1 transition-all">Energy &
                                 Power</a></li>
+                        <li><a href="it-services.html" class="hover:text-tde-accent hover:pl-1 transition-all">IT
+                                Solutions</a></li>
                         <li><a href="supply.html" class="hover:text-tde-accent hover:pl-1 transition-all">General
                                 Supply</a></li>
+                        <li><a href="consultancy.html"
+                                class="hover:text-tde-accent hover:pl-1 transition-all">Consultancy</a></li>
                     </ul>
                 </div>
                 <div>
