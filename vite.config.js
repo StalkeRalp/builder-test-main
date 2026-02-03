@@ -15,6 +15,7 @@ export default defineConfig({
         it_services: resolve(__dirname, 'it-services.html'),
         supply: resolve(__dirname, 'supply.html'),
         consultancy: resolve(__dirname, 'consultancy.html'),
+        suggestions: resolve(__dirname, 'suggestions.html'),
       },
     },
   },
