@@ -142,6 +142,8 @@ git push
 
 ## 📁 Structure du projet
 
+> **Note**: Pour une documentation détaillée de l'architecture et du module **MyProject**, voir [PROJECT_DOCUMENTATION.md](./PROJECT_DOCUMENTATION.md).
+
 ```
 builder-test-main/
 ├── public/                    # Fichiers statiques

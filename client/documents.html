@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Documents - Portail Client TDE Group</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="../src/style.css" />
+    <link rel="stylesheet" href="./styles/client-theme.css" />
+
+    <style>
+        :root {
+            --primary: #0d9488;
+            --primary-dark: #0f766e;
+            --secondary: #2563eb;
+            --warning: #d97706;
+            --ink: #0f172a;
+            --muted: #64748b;
+            --surface: #f1f5f9;
+            --soft: #e2e8f0;
+            --card: #ffffff;
+            --shadow-sm: 0 10px 24px rgba(15, 23, 42, 0.08);
+            --shadow-md: 0 20px 34px rgba(15, 23, 42, 0.14);
+            --radius-lg: 18px;
+            --radius-md: 12px;
+            --transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body.client-portal {
+            background:
+                radial-gradient(circle at 8% 10%, rgba(13, 148, 136, 0.09), transparent 34%),
+                radial-gradient(circle at 92% 12%, rgba(37, 99, 235, 0.08), transparent 36%),
+                var(--surface);
+        }
+
+        .documents-layout {
+            min-height: 100vh;
+            display: flex;
+        }
+
+        .documents-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .documents-header {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--soft);
+            padding: 18px 20px;
+        }
+
+        .header-grid {
+            max-width: 1220px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-title h1 {
+            margin: 0;
+            font-family: 'Sora', sans-serif;
+            color: var(--ink);
+            font-size: clamp(1.35rem, 2.2vw, 2rem);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-title h1 .material-icons {
+            color: var(--primary);
+            font-size: 1.9rem;
+        }
+
+        .header-title p {
+            margin: 6px 0 0;
+            color: var(--muted);
+            font-size: 0.92rem;
+        }
+
+        .project-badge {
+            border-radius: 999px;
+            border: 1px solid rgba(13, 148, 136, 0.25);
+            background: rgba(13, 148, 136, 0.08);
+            color: var(--primary-dark);
+            font-weight: 700;
+            font-size: 0.8rem;
+            padding: 8px 12px;
+            white-space: nowrap;
+        }
+
+        .documents-wrap {
+            width: min(1220px, 100%);
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .bonus-grid {
+            display: grid;
+            grid-template-columns: 1.3fr 1fr;
+            gap: 14px;
+            margin-bottom: 14px;
+        }
+
+        .bonus-card {
+            background: var(--card);
+            border: 1px solid var(--soft);
+            border-radius: var(--radius-lg);
+            padding: 16px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .bonus-title {
+            margin: 0 0 10px;
+            font-family: 'Sora', sans-serif;
+            color: var(--ink);
+            font-size: 0.98rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .bonus-title .material-icons {
+            color: var(--primary);
+            font-size: 20px;
+        }
+
+        .project-name {
+            margin: 0;
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--ink);
+        }
+
+        .project-meta {
+            margin-top: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .meta-pill {
+            display: inline-flex;
+            gap: 6px;
+            align-items: center;
+            background: #f8fafc;
+            border: 1px solid var(--soft);
+            color: var(--ink);
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .meta-pill .material-icons {
+            font-size: 14px;
+            color: var(--primary);
+        }
+
+        .session-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .stat-box {
+            border: 1px solid var(--soft);
+            border-radius: var(--radius-md);
+            background: linear-gradient(135deg, rgba(13, 148, 136, 0.08), #ffffff 80%);
+            padding: 10px;
+        }
+
+        .stat-box p {
+            margin: 0;
+        }
+
+        .stat-label {
+            font-size: 0.72rem;
+            color: var(--muted);
+            margin-bottom: 2px;
+        }
+
+        .stat-value {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.02rem;
+            font-weight: 800;
+            color: var(--ink);
+        }
+
+        .actions-bar,
+        .tools-bar {
+            background: var(--card);
+            border: 1px solid var(--soft);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+
+        .actions-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .quick-btn {
+            border: none;
+            border-radius: 10px;
+            padding: 10px 12px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+        }
+
+        .quick-btn .material-icons {
+            font-size: 18px;
+        }
+
+        .quick-btn.primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff; }
+        .quick-btn.secondary { background: linear-gradient(135deg, var(--secondary), #1d4ed8); color: #fff; }
+        .quick-btn.warning { background: linear-gradient(135deg, #f59e0b, var(--warning)); color: #fff; }
+        .quick-btn.ghost { background: #f8fafc; color: var(--ink); border: 1px solid var(--soft); }
+
+        .quick-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 20px rgba(15, 23, 42, 0.18);
+        }
+
+        .tools-bar {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .search-wrap {
+            position: relative;
+        }
+
+        .search-wrap .material-icons {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--muted);
+            font-size: 18px;
+        }
+
+        .search-wrap input {
+            width: 100%;
+            border: 1px solid var(--soft);
+            border-radius: 10px;
+            background: #fff;
+            padding: 10px 10px 10px 34px;
+            font-size: 0.86rem;
+            color: var(--ink);
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .search-wrap input:focus {
+            border-color: rgba(13, 148, 136, 0.5);
+            box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.14);
+        }
+
+        .tool-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .tool-select {
+            border: 1px solid var(--soft);
+            border-radius: 10px;
+            padding: 9px 10px;
+            font-size: 0.85rem;
+            color: var(--ink);
+            background: #fff;
+        }
+
+        .documents-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .document-card {
+            background: #ffffff;
+            border: 1px solid var(--soft);
+            border-radius: 16px;
+            padding: 14px;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(14px);
+            animation: riseIn 0.45s ease forwards;
+        }
+
+        .document-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+            border-color: rgba(13, 148, 136, 0.24);
+        }
+
+        .document-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        .doc-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .doc-main {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            min-width: 0;
+        }
+
+        .doc-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 11px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .doc-icon .material-icons {
+            font-size: 20px;
+        }
+
+        .doc-type-quote .doc-icon { background: linear-gradient(135deg, #2563eb, #1d4ed8); }
+        .doc-type-plans .doc-icon { background: linear-gradient(135deg, #0d9488, #0f766e); }
+        .doc-type-contract .doc-icon { background: linear-gradient(135deg, #7c3aed, #6d28d9); }
+        .doc-type-report .doc-icon { background: linear-gradient(135deg, #f59e0b, #d97706); }
+        .doc-type-invoice .doc-icon { background: linear-gradient(135deg, #be123c, #9f1239); }
+        .doc-type-other .doc-icon { background: linear-gradient(135deg, #475569, #334155); }
+
+        .doc-name {
+            margin: 0;
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: var(--ink);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+        }
+
+        .doc-sub {
+            margin: 3px 0 0;
+            font-size: 0.78rem;
+            color: var(--muted);
+        }
+
+        .doc-tag {
+            border-radius: 999px;
+            border: 1px solid var(--soft);
+            padding: 4px 8px;
+            font-size: 0.7rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .doc-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin: 10px 0;
+            font-size: 0.75rem;
+            color: var(--muted);
+            border-top: 1px solid #f1f5f9;
+            padding-top: 10px;
+        }
+
+        .doc-meta span {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .doc-meta .material-icons {
+            font-size: 14px;
+            color: var(--primary);
+        }
+
+        .doc-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .doc-btn {
+            flex: 1;
+            border-radius: 10px;
+            border: 1px solid var(--soft);
+            background: #fff;
+            color: var(--muted);
+            padding: 8px 10px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .doc-btn .material-icons { font-size: 16px; }
+
+        .doc-btn.primary {
+            border: none;
+            color: #fff;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        }
+
+        .doc-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            color: var(--muted);
+            background: #fff;
+            border: 1px dashed #cbd5e1;
+            border-radius: 14px;
+            padding: 24px;
+        }
+
+        @keyframes riseIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 1080px) {
+            .bonus-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .documents-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tools-bar {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .documents-header {
+                padding: 14px 12px;
+            }
+
+            .documents-wrap {
+                padding: 12px;
+            }
+
+            .header-grid {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .tool-actions {
+                width: 100%;
+            }
+
+            .tool-select,
+            .quick-btn.ghost {
+                flex: 1;
+            }
+        }
+    </style>
+</head>
+
+<body class="client-portal antialiased">
+    <div class="documents-layout">
+        <aside class="client-sidebar hidden lg:flex w-72 flex-col sticky top-0 h-screen z-20">
+            <div class="p-6 border-b border-white/10">
+                <div class="sidebar-brand cursor-pointer" onclick="window.location.href='./dashboard.html'">
+                    <img src="/logo.png" alt="TDE Group">
+                    <div>
+                        <h2 class="font-bold text-gray-900">My Project</h2>
+                        <p class="text-xs text-gray-500">Client Portal</p>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav flex-1 overflow-y-auto p-4 space-y-2">
+                <a href="./dashboard.html" class="nav-item nav-link flex items-center gap-3 px-4 py-3 rounded-lg transition-colors">
+                    <span class="material-icons">dashboard</span>
+                    <span>Tableau de bord</span>
+                </a>
+                <a href="./timeline.html" class="nav-item nav-link flex items-center gap-3 px-4 py-3 rounded-lg transition-colors">
+                    <span class="material-icons">timeline</span>
+                    <span>Timeline</span>
+                </a>
+                <a href="./documents.html" class="nav-item nav-link active flex items-center gap-3 px-4 py-3 rounded-lg transition-colors">
+                    <span class="material-icons">folder</span>
+                    <span>Documents</span>
+                </a>
+                <a href="./chat.html" class="nav-item nav-link flex items-center gap-3 px-4 py-3 rounded-lg transition-colors">
+                    <span class="material-icons">chat</span>
+                    <span>Messages</span>
+                    <span id="chatBadge" class="badge-count" hidden>0</span>
+                </a>
+                <a href="./tickets.html" class="nav-item nav-link flex items-center gap-3 px-4 py-3 rounded-lg transition-colors">
+                    <span class="material-icons">support_agent</span>
+                    <span>Tickets</span>
+                    <span id="ticketBadge" class="badge-count" hidden>0</span>
+                </a>
+                <a href="./profile.html" class="nav-item nav-link flex items-center gap-3 px-4 py-3 rounded-lg transition-colors">
+                    <span class="material-icons">person</span>
+                    <span>Profil</span>
+                </a>
+            </nav>
+
+            <div class="p-4 border-t border-gray-200 space-y-3">
+                <button id="logoutBtn" class="w-full flex items-center justify-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors font-medium" type="button">
+                    <span class="material-icons">logout</span>
+                    <span>Déconnexion</span>
+                </button>
+            </div>
+        </aside>
+
+        <main class="documents-main">
+            <header class="documents-header">
+                <div class="header-grid">
+                    <div class="header-title">
+                        <h1>
+                            <span class="material-icons">folder_open</span>
+                            Documents Projet
+                        </h1>
+                        <p>Bibliothèque centralisée des documents validés et des livrables.</p>
+                    </div>
+                    <div class="project-badge" id="projectStatusBadge">Statut: -</div>
+                </div>
+            </header>
+
+            <div class="documents-wrap">
+                <section class="bonus-grid">
+                    <article class="bonus-card">
+                        <h2 class="bonus-title">
+                            <span class="material-icons">workspaces</span>
+                            Bonus Projet
+                        </h2>
+                        <p class="project-name" id="projectName">Chargement...</p>
+                        <div class="project-meta">
+                            <span class="meta-pill"><span class="material-icons">badge</span><span id="projectId">-</span></span>
+                            <span class="meta-pill"><span class="material-icons">person</span><span id="projectManager">-</span></span>
+                            <span class="meta-pill"><span class="material-icons">payments</span><span id="projectBudget">-</span></span>
+                            <span class="meta-pill"><span class="material-icons">category</span><span id="projectType">-</span></span>
+                        </div>
+                    </article>
+
+                    <article class="bonus-card">
+                        <h2 class="bonus-title">
+                            <span class="material-icons">bolt</span>
+                            Bonus Session & Documents
+                        </h2>
+                        <div class="session-stats">
+                            <div class="stat-box">
+                                <p class="stat-label">Documents visibles</p>
+                                <p class="stat-value" id="docCount">0</p>
+                            </div>
+                            <div class="stat-box">
+                                <p class="stat-label">Taille cumulée</p>
+                                <p class="stat-value" id="docTotalSize">-</p>
+                            </div>
+                            <div class="stat-box">
+                                <p class="stat-label">Dernier ajout</p>
+                                <p class="stat-value" id="lastUpload">-</p>
+                            </div>
+                            <div class="stat-box">
+                                <p class="stat-label">Session restante</p>
+                                <p class="stat-value" id="sessionTime">-</p>
+                            </div>
+                        </div>
+                    </article>
+                </section>
+
+                <section class="actions-bar" aria-label="Actions rapides documents">
+                    <a href="./timeline.html" class="quick-btn secondary">
+                        <span class="material-icons">timeline</span>
+                        Voir timeline
+                    </a>
+                    <a href="./chat.html" class="quick-btn primary">
+                        <span class="material-icons">chat</span>
+                        Contacter l'équipe
+                    </a>
+                    <a href="./tickets.html" class="quick-btn warning">
+                        <span class="material-icons">support_agent</span>
+                        Ouvrir un ticket
+                    </a>
+                    <button id="downloadVisibleBtn" class="quick-btn ghost" type="button">
+                        <span class="material-icons">download</span>
+                        Télécharger visibles
+                    </button>
+                    <button id="copyProjectIdBtn" class="quick-btn ghost" type="button">
+                        <span class="material-icons">content_copy</span>
+                        Copier ID projet
+                    </button>
+                </section>
+
+                <section class="tools-bar">
+                    <div class="search-wrap">
+                        <span class="material-icons">search</span>
+                        <input id="searchInput" type="text" placeholder="Rechercher un document (nom, type)...">
+                    </div>
+
+                    <div class="tool-actions">
+                        <select id="typeFilter" class="tool-select">
+                            <option value="all">Tous les types</option>
+                            <option value="quote">Devis</option>
+                            <option value="plans">Plans</option>
+                            <option value="contract">Contrat</option>
+                            <option value="invoice">Facture</option>
+                            <option value="report">Rapport</option>
+                            <option value="other">Autres</option>
+                        </select>
+                        <button id="refreshBtn" class="quick-btn ghost" type="button">
+                            <span class="material-icons">refresh</span>
+                            Actualiser
+                        </button>
+                    </div>
+                </section>
+
+                <section id="documentsList" class="documents-grid" aria-live="polite">
+                    <!-- Loaded dynamically -->
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script src="../src/client-auth-service.js"></script>
+    <script src="../src/client-data-service.js"></script>
+    <script src="../src/client-profile-shortcut.js"></script>
+    <script src="../src/client-ui-helpers.js"></script>
+    <script>
+        if (!clientAuthService.isAuthenticated()) {
+            window.location.href = './login.html';
+        }
+
+        const documentsState = {
+            all: [],
+            visible: [],
+            project: null,
+            filterType: 'all',
+            search: ''
+        };
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            setupListeners();
+            await loadPageData();
+            startSessionTicker();
+        });
+
+        function setupListeners() {
+            document.getElementById('searchInput').addEventListener('input', (event) => {
+                documentsState.search = event.target.value.trim().toLowerCase();
+                renderVisibleDocuments();
+            });
+
+            document.getElementById('typeFilter').addEventListener('change', (event) => {
+                documentsState.filterType = event.target.value;
+                renderVisibleDocuments();
+            });
+
+            document.getElementById('refreshBtn').addEventListener('click', async () => {
+                await loadPageData(true);
+                ClientUIHelpers.showNotification('Liste des documents mise à jour', 'success');
+            });
+
+            document.getElementById('downloadVisibleBtn').addEventListener('click', downloadVisibleDocuments);
+
+            document.getElementById('copyProjectIdBtn').addEventListener('click', () => {
+                const projectId = documentsState.project?.id || clientAuthService.getProjectId();
+                if (!projectId) {
+                    ClientUIHelpers.showNotification('Aucun ID projet disponible', 'warning');
+                    return;
+                }
+                ClientUIHelpers.copyToClipboard(projectId);
+            });
+
+            document.getElementById('logoutBtn').addEventListener('click', () => {
+                ClientUIHelpers.showConfirmDialog(
+                    'Confirmer la déconnexion',
+                    'Souhaitez-vous vraiment vous déconnecter ?',
+                    () => {
+                        clientAuthService.logout();
+                        window.location.href = './login.html';
+                    }
+                );
+            });
+        }
+
+        async function loadPageData(isManualRefresh = false) {
+            try {
+                const [project, documents, messages, tickets] = await Promise.all([
+                    clientDataService.getProject(),
+                    clientDataService.getDocuments(),
+                    clientDataService.getMessages(),
+                    clientDataService.getTickets()
+                ]);
+
+                documentsState.project = project || null;
+                documentsState.all = Array.isArray(documents) ? documents : [];
+
+                updateProjectBonus(project);
+                updateBadges(messages, tickets);
+                renderVisibleDocuments();
+                updateSessionTime();
+
+                if (isManualRefresh) {
+                    pulseCards();
+                }
+            } catch (error) {
+                console.error('Error loading documents page:', error);
+                ClientUIHelpers.showNotification('Erreur lors du chargement des données', 'error');
+            }
+        }
+
+        function renderVisibleDocuments() {
+            const type = documentsState.filterType;
+            const query = documentsState.search;
+
+            const visible = documentsState.all.filter((doc) => {
+                const matchesType = type === 'all' || String(doc.type || '').toLowerCase() === type;
+                const searchable = `${doc.name || ''} ${doc.type || ''}`.toLowerCase();
+                const matchesQuery = !query || searchable.includes(query);
+                return matchesType && matchesQuery;
+            });
+
+            documentsState.visible = visible;
+
+            const documentsList = document.getElementById('documentsList');
+            if (!visible.length) {
+                documentsList.innerHTML = '<div class="empty-state">Aucun document ne correspond à votre recherche.</div>';
+                updateDocMetrics([]);
+                return;
+            }
+
+            documentsList.innerHTML = visible.map((doc, index) => {
+                const delay = Math.min(index * 40, 320);
+                const typeClass = `doc-type-${normalizeType(doc.type)}`;
+                return `
+                    <article class="document-card ${typeClass}" style="animation-delay:${delay}ms">
+                        <div class="doc-head">
+                            <div class="doc-main">
+                                <div class="doc-icon">
+                                    <span class="material-icons">${getDocMaterialIcon(doc.type)}</span>
+                                </div>
+                                <div class="min-w-0">
+                                    <h3 class="doc-name" title="${escapeHtml(doc.name || '')}">${escapeHtml(doc.name || 'Document')}</h3>
+                                    <p class="doc-sub">${ClientUIHelpers.formatFileSize((Number(doc.size) || 0) * 1024 * 1024)}</p>
+                                </div>
+                            </div>
+                            <span class="doc-tag">${escapeHtml(getTypeLabel(doc.type))}</span>
+                        </div>
+
+                        <div class="doc-meta">
+                            <span><span class="material-icons">calendar_month</span>${ClientUIHelpers.formatDate(doc.uploadDate)}</span>
+                            <span><span class="material-icons">inventory_2</span>${(doc.type || 'other').toUpperCase()}</span>
+                        </div>
+
+                        <div class="doc-actions">
+                            <button class="doc-btn" type="button" onclick="previewDocument('${escapeAttr(doc.url)}', '${escapeAttr(doc.name || 'document')}')">
+                                <span class="material-icons">visibility</span>
+                                Prévisualiser
+                            </button>
+                            <button class="doc-btn primary" type="button" onclick="confirmDownload('${escapeAttr(doc.url)}', '${escapeAttr(doc.name || 'document')}')">
+                                <span class="material-icons">download</span>
+                                Télécharger
+                            </button>
+                        </div>
+                    </article>
+                `;
+            }).join('');
+
+            updateDocMetrics(visible);
+        }
+
+        function updateProjectBonus(project) {
+            const projectData = project || {};
+            const projectId = projectData.id || clientAuthService.getProjectId() || '-';
+
+            document.getElementById('projectName').textContent = projectData.name || 'Projet client';
+            document.getElementById('projectId').textContent = projectId !== '-' ? `#${String(projectId).slice(0, 8)}` : '-';
+            document.getElementById('projectManager').textContent = projectData.manager || projectData.project_manager || '-';
+            document.getElementById('projectBudget').textContent = formatBudget(projectData.budget, projectData.currency || 'EUR');
+            document.getElementById('projectType').textContent = formatProjectType(projectData.project_type || projectData.type);
+
+            const status = formatProjectStatus(projectData.status);
+            document.getElementById('projectStatusBadge').textContent = `Statut: ${status}`;
+        }
+
+        function updateDocMetrics(visibleDocs) {
+            const docs = Array.isArray(visibleDocs) ? visibleDocs : [];
+            document.getElementById('docCount').textContent = String(docs.length);
+
+            const totalMB = docs.reduce((sum, doc) => sum + (Number(doc.size) || 0), 0);
+            document.getElementById('docTotalSize').textContent = `${totalMB.toFixed(1)} MB`;
+
+            const lastDate = [...docs]
+                .filter((doc) => doc.uploadDate)
+                .sort((a, b) => new Date(b.uploadDate) - new Date(a.uploadDate))[0]?.uploadDate;
+            document.getElementById('lastUpload').textContent = lastDate ? ClientUIHelpers.formatDate(lastDate) : '-';
+        }
+
+        function updateBadges(messages, tickets) {
+            const unreadMessages = (messages || []).filter((msg) => !msg.read).length;
+            const openTickets = (tickets || []).filter((ticket) => ['open', 'in_progress'].includes(ticket.status)).length;
+
+            const chatBadge = document.getElementById('chatBadge');
+            if (chatBadge) {
+                chatBadge.hidden = unreadMessages === 0;
+                chatBadge.textContent = unreadMessages > 9 ? '9+' : String(unreadMessages);
+            }
+
+            const ticketBadge = document.getElementById('ticketBadge');
+            if (ticketBadge) {
+                ticketBadge.hidden = openTickets === 0;
+                ticketBadge.textContent = openTickets > 9 ? '9+' : String(openTickets);
+            }
+        }
+
+        function updateSessionTime() {
+            const minutes = Math.max(0, Number(clientAuthService.getSessionTimeRemaining()) || 0);
+            document.getElementById('sessionTime').textContent = `${minutes} min`;
+        }
+
+        function startSessionTicker() {
+            updateSessionTime();
+            setInterval(updateSessionTime, 60000);
+        }
+
+        function pulseCards() {
+            document.querySelectorAll('.document-card').forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.transform = 'translateY(-3px)';
+                    setTimeout(() => {
+                        card.style.transform = '';
+                    }, 150);
+                }, index * 30);
+            });
+        }
+
+        async function resolveDocumentUrl(url) {
+            if (!url) return null;
+            try {
+                const { default: clientBackendService } = await import('../src/client-backend-service.js');
+                const signed = await clientBackendService.getSignedDocumentUrl(url, 300);
+                if (signed?.success && signed.url) {
+                    return signed.url;
+                }
+                if (signed?.publicUrl) {
+                    return signed.publicUrl;
+                }
+                if (signed?.error && String(signed.error).toLowerCase().includes('bucket not found')) {
+                    ClientUIHelpers.showNotification('Bucket storage introuvable: vérifie "project-documents" dans Supabase', 'error');
+                    return null;
+                }
+            } catch (error) {
+                console.warn('Signed URL unavailable, fallback to raw URL:', error);
+            }
+            return url;
+        }
+
+        function confirmDownload(url, name) {
+            ClientUIHelpers.showConfirmDialog(
+                'Télécharger le document',
+                `Confirmez-vous le téléchargement de "${name}" ?`,
+                async () => {
+                    const safeUrl = await resolveDocumentUrl(url);
+                    if (!safeUrl) {
+                        ClientUIHelpers.showNotification('Téléchargement indisponible', 'warning');
+                        return;
+                    }
+                    ClientUIHelpers.downloadFile(safeUrl, name);
+                }
+            );
+        }
+
+        async function previewDocument(url) {
+            if (!url) {
+                ClientUIHelpers.showNotification('Aperçu indisponible', 'warning');
+                return;
+            }
+            const safeUrl = await resolveDocumentUrl(url);
+            if (!safeUrl) {
+                ClientUIHelpers.showNotification('Aperçu indisponible', 'warning');
+                return;
+            }
+            window.open(safeUrl, '_blank', 'noopener,noreferrer');
+        }
+
+        function downloadVisibleDocuments() {
+            if (!documentsState.visible.length) {
+                ClientUIHelpers.showNotification('Aucun document visible à télécharger', 'info');
+                return;
+            }
+
+            ClientUIHelpers.showConfirmDialog(
+                'Télécharger les documents visibles',
+                `Télécharger ${documentsState.visible.length} document(s) visibles ?`,
+                async () => {
+                    documentsState.visible.forEach((doc, index) => {
+                        setTimeout(async () => {
+                            const safeUrl = await resolveDocumentUrl(doc.url);
+                            if (safeUrl) {
+                                ClientUIHelpers.downloadFile(safeUrl, doc.name);
+                            }
+                        }, index * 220);
+                    });
+                    ClientUIHelpers.showNotification('Téléchargements lancés', 'success');
+                }
+            );
+        }
+
+        function normalizeType(type) {
+            const value = String(type || 'other').toLowerCase();
+            const allowed = ['quote', 'plans', 'contract', 'invoice', 'report', 'other'];
+            return allowed.includes(value) ? value : 'other';
+        }
+
+        function getTypeLabel(type) {
+            const map = {
+                quote: 'Devis',
+                plans: 'Plans',
+                contract: 'Contrat',
+                invoice: 'Facture',
+                report: 'Rapport',
+                other: 'Autre'
+            };
+            return map[normalizeType(type)] || 'Autre';
+        }
+
+        function getDocMaterialIcon(type) {
+            const map = {
+                quote: 'request_quote',
+                plans: 'architecture',
+                contract: 'description',
+                invoice: 'receipt_long',
+                report: 'bar_chart',
+                other: 'insert_drive_file'
+            };
+            return map[normalizeType(type)] || 'insert_drive_file';
+        }
+
+        function formatBudget(amount, currency = 'EUR') {
+            const value = Number(amount);
+            if (!Number.isFinite(value)) return '-';
+            try {
+                return new Intl.NumberFormat('fr-FR', {
+                    style: 'currency',
+                    currency
+                }).format(value);
+            } catch {
+                return `${value.toLocaleString('fr-FR')} ${currency}`;
+            }
+        }
+
+        function formatProjectType(type) {
+            if (!type) return '-';
+            return String(type)
+                .replace(/[_-]+/g, ' ')
+                .replace(/\s+/g, ' ')
+                .trim()
+                .replace(/\b\w/g, (char) => char.toUpperCase());
+        }
+
+        function formatProjectStatus(status) {
+            const map = {
+                planning: 'Planification',
+                planned: 'Planifié',
+                in_progress: 'En cours',
+                active: 'Actif',
+                completed: 'Terminé',
+                paused: 'En pause',
+                delayed: 'Retardé',
+                cancelled: 'Annulé'
+            };
+            const key = String(status || '').toLowerCase();
+            return map[key] || (status ? formatProjectType(status) : '-');
+        }
+
+        function escapeHtml(value) {
+            return String(value || '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function escapeAttr(value) {
+            return escapeHtml(value).replace(/`/g, '&#96;');
+        }
+
+        window.confirmDownload = confirmDownload;
+        window.previewDocument = previewDocument;
+    </script>
+</body>
+
+</html>

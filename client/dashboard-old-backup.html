@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard - Portail Client TDE Group</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../src/style.css" />
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body class="bg-gray-50 text-slate-800 font-sans antialiased">
+    <div class="min-h-screen flex">
+        <!-- Sidebar -->
+        <aside class="hidden lg:flex w-72 bg-white border-r border-gray-200 flex-col sticky top-0 h-screen z-20">
+            <div class="p-6 border-b border-gray-200">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-600 to-indigo-600 flex items-center justify-center">
+                        <i data-lucide="building-2" class="w-6 h-6 text-white"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-bold text-gray-900">My Project</h2>
+                        <p class="text-xs text-gray-500">Client Portal</p>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="flex-1 overflow-y-auto p-4 space-y-2">
+                <a href="./dashboard.html" class="nav-link active flex items-center gap-3 px-4 py-3 rounded-lg text-gray-900 font-medium hover:bg-purple-50 transition-colors">
+                    <i data-lucide="home" class="w-5 h-5"></i> Dashboard
+                </a>
+                <a href="./timeline.html" class="nav-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors">
+                    <i data-lucide="calendar" class="w-5 h-5"></i> Timeline
+                </a>
+                <a href="./documents.html" class="nav-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors">
+                    <i data-lucide="file-text" class="w-5 h-5"></i> Documents
+                </a>
+                <a href="./chat.html" class="nav-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors">
+                    <i data-lucide="message-square" class="w-5 h-5"></i> Chat
+                </a>
+                <a href="./tickets.html" class="nav-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors">
+                    <i data-lucide="ticket" class="w-5 h-5"></i> Tickets
+                </a>
+                <a href="./profile.html" class="nav-link flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors">
+                    <i data-lucide="user" class="w-5 h-5"></i> Profil
+                </a>
+            </nav>
+
+            <div class="p-4 border-t border-gray-200 space-y-3">
+                <button id="logoutBtn" class="w-full flex items-center justify-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors font-medium">
+                    <i data-lucide="log-out" class="w-4 h-4"></i> Déconnexion
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 min-h-screen flex flex-col">
+            <!-- Header Mobile -->
+            <header class="lg:hidden bg-white border-b border-gray-200 sticky top-0 z-10 px-4 py-4 flex items-center justify-between">
+                <h1 class="font-bold text-gray-900">My Project</h1>
+                <button id="mobileMenuBtn" class="p-2 hover:bg-gray-100 rounded-lg">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </header>
+
+            <!-- Page Content -->
+            <div class="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8 max-w-6xl w-full mx-auto">
+
+                <!-- Welcome Section -->
+                <div class="mb-8">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-2">Bienvenue! 👋</h2>
+                    <p class="text-gray-600">Suivi en temps réel de votre projet</p>
+                </div>
+
+                <!-- Project Overview Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                    <!-- Project Status -->
+                    <div class="bg-white rounded-2xl p-6 border border-gray-200 hover:shadow-lg transition-shadow">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="text-sm font-medium text-gray-600">Statut</h3>
+                            <i data-lucide="info" class="w-4 h-4 text-gray-400"></i>
+                        </div>
+                        <p id="projectStatus" class="text-2xl font-bold text-gray-900">En cours</p>
+                        <p class="text-xs text-gray-500 mt-2">Projet actif</p>
+                    </div>
+
+                    <!-- Progress -->
+                    <div class="bg-white rounded-2xl p-6 border border-gray-200 hover:shadow-lg transition-shadow">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="text-sm font-medium text-gray-600">Avancement</h3>
+                            <i data-lucide="trending-up" class="w-4 h-4 text-green-500"></i>
+                        </div>
+                        <p id="projectProgress" class="text-2xl font-bold text-gray-900">45%</p>
+                        <div class="w-full bg-gray-200 rounded-full h-2 mt-3">
+                            <div id="progressBar" class="bg-gradient-to-r from-purple-600 to-indigo-600 h-2 rounded-full" style="width: 45%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Manager -->
+                    <div class="bg-white rounded-2xl p-6 border border-gray-200 hover:shadow-lg transition-shadow">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="text-sm font-medium text-gray-600">Responsable</h3>
+                            <i data-lucide="user-check" class="w-4 h-4 text-blue-500"></i>
+                        </div>
+                        <p id="projectManager" class="text-2xl font-bold text-gray-900">Jean Martin</p>
+                        <p class="text-xs text-gray-500 mt-2">Project Manager</p>
+                    </div>
+
+                    <!-- Delivery Date -->
+                    <div class="bg-white rounded-2xl p-6 border border-gray-200 hover:shadow-lg transition-shadow">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="text-sm font-medium text-gray-600">Livraison</h3>
+                            <i data-lucide="calendar" class="w-4 h-4 text-purple-500"></i>
+                        </div>
+                        <p id="daysRemaining" class="text-2xl font-bold text-gray-900">134 j</p>
+                        <p id="deliveryDate" class="text-xs text-gray-500 mt-2">30 Juin 2026</p>
+                    </div>
+                </div>
+
+                <!-- Main Content Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+                    <!-- Left Column -->
+                    <div class="lg:col-span-2 space-y-8">
+
+                        <!-- Budget Card -->
+                        <div class="bg-white rounded-2xl p-8 border border-gray-200 hover:shadow-lg transition-shadow">
+                            <h3 class="text-lg font-bold text-gray-900 mb-6">Informations Clés</h3>
+                            
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between pb-4 border-b border-gray-100">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center">
+                                            <i data-lucide="dollar-sign" class="w-5 h-5 text-purple-600"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm text-gray-600">Budget</p>
+                                            <p id="budget" class="font-bold text-gray-900">€250,000</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center justify-between pb-4 border-b border-gray-100">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center">
+                                            <i data-lucide="calendar" class="w-5 h-5 text-blue-600"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm text-gray-600">Début du projet</p>
+                                            <p id="startDate" class="font-bold text-gray-900">20 Février 2026</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center">
+                                            <i data-lucide="flag" class="w-5 h-5 text-green-600"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm text-gray-600">Fin estimée</p>
+                                            <p id="endDate" class="font-bold text-gray-900">30 Juin 2026</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Recent Activity -->
+                        <div class="bg-white rounded-2xl p-8 border border-gray-200 hover:shadow-lg transition-shadow">
+                            <h3 class="text-lg font-bold text-gray-900 mb-6">Activité Récente</h3>
+                            
+                            <div id="recentActivityContainer" class="space-y-4">
+                                <!-- Loaded dynamically -->
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Right Column -->
+                    <div class="space-y-8">
+
+                        <!-- Quick Actions -->
+                        <div class="bg-white rounded-2xl p-8 border border-gray-200">
+                            <h3 class="text-lg font-bold text-gray-900 mb-6">Actions Rapides</h3>
+                            
+                            <div class="space-y-3">
+                                <a href="./timeline.html" class="flex items-center gap-3 p-4 rounded-lg bg-gradient-to-r from-purple-50 to-indigo-50 hover:from-purple-100 hover:to-indigo-100 transition-colors text-gray-900 font-medium">
+                                    <i data-lucide="calendar" class="w-5 h-5 text-purple-600"></i>
+                                    <span>Voir Timeline</span>
+                                    <i data-lucide="arrow-right" class="w-4 h-4 ml-auto text-gray-400"></i>
+                                </a>
+                                <a href="./documents.html" class="flex items-center gap-3 p-4 rounded-lg bg-gradient-to-r from-blue-50 to-cyan-50 hover:from-blue-100 hover:to-cyan-100 transition-colors text-gray-900 font-medium">
+                                    <i data-lucide="file-text" class="w-5 h-5 text-blue-600"></i>
+                                    <span>Documents</span>
+                                    <i data-lucide="arrow-right" class="w-4 h-4 ml-auto text-gray-400"></i>
+                                </a>
+                                <a href="./chat.html" class="flex items-center gap-3 p-4 rounded-lg bg-gradient-to-r from-green-50 to-emerald-50 hover:from-green-100 hover:to-emerald-100 transition-colors text-gray-900 font-medium">
+                                    <i data-lucide="message-square" class="w-5 h-5 text-green-600"></i>
+                                    <span>Chat Équipe</span>
+                                    <i data-lucide="arrow-right" class="w-4 h-4 ml-auto text-gray-400"></i>
+                                </a>
+                                <a href="./tickets.html" class="flex items-center gap-3 p-4 rounded-lg bg-gradient-to-r from-orange-50 to-red-50 hover:from-orange-100 hover:to-red-100 transition-colors text-gray-900 font-medium">
+                                    <i data-lucide="ticket" class="w-5 h-5 text-orange-600"></i>
+                                    <span>Signaler Problème</span>
+                                    <i data-lucide="arrow-right" class="w-4 h-4 ml-auto text-gray-400"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Current Phase -->
+                        <div class="bg-white rounded-2xl p-8 border border-gray-200 hover:shadow-lg transition-shadow">
+                            <h3 class="text-lg font-bold text-gray-900 mb-4">Phase Actuelle</h3>
+                            
+                            <div id="currentPhaseContainer" class="space-y-4">
+                                <!-- Loaded dynamically -->
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="../src/client-auth-service.js"></script>
+    <script src="../src/client-data-service.js"></script>
+    <script src="../src/client-ui-helpers.js"></script>
+    <script>
+        // Vérifier l'authentification
+        if (!clientAuthService.isAuthenticated()) {
+            window.location.href = './login.html';
+        }
+
+        lucide.createIcons();
+
+        // Charger les données du dashboard
+        async function loadDashboard() {
+            try {
+                const project = await clientDataService.getProject();
+                const phases = await clientDataService.getPhases();
+                const activity = await clientDataService.getRecentActivity();
+
+                // Remplir les informations du projet
+                document.getElementById('projectStatus').textContent = 'En cours';
+                document.getElementById('projectProgress').textContent = `${project.progress}%`;
+                document.getElementById('progressBar').style.width = `${project.progress}%`;
+                document.getElementById('projectManager').textContent = project.manager;
+                document.getElementById('daysRemaining').textContent = `${project.daysRemaining} j`;
+                document.getElementById('deliveryDate').textContent = ClientUIHelpers.formatDate(project.endDate);
+                document.getElementById('budget').textContent = ClientUIHelpers.formatCurrency(project.budget, project.currency);
+                document.getElementById('startDate').textContent = ClientUIHelpers.formatDate(project.startDate);
+                document.getElementById('endDate').textContent = ClientUIHelpers.formatDate(project.endDate);
+
+                // Afficher l'activité récente
+                const activityContainer = document.getElementById('recentActivityContainer');
+                activityContainer.innerHTML = activity.map(act => `
+                    <div class="flex gap-4 pb-4 border-b border-gray-100 last:border-b-0 last:pb-0">
+                        <div class="text-2xl">${act.type === 'photo' ? '📸' : act.type === 'message' ? '💬' : '🎫'}</div>
+                        <div class="flex-1">
+                            <p class="text-gray-900 font-medium">${act.message}</p>
+                            <p class="text-xs text-gray-500 mt-1">${ClientUIHelpers.formatDateTime(act.timestamp)}</p>
+                        </div>
+                    </div>
+                `).join('');
+
+                // Afficher la phase actuelle
+                const currentPhase = phases.find(p => p.status === 'in_progress') || phases[0];
+                const phaseContainer = document.getElementById('currentPhaseContainer');
+                phaseContainer.innerHTML = `
+                    <div>
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-2xl">${ClientUIHelpers.getStatusEmoji(currentPhase.status)}</span>
+                            <h4 class="font-bold text-gray-900">${currentPhase.name}</h4>
+                        </div>
+                        <p class="text-sm text-gray-600 mb-4">${currentPhase.description}</p>
+                        <div class="bg-gray-100 rounded-full h-2 mb-2">
+                            <div class="bg-gradient-to-r from-purple-600 to-indigo-600 h-2 rounded-full" style="width: ${currentPhase.progress}%"></div>
+                        </div>
+                        <p class="text-xs text-gray-500">${currentPhase.progress}% complétée</p>
+                    </div>
+                `;
+
+            } catch (error) {
+                console.error('Error loading dashboard:', error);
+                ClientUIHelpers.showNotification('Erreur lors du chargement', 'error');
+            }
+        }
+
+        // Déconnexion
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            clientAuthService.logout();
+            window.location.href = './login.html';
+        });
+
+        // Charger les données
+        loadDashboard();
+
+        // Initialiser les icônes après le chargement
+        setTimeout(() => lucide.createIcons(), 100);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuration Requise - TDE Group</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .container { background: white; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); max-width: 900px; width: 100%; overflow: hidden; }
+        .header { background: linear-gradient(135deg, #4c1d95, #5b21b6); color: white; padding: 40px; text-align: center; }
+        .header h1 { font-size: 32px; margin-bottom: 10px; }
+        .header p { opacity: 0.9; font-size: 16px; }
+        .content { padding: 40px; }
+        .section { margin-bottom: 40px; }
+        .section h2 { color: #1f2937; font-size: 22px; margin-bottom: 20px; border-bottom: 3px solid #4c1d95; padding-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+        .section h2 .icon { font-size: 24px; }
+        .checklist { list-style: none; }
+        .checklist li { padding: 12px 0; padding-left: 35px; position: relative; line-height: 1.6; }
+        .checklist li:before { content: "✓"; position: absolute; left: 0; color: #10b981; font-weight: bold; font-size: 18px; }
+        .code-block { background: #1f2937; color: #10b981; padding: 20px; border-radius: 8px; overflow-x: auto; font-family: 'Courier New', monospace; font-size: 13px; margin: 15px 0; line-height: 1.6; }
+        .code-block.line { margin: 5px 0; }
+        .alert { padding: 15px 20px; border-radius: 8px; margin: 20px 0; display: flex; gap: 15px; align-items: flex-start; }
+        .alert.warning { background: #fef3c7; border-left: 4px solid #f59e0b; color: #92400e; }
+        .alert.success { background: #d1fae5; border-left: 4px solid #10b981; color: #065f46; }
+        .alert.info { background: #dbeafe; border-left: 4px solid #3b82f6; color: #1e40af; }
+        .alert-icon { flex-shrink: 0; font-size: 20px; }
+        .button-group { display: flex; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
+        .btn { padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: 0.3s; font-size: 14px; }
+        .btn-primary { background: linear-gradient(135deg, #4c1d95, #5b21b6); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(76,29,149,0.2); }
+        .btn-secondary { background: #e5e7eb; color: #1f2937; }
+        .btn-secondary:hover { background: #d1d5db; }
+        .step { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px; margin: 15px 0; }
+        .step h3 { color: #4c1d95; margin-bottom: 10px; font-size: 16px; }
+        .step p { color: #4b5563; line-height: 1.6; margin-bottom: 10px; }
+        .step p strong { color: #1f2937; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        table th, table td { padding: 12px; text-align: left; border-bottom: 1px solid #e5e7eb; }
+        table th { background: #f3f4f6; font-weight: 600; color: #1f2937; }
+        table tr:hover { background: #f9fafb; }
+        .file-tag { display: inline-block; background: #f0f9ff; color: #0369a1; padding: 4px 8px; border-radius: 4px; font-family: monospace; font-size: 12px; margin: 0 4px; }
+        .status-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+        .status-badge.done { background: #d1fae5; color: #065f46; }
+        .status-badge.pending { background: #fef3c7; color: #92400e; }
+        .copy-btn { padding: 4px 12px; background: #4c1d95; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; }
+        .copy-btn:hover { background: #5b21b6; }
+        @media (max-width: 768px) {
+            .header h1 { font-size: 24px; }
+            .content { padding: 20px; }
+            .button-group { flex-direction: column; }
+            .btn { width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📋 Configuration Requise</h1>
+            <p>Système de Création de Projet TDE Group - Étapes de mise en place</p>
+        </div>
+
+        <div class="content">
+            <!-- Section 1: Status -->
+            <div class="section">
+                <h2><span class="icon">✨</span>État du Système</h2>
+                <table>
+                    <tr>
+                        <th>Composant</th>
+                        <th>Status</th>
+                        <th>Details</th>
+                    </tr>
+                    <tr>
+                        <td>Frontend HTML</td>
+                        <td><span class="status-badge done">✓ PRÊT</span></td>
+                        <td><span class="file-tag">admin/create-project.html</span> - Nouveau formulaire optimisé</td>
+                    </tr>
+                    <tr>
+                        <td>Backend JavaScript</td>
+                        <td><span class="status-badge done">✓ PRÊT</span></td>
+                        <td><span class="file-tag">src/data-store.js</span> - Méthode create() mise à jour</td>
+                    </tr>
+                    <tr>
+                        <td>Base de Données</td>
+                        <td><span class="status-badge pending">⚠ ACTION REQUISE</span></td>
+                        <td>Ajouter colonnes project_manager et manager_email</td>
+                    </tr>
+                    <tr>
+                        <td>Tests</td>
+                        <td><span class="status-badge pending">⏳ À FAIRE</span></td>
+                        <td>Créer et valider un projet de test</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- Section 2: Migration SQL -->
+            <div class="section">
+                <h2><span class="icon">🔧</span>Étape 1: Migration Base de Données</h2>
+                
+                <div class="alert warning">
+                    <span class="alert-icon">⚠️</span>
+                    <div>
+                        <strong>Important!</strong> Cette étape est REQUISE avant de tester la création de projets. Les colonnes <strong>project_manager</strong> et <strong>manager_email</strong> doivent exister dans la base de données.
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h3>📍 Option 1: Via Supabase Console (Recommandé)</h3>
+                    <ol style="margin-left: 20px; color: #4b5563; line-height: 2;">
+                        <li>Allez sur: <strong>https://app.supabase.com</strong></li>
+                        <li>Connectez-vous à votre projet</li>
+                        <li>Allez à: <strong>SQL Editor</strong></li>
+                        <li>Cliquez: <strong>New Query</strong></li>
+                        <li>Collez le SQL ci-dessous:</li>
+                    </ol>
+                    <div class="code-block">
+<span class="code-block line">-- Ajouter colonnes project_manager et manager_email</span>
+<span class="code-block line">ALTER TABLE public.projects</span>
+<span class="code-block line">ADD COLUMN IF NOT EXISTS project_manager TEXT DEFAULT NULL,</span>
+<span class="code-block line">ADD COLUMN IF NOT EXISTS manager_email TEXT DEFAULT NULL;</span>
+<span class="code-block line"></span>
+<span class="code-block line">-- Créer indexes pour performance</span>
+<span class="code-block line">CREATE INDEX IF NOT EXISTS idx_projects_project_manager</span>
+<span class="code-block line">ON public.projects(project_manager);</span>
+<span class="code-block line"></span>
+<span class="code-block line">CREATE INDEX IF NOT EXISTS idx_projects_manager_email</span>
+<span class="code-block line">ON public.projects(manager_email);</span>
+                    </div>
+                    <button class="copy-btn" onclick="copyToClipboard()">📋 Copier le SQL</button>
+                    <ol style="margin-left: 20px; color: #4b5563; line-height: 2; margin-top: 15px;">
+                        <li>Cliquez: <strong>Run</strong> (ou Cmd/Ctrl + Enter)</li>
+                        <li>Attendez le message: <strong>✓ Success</strong></li>
+                    </ol>
+                </div>
+
+                <div class="step">
+                    <h3>📍 Option 2: Via fichier SQL</h3>
+                    <ol style="margin-left: 20px; color: #4b5563; line-height: 2;">
+                        <li>Ouvrez le fichier: <span class="file-tag">ADD_PROJECT_MANAGER_FIELDS.sql</span></li>
+                        <li>Copiez tout le contenu</li>
+                        <li>Allez à Supabase SQL Editor</li>
+                        <li>Créez une nouvelle requête</li>
+                        <li>Collez et exécutez</li>
+                    </ol>
+                </div>
+
+                <div class="alert success">
+                    <span class="alert-icon">✓</span>
+                    <div>
+                        <strong>Succès!</strong> Si vous voyez "Success", les colonnes sont ajoutées et vous pouvez continuer.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 3: Test de Création -->
+            <div class="section">
+                <h2><span class="icon">🧪</span>Étape 2: Tester la Création de Projet</h2>
+
+                <div class="step">
+                    <h3>📍 Démarrer l'application</h3>
+                    <p>Dans le terminal:</p>
+                    <div class="code-block">
+<span class="code-block line">cd /home/stalker/Bureau/builder-test-main</span>
+<span class="code-block line">npm run dev</span>
+                    </div>
+                    <p style="margin-top: 10px;">Attendez: <strong>"VITE v... ready in ... ms"</strong></p>
+                </div>
+
+                <div class="step">
+                    <h3>📍 Se connecter</h3>
+                    <ol style="margin-left: 20px; color: #4b5563; line-height: 2;">
+                        <li>Allez à: <strong>http://localhost:5173/admin/login.html</strong></li>
+                        <li>Entrez vos identifiants admin</li>
+                        <li>Cliquez: <strong>Se connecter</strong></li>
+                    </ol>
+                </div>
+
+                <div class="step">
+                    <h3>📍 Créer un projet de test</h3>
+                    <ol style="margin-left: 20px; color: #4b5563; line-height: 2;">
+                        <li>Allez à: <strong>http://localhost:5173/admin/create-project.html</strong></li>
+                        <li>Remplissez le formulaire avec ces données:</li>
+                    </ol>
+                    <table style="margin-top: 15px;">
+                        <tr>
+                            <th>Champ</th>
+                            <th>Valeur</th>
+                        </tr>
+                        <tr>
+                            <td>Nom du Projet</td>
+                            <td><strong>Test Project 001</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Type de Projet</td>
+                            <td><strong>IT</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Description</td>
+                            <td><strong>Projet de test pour valider le système</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Nom de l'Entreprise</td>
+                            <td><strong>Test Client Inc.</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Email du Contact</td>
+                            <td><strong>contact@testclient.com</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Chef de Projet</td>
+                            <td><strong>Jean Dupont</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Email Chef de Projet</td>
+                            <td><strong>jean@tdegroup.com</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Date de Début</td>
+                            <td><strong>Aujourd'hui</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Date de Fin</td>
+                            <td><strong>+30 jours</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Budget</td>
+                            <td><strong>50000</strong></td>
+                        </tr>
+                    </table>
+                    <ol style="margin-left: 20px; color: #4b5563; line-height: 2; margin-top: 15px;">
+                        <li>UUID sera <strong>généré automatiquement</strong></li>
+                        <li>PIN sera <strong>généré automatiquement</strong></li>
+                        <li>Cliquez: <strong>"Créer le Projet"</strong></li>
+                    </ol>
+                </div>
+
+                <div class="step">
+                    <h3>✓ Validation du succès</h3>
+                    <ul style="margin-left: 20px; color: #4b5563; line-height: 2;">
+                        <li>✓ Voir le message: <strong>"✅ Projet créé avec succès!"</strong></li>
+                        <li>✓ Être redirigé vers le dashboard en 2.5 secondes</li>
+                        <li>✓ Voir le nouveau projet dans la liste</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Section 4: Vérification BDD -->
+            <div class="section">
+                <h2><span class="icon">📊</span>Étape 3: Vérifier les Données en Base</h2>
+
+                <div class="step">
+                    <h3>📍 Vérifier le projet créé</h3>
+                    <ol style="margin-left: 20px; color: #4b5563; line-height: 2;">
+                        <li>Allez à Supabase Console</li>
+                        <li>Allez à: <strong>SQL Editor</strong></li>
+                        <li>Créez une nouvelle requête</li>
+                        <li>Exécutez ce SQL:</li>
+                    </ol>
+                    <div class="code-block">
+<span class="code-block line">SELECT id, name, project_manager, manager_email, access_pin</span>
+<span class="code-block line">FROM projects</span>
+<span class="code-block line">ORDER BY created_at DESC</span>
+<span class="code-block line">LIMIT 1;</span>
+                    </div>
+                    <p style="margin-top: 10px; color: #4b5563;"><strong>Vous devriez voir:</strong></p>
+                    <ul style="margin-left: 20px; color: #4b5563; line-height: 2;">
+                        <li>✓ <strong>id:</strong> UUID généré (ex: a1b2c3d4-...)</li>
+                        <li>✓ <strong>name:</strong> "Test Project 001"</li>
+                        <li>✓ <strong>project_manager:</strong> "Jean Dupont"</li>
+                        <li>✓ <strong>manager_email:</strong> "jean@tdegroup.com"</li>
+                        <li>✓ <strong>access_pin:</strong> 6 chiffres (ex: 123456)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Section 5: Prochaines étapes -->
+            <div class="section">
+                <h2><span class="icon">🚀</span>Prochaines Étapes</h2>
+
+                <div class="alert info">
+                    <span class="alert-icon">ℹ️</span>
+                    <div>
+                        <strong>Système en production!</strong> Vous pouvez maintenant créer des projets. Les identifiants UUID + PIN peuvent être utilisés pour la connexion client (à développer).
+                    </div>
+                </div>
+
+                <ul class="checklist">
+                    <li><strong>Phase 4:</strong> Créer la page de login client (UUID + PIN)</li>
+                    <li><strong>Phase 5:</strong> Implémenter le dashboard client</li>
+                    <li><strong>Phase 6:</strong> Ajouter les notifications en temps réel</li>
+                    <li><strong>Phase 7:</strong> Déployer en production</li>
+                </ul>
+
+                <div class="button-group" style="margin-top: 30px;">
+                    <a href="http://localhost:5173/admin/create-project.html" class="btn btn-primary" target="_blank">
+                        🚀 Aller à la page de création
+                    </a>
+                    <a href="http://localhost:5173/admin/index.html" class="btn btn-primary" target="_blank">
+                        📊 Aller au dashboard
+                    </a>
+                </div>
+            </div>
+
+            <!-- Section 6: Support -->
+            <div class="section">
+                <h2><span class="icon">🆘</span>Dépannage</h2>
+
+                <div class="step">
+                    <h3>❌ Erreur: "Column does not exist"</h3>
+                    <p><strong>Solution:</strong> Les colonnes project_manager et manager_email n'existent pas. Exécutez la migration SQL (Étape 1).</p>
+                </div>
+
+                <div class="step">
+                    <h3>❌ Erreur: "User not authenticated"</h3>
+                    <p><strong>Solution:</strong> Reconnectez-vous sur la page de login (<strong>admin/login.html</strong>).</p>
+                </div>
+
+                <div class="step">
+                    <h3>❌ UUID/PIN vides</h3>
+                    <p><strong>Solution:</strong> Rafraîchissez la page (F5). S'ils restent vides, cliquez sur "Générer".</p>
+                </div>
+
+                <div class="step">
+                    <h3>❌ Le projet ne se crée pas</h3>
+                    <p><strong>Solution:</strong> Ouvrez la console (F12 → Console). Cherchez les erreurs rouges. Vérifiez que:</p>
+                    <ul style="margin-left: 20px;">
+                        <li>Tous les champs obligatoires sont remplis (marked with *)</li>
+                        <li>UUID et PIN sont générés (non-vides)</li>
+                        <li>Vous êtes connecté</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Fichiers -->
+            <div class="section">
+                <h2><span class="icon">📁</span>Fichiers Modifiés/Créés</h2>
+                <table>
+                    <tr>
+                        <th>Fichier</th>
+                        <th>Type</th>
+                        <th>Status</th>
+                    </tr>
+                    <tr>
+                        <td><span class="file-tag">admin/create-project.html</span></td>
+                        <td>HTML + CSS + JS</td>
+                        <td><span class="status-badge done">✓ PRÊT</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="file-tag">src/data-store.js</span></td>
+                        <td>JavaScript (method update)</td>
+                        <td><span class="status-badge done">✓ PRÊT</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="file-tag">ADD_PROJECT_MANAGER_FIELDS.sql</span></td>
+                        <td>SQL Migration</td>
+                        <td><span class="status-badge pending">⏳ À EXÉCUTER</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="file-tag">IMPLEMENTATION_SUMMARY.md</span></td>
+                        <td>Documentation</td>
+                        <td><span class="status-badge done">✓ INFO</span></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function copyToClipboard() {
+            const sql = `-- Ajouter colonnes project_manager et manager_email
+ALTER TABLE public.projects
+ADD COLUMN IF NOT EXISTS project_manager TEXT DEFAULT NULL,
+ADD COLUMN IF NOT EXISTS manager_email TEXT DEFAULT NULL;
+
+-- Créer indexes pour performance
+CREATE INDEX IF NOT EXISTS idx_projects_project_manager
+ON public.projects(project_manager);
+
+CREATE INDEX IF NOT EXISTS idx_projects_manager_email
+ON public.projects(manager_email);`;
+            
+            navigator.clipboard.writeText(sql).then(() => {
+                alert('✓ SQL copié dans le presse-papiers!');
+            }).catch(() => {
+                alert('Erreur lors de la copie. Copiez manuellement le SQL ci-dessus.');
+            });
+        }
+    </script>
+</body>
+</html>

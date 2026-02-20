@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧪 TDE Group - Test Validation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .card h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1em;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-success {
+            background: #22c55e;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #16a34a;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+        }
+
+        .console {
+            background: #1e1e1e;
+            color: #00ff00;
+            border-radius: 6px;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            max-height: 500px;
+            overflow-y: auto;
+            line-height: 1.5;
+            border: 1px solid #333;
+        }
+
+        .console-line {
+            margin: 3px 0;
+        }
+
+        .info { color: #3b82f6; }
+        .success { color: #22c55e; }
+        .error { color: #ef4444; }
+        .warning { color: #f59e0b; }
+
+        .instruction {
+            background: #f0f7ff;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+        }
+
+        .status-box {
+            background: #f0f7ff;
+            border: 2px solid #667eea;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 15px 0;
+            font-weight: 600;
+        }
+
+        .status-box.success {
+            background: #f0fdf4;
+            border-color: #22c55e;
+            color: #15803d;
+        }
+
+        .status-box.error {
+            background: #fef2f2;
+            border-color: #ef4444;
+            color: #991b1b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>👑 TDE GROUP</h1>
+            <p>🧪 Test Validation Suite v2.0</p>
+        </div>
+
+        <div class="card">
+            <h2>⚡ Tests Rapides</h2>
+            
+            <div class="instruction">
+                <strong>ℹ️ Instructions:</strong><br>
+                1. Assurez-vous que le serveur est lancé (npm run dev)<br>
+                2. Cliquez sur "Tester la configuration"<br>
+                3. Vérifiez que Supabase est configuré dans .env.local<br>
+                4. Consultez la console du navigateur (F12) pour les détails
+            </div>
+
+            <div class="button-group">
+                <button class="btn-success" onclick="testConfiguration()">
+                    ✅ Tester Configuration
+                </button>
+                <button class="btn-primary" onclick="testSupabaseConnection()">
+                    🔌 Supabase Connection
+                </button>
+                <button class="btn-primary" onclick="testServices()">
+                    🚀 Services JS
+                </button>
+                <button class="btn-primary" onclick="clearConsole()">
+                    🗑️ Effacer Console
+                </button>
+            </div>
+
+            <div id="console" class="console">
+                <div class="console-line info">// Console de test...</div>
+                <div class="console-line info">// Cliquez sur un bouton pour commencer</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📊 Résultats</h2>
+            <div id="results"></div>
+        </div>
+    </div>
+
+    <script>
+        const consoleDiv = document.getElementById('console');
+        const resultsDiv = document.getElementById('results');
+
+        function log(message, type = 'info') {
+            const line = document.createElement('div');
+            line.className = `console-line ${type}`;
+            line.textContent = message;
+            consoleDiv.appendChild(line);
+            consoleDiv.scrollTop = consoleDiv.scrollHeight;
+        }
+
+        function clearConsole() {
+            consoleDiv.innerHTML = '';
+            resultsDiv.innerHTML = '';
+            log('Console effacée', 'success');
+        }
+
+        function addResult(title, status, message) {
+            const div = document.createElement('div');
+            div.className = `status-box ${status}`;
+            div.innerHTML = `<strong>${title}:</strong> ${message}`;
+            resultsDiv.appendChild(div);
+        }
+
+        async function testConfiguration() {
+            clearConsole();
+            log('▶ Vérification de la configuration...', 'warning');
+
+            try {
+                // Test 1: Check environment variables
+                log('TEST 1: Variables d\'environnement', 'info');
+                
+                // Try to access from window
+                const url = import.meta.env.VITE_SUPABASE_URL;
+                const key = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+                if (url && key) {
+                    log('✅ VITE_SUPABASE_URL trouvée', 'success');
+                    log('✅ VITE_SUPABASE_ANON_KEY trouvée', 'success');
+                    addResult('Configuration', 'success', 'Variables d\'environnement OK');
+                } else {
+                    log('⚠️ Impossible de vérifier les variables (mode dev)', 'warning');
+                    log('   → Assurez-vous que .env.local contient:', 'info');
+                    log('      VITE_SUPABASE_URL=https://xxx.supabase.co', 'info');
+                    log('      VITE_SUPABASE_ANON_KEY=eyJ...', 'info');
+                }
+
+                // Test 2: Check if we can import supabase
+                log('', 'info');
+                log('TEST 2: Vérification des modules', 'info');
+                
+                try {
+                    const mod = await import('./src/supabase-client.js');
+                    if (mod.supabase) {
+                        log('✅ supabase-client.js importé avec succès', 'success');
+                        addResult('Module', 'success', 'supabase-client.js OK');
+                    }
+                } catch (e) {
+                    log('❌ Erreur import supabase-client.js:', 'error');
+                    log('   ' + e.message, 'error');
+                    addResult('Module', 'error', 'Erreur: ' + e.message);
+                }
+
+            } catch (error) {
+                log('❌ Erreur:', 'error');
+                log(error.message, 'error');
+                addResult('Configuration', 'error', error.message);
+            }
+        }
+
+        async function testSupabaseConnection() {
+            clearConsole();
+            log('▶ Test Supabase Connection...', 'warning');
+
+            try {
+                const { supabase } = await import('./src/supabase-client.js');
+                
+                log('✅ Module supabase chargé', 'success');
+                log('', 'info');
+                log('TEST 1: Ping Supabase', 'info');
+
+                // Test simple query
+                const { data, error } = await supabase
+                    .from('projects')
+                    .select('count', { count: 'exact', head: true })
+                    .limit(1);
+
+                if (error) {
+                    if (error.code === '42P01') {
+                        log('⚠️ Table "projects" n\'existe pas encore', 'warning');
+                        log('   → Exécutez DATABASE_SCHEMA.sql dans Supabase SQL Editor', 'info');
+                        addResult('Database', 'error', 'Table projects non trouvée');
+                    } else if (error.message.includes('PGRST201')) {
+                        log('⚠️ Authentification requise', 'warning');
+                        log('   → Vérifiez votre VITE_SUPABASE_ANON_KEY', 'info');
+                        addResult('Auth', 'error', 'Clé API invalide');
+                    } else {
+                        log('❌ Erreur Supabase:', 'error');
+                        log(error.message, 'error');
+                        addResult('Database', 'error', error.message);
+                    }
+                } else {
+                    log('✅ Connexion Supabase OK', 'success');
+                    log('✅ Table "projects" accessible', 'success');
+                    addResult('Database', 'success', 'Connexion établie');
+                }
+
+            } catch (error) {
+                log('❌ Erreur:', 'error');
+                log(error.message, 'error');
+                if (error.message.includes('Cannot find')) {
+                    log('   → Assurez-vous que les fichiers existent dans src/', 'info');
+                }
+                addResult('Connection', 'error', error.message);
+            }
+        }
+
+        async function testServices() {
+            clearConsole();
+            log('▶ Test Services JS...', 'warning');
+
+            try {
+                log('TEST 1: Import auth-service.js', 'info');
+                const authMod = await import('./src/auth-service.js');
+                if (authMod.default) {
+                    log('✅ auth-service.js importé', 'success');
+                    addResult('Auth Service', 'success', 'Module OK');
+                } else {
+                    throw new Error('Default export not found');
+                }
+
+                log('', 'info');
+                log('TEST 2: Import data-store.js', 'info');
+                const dataMod = await import('./src/data-store.js');
+                if (dataMod.default) {
+                    log('✅ data-store.js importé', 'success');
+                    addResult('Data Store', 'success', 'Module OK');
+                } else {
+                    throw new Error('Default export not found');
+                }
+
+                log('', 'info');
+                log('TEST 3: Import chat-service.js', 'info');
+                const chatMod = await import('./src/chat-service.js');
+                if (chatMod.default) {
+                    log('✅ chat-service.js importé', 'success');
+                    addResult('Chat Service', 'success', 'Module OK');
+                } else {
+                    throw new Error('Default export not found');
+                }
+
+                log('', 'info');
+                log('✅ Tous les services sont importables!', 'success');
+
+            } catch (error) {
+                log('❌ Erreur:', 'error');
+                log(error.message, 'error');
+                addResult('Services', 'error', error.message);
+            }
+        }
+
+        // Initial message
+        log('✅ Page de test chargée', 'success');
+        log('', 'info');
+    </script>
+</body>
+</html>

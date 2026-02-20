@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TDE Group - Validation Suite</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .card h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .test-group {
+            margin-bottom: 20px;
+        }
+
+        .test-group h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1em;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+        }
+
+        .btn-success {
+            background: #22c55e;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #16a34a;
+        }
+
+        .btn-warning {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: #d97706;
+        }
+
+        .console {
+            background: #1e1e1e;
+            color: #00ff00;
+            border-radius: 6px;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            max-height: 400px;
+            overflow-y: auto;
+            line-height: 1.5;
+            margin-top: 20px;
+            border: 1px solid #333;
+        }
+
+        .console-line {
+            margin: 5px 0;
+        }
+
+        .info {
+            color: #3b82f6;
+        }
+
+        .success {
+            color: #22c55e;
+        }
+
+        .error {
+            color: #ef4444;
+        }
+
+        .warning {
+            color: #f59e0b;
+        }
+
+        .instruction {
+            background: #f0f7ff;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+        }
+
+        .instruction strong {
+            color: #667eea;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .status-ready {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-running {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .checklist {
+            list-style: none;
+        }
+
+        .checklist li {
+            padding: 10px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .checklist li:last-child {
+            border-bottom: none;
+        }
+
+        .checklist input {
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .checklist label {
+            cursor: pointer;
+            font-size: 1.05em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>👑 TDE GROUP</h1>
+            <p>Validation & Test Suite</p>
+            <p style="font-size: 0.9em; margin-top: 10px;">Version 1.0.0 | Ready to Test</p>
+        </div>
+
+        <div class="card">
+            <h2>🧪 Validation Suite</h2>
+            
+            <div class="test-group">
+                <h3>Tests Complets</h3>
+                <div class="button-group">
+                    <button class="btn-success" onclick="runAllTestsUI()">▶ Lancer tous les tests</button>
+                </div>
+                <div class="instruction">
+                    <strong>ℹ️ Comment ça marche:</strong><br>
+                    Les tests s'exécutent dans la console du navigateur (F12 > Console).
+                    Ouvrez la console avant de cliquer!
+                </div>
+            </div>
+
+            <div class="test-group">
+                <h3>Tests Individuels</h3>
+                <div class="button-group">
+                    <button class="btn-primary" onclick="testAuthServiceUI()">🔐 Auth Service</button>
+                    <button class="btn-primary" onclick="testDataStoreUI()">📊 Data Store</button>
+                    <button class="btn-primary" onclick="testChatServiceUI()">💬 Chat Service</button>
+                </div>
+            </div>
+
+            <div class="test-group">
+                <h3>Tests de Système</h3>
+                <div class="button-group">
+                    <button class="btn-warning" onclick="testDatabaseConnectionUI()">🗄️ Database</button>
+                    <button class="btn-warning" onclick="testRLSPoliciesUI()">🔒 RLS Policies</button>
+                </div>
+            </div>
+
+            <div id="console" class="console">
+                <div class="console-line info">// Console de test...</div>
+                <div class="console-line info">// Cliquez sur un bouton pour commencer</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>✅ Checklist de Validation</h2>
+            <ul class="checklist">
+                <li>
+                    <input type="checkbox" id="check1" onchange="updateProgress()">
+                    <label for="check1">Configuration Supabase (.env.local)</label>
+                </li>
+                <li>
+                    <input type="checkbox" id="check2" onchange="updateProgress()">
+                    <label for="check2">Database schema créé (tables + RLS)</label>
+                </li>
+                <li>
+                    <input type="checkbox" id="check3" onchange="updateProgress()">
+                    <label for="check3">Auth Service validé</label>
+                </li>
+                <li>
+                    <input type="checkbox" id="check4" onchange="updateProgress()">
+                    <label for="check4">Data Store validé</label>
+                </li>
+                <li>
+                    <input type="checkbox" id="check5" onchange="updateProgress()">
+                    <label for="check5">Chat Service validé</label>
+                </li>
+                <li>
+                    <input type="checkbox" id="check6" onchange="updateProgress()">
+                    <label for="check6">Database connectivity OK</label>
+                </li>
+                <li>
+                    <input type="checkbox" id="check7" onchange="updateProgress()">
+                    <label for="check7">RLS Policies OK</label>
+                </li>
+            </ul>
+            <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
+                <strong>Progression:</strong> <span id="progress" style="color: #667eea; font-weight: bold;">0%</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📚 Documentation</h2>
+            <ul class="checklist">
+                <li>📖 <strong>EXECUTIVE_SUMMARY.md</strong> - Vue d'ensemble 10 min</li>
+                <li>🏗️ <strong>ARCHITECTURE.md</strong> - Architecture détaillée</li>
+                <li>🔐 <strong>SECURITY_AND_PERMISSIONS.md</strong> - Modèle de sécurité</li>
+                <li>👑 <strong>ADMIN_GUIDE.md</strong> - Manuel admin</li>
+                <li>👤 <strong>CLIENT_GUIDE.md</strong> - Guide client</li>
+                <li>🚀 <strong>SUPABASE_SETUP.md</strong> - Installation Supabase</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>🚀 Prochaines Étapes</h2>
+            <ol style="margin-left: 20px; line-height: 1.8;">
+                <li>Valider tous les tests ci-dessus</li>
+                <li>Créer l'admin initial dans Supabase</li>
+                <li>Créer un projet de test</li>
+                <li>Générer PIN client</li>
+                <li>Tester login admin & client</li>
+                <li>Implémenter pages Admin (dashboard, CRM)</li>
+                <li>Implémenter pages Client (timeline, documents, chat)</li>
+                <li>Tests E2E complets</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        // Capture console output
+        const originalLog = console.log;
+        const consoleDiv = document.getElementById('console');
+
+        console.log = function(...args) {
+            originalLog(...args);
+            const line = document.createElement('div');
+            line.className = 'console-line';
+            line.textContent = args.map(a => typeof a === 'object' ? JSON.stringify(a) : a).join(' ');
+            consoleDiv.appendChild(line);
+            consoleDiv.scrollTop = consoleDiv.scrollHeight;
+        };
+
+        function clearConsole() {
+            consoleDiv.innerHTML = '';
+        }
+
+        function addConsoleLine(text, type = 'info') {
+            const line = document.createElement('div');
+            line.className = `console-line ${type}`;
+            line.textContent = text;
+            consoleDiv.appendChild(line);
+            consoleDiv.scrollTop = consoleDiv.scrollHeight;
+        }
+
+        // UI Functions
+        function runAllTestsUI() {
+            clearConsole();
+            addConsoleLine('▶ Lancement de tous les tests...', 'warning');
+            if (window.runAllTests) {
+                window.runAllTests();
+            } else {
+                addConsoleLine('❌ Services de test pas chargés', 'error');
+            }
+        }
+
+        function testAuthServiceUI() {
+            clearConsole();
+            addConsoleLine('▶ Test Auth Service...', 'warning');
+            if (window.testAuthService) {
+                window.testAuthService();
+            } else {
+                addConsoleLine('❌ Service pas chargé', 'error');
+            }
+        }
+
+        function testDataStoreUI() {
+            clearConsole();
+            addConsoleLine('▶ Test Data Store...', 'warning');
+            if (window.testDataStore) {
+                window.testDataStore();
+            } else {
+                addConsoleLine('❌ Service pas chargé', 'error');
+            }
+        }
+
+        function testChatServiceUI() {
+            clearConsole();
+            addConsoleLine('▶ Test Chat Service...', 'warning');
+            if (window.testChatService) {
+                window.testChatService();
+            } else {
+                addConsoleLine('❌ Service pas chargé', 'error');
+            }
+        }
+
+        function testDatabaseConnectionUI() {
+            clearConsole();
+            addConsoleLine('▶ Test Database Connection...', 'warning');
+            if (window.testDatabaseConnection) {
+                window.testDatabaseConnection();
+            } else {
+                addConsoleLine('❌ Service pas chargé', 'error');
+            }
+        }
+
+        function testRLSPoliciesUI() {
+            clearConsole();
+            addConsoleLine('▶ Test RLS Policies...', 'warning');
+            if (window.testRLSPolicies) {
+                window.testRLSPolicies();
+            } else {
+                addConsoleLine('❌ Service pas chargé', 'error');
+            }
+        }
+
+        function updateProgress() {
+            const checks = document.querySelectorAll('.checklist input:checked').length;
+            const total = document.querySelectorAll('.checklist input').length;
+            const percent = Math.round((checks / total) * 100);
+            document.getElementById('progress').textContent = percent + '%';
+        }
+
+        // Initial message
+        clearConsole();
+        addConsoleLine('✅ Validation Suite chargée', 'success');
+        addConsoleLine('👇 Cliquez sur les boutons ci-dessus pour tester', 'info');
+        addConsoleLine('', 'info');
+    </script>
+
+    <!-- Import test suite -->
+    <script type="module">
+        import './src/test-suite.js';
+    </script>
+</body>
+</html>

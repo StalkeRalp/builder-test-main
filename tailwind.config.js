@@ -7,6 +7,9 @@ export default {
     "./it-services.html",
     "./supply.html",
     "./consultancy.html",
+    "./suggestions.html",
+    "./admin/**/*.html",
+    "./client/**/*.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {

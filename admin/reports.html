@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rapports - TDE Group Admin</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="./styles/admin-layout.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .report-container { max-width: 1200px; margin: 0 auto; }
+        .export-section { background: white; border-radius: 12px; padding: 25px; margin-bottom: 30px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .export-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid #e5e7eb; padding-bottom: 15px; }
+        .export-header h2 { margin: 0; }
+        .export-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .form-group { display: flex; flex-direction: column; }
+        .form-group label { font-weight: 600; margin-bottom: 8px; font-size: 14px; }
+        .form-group input, .form-group select { padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; }
+        .btn-export { background: linear-gradient(135deg, #0d9488, #14b8a6); color: white; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: 0.2s; }
+        .btn-export:hover { transform: translateY(-2px); box-shadow: 0 8px 16px rgba(76, 29, 149, 0.3); }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .stat-card { background: white; border-radius: 12px; padding: 25px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .stat-card h3 { margin: 0 0 15px 0; color: #6b7280; font-size: 14px; font-weight: 600; }
+        .stat-value { font-size: 32px; font-weight: 700; color: #1f2937; margin: 10px 0; }
+        .stat-change { font-size: 12px; color: #10b981; }
+        .chart-container { background: white; border-radius: 12px; padding: 25px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 30px; }
+        .chart-title { font-size: 16px; font-weight: 600; margin-bottom: 20px; color: #1f2937; }
+        .activity-log { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .activity-item { padding: 15px; border-bottom: 1px solid #e5e7eb; display: flex; gap: 15px; align-items: flex-start; }
+        .activity-icon { width: 40px; height: 40px; border-radius: 8px; background: #f3f4f6; display: flex; align-items: center; justify-content: center; color: #0d9488; flex-shrink: 0; }
+        .activity-content { flex: 1; }
+        .activity-title { font-weight: 600; color: #1f2937; margin: 0; }
+        .activity-time { font-size: 12px; color: #9ca3af; margin: 5px 0 0 0; }
+        .date-range { display: flex; gap: 10px; align-items: center; }
+        @media print {
+            .sidebar,
+            .header,
+            .export-controls,
+            .btn-export {
+                display: none !important;
+            }
+            body { background: white; }
+            .main-content { margin: 0; }
+            .export-section,
+            .stat-card,
+            .chart-container,
+            .activity-log {
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-logo"><img src="../logo.png" alt="TDE Group"><div class="logo-text"><span>TDE GROUP</span><small>TOGETHER WE MAKE IT!</small></div></div>
+        <nav class="sidebar-menu">
+            <a href="index.html" class="sidebar-item"><span class="material-icons">dashboard</span><span>Dashboard</span></a>
+            <a href="create-project.html" class="sidebar-item"><span class="material-icons">add_circle</span><span>Nouveau Projet</span></a>
+            <a href="clients.html" class="sidebar-item"><span class="material-icons">groups</span><span>Clients (CRM)</span></a>
+            <a href="tickets.html" class="sidebar-item"><span class="material-icons">support_agent</span><span>Support</span></a>
+            <a href="messages.html" class="sidebar-item"><span class="material-icons">mail</span><span>Messages</span></a>
+            <a href="calendar.html" class="sidebar-item"><span class="material-icons">calendar_today</span><span>Calendrier</span></a>
+            <a href="reports.html" class="sidebar-item active"><span class="material-icons">assessment</span><span>Rapports</span></a>
+            <a href="profile.html" class="sidebar-item"><span class="material-icons">account_circle</span><span>Profil</span></a>
+            <a href="../my-project.html" class="sidebar-item" target="_blank" rel="noopener"><span class="material-icons">visibility</span><span>My Project (Client)</span></a>
+            <div class="sidebar-logout">
+                <button class="sidebar-item" onclick="logout()"><span class="material-icons">logout</span><span>Déconnexion</span></button>
+            </div>
+        </nav>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <div class="header-title"><span class="material-icons">assessment</span><span>Rapports</span></div>
+            <div class="header-right">
+                <div class="user-profile"><div class="user-avatar" id="userInitials">AD</div></div>
+            </div>
+        </div>
+
+        <div class="content report-container">
+            <!-- Export Section -->
+            <div class="export-section export-controls">
+                <div class="export-header">
+                    <h2>Générer un Rapport</h2>
+                </div>
+                <div class="export-form">
+                    <div class="form-group">
+                        <label>Période - Du:</label>
+                        <input type="date" id="startDate">
+                    </div>
+                    <div class="form-group">
+                        <label>Période - Au:</label>
+                        <input type="date" id="endDate">
+                    </div>
+                    <div class="form-group">
+                        <label>Format:</label>
+                        <select id="exportFormat">
+                            <option value="pdf">PDF</option>
+                            <option value="csv">CSV</option>
+                            <option value="excel">Excel</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn-export" onclick="generateReport()">
+                    <span class="material-icons">download</span>
+                    <span>Télécharger Rapport</span>
+                </button>
+            </div>
+
+            <!-- Statistics Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Projets Totaux</h3>
+                    <div class="stat-value" id="totalProjects">0</div>
+                    <p class="stat-change" id="projectChange">↑ 0% ce mois</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Budget Total</h3>
+                    <div class="stat-value" id="totalBudget">FCFA 0</div>
+                    <p class="stat-change" id="budgetChange">↑ 0% ce mois</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Progression Moyenne</h3>
+                    <div class="stat-value" id="avgProgress">0%</div>
+                    <p class="stat-change">des projets terminés</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Taux de Livraison</h3>
+                    <div class="stat-value" id="deliveryRate">0%</div>
+                    <p class="stat-change" id="deliveryChange">à temps</p>
+                </div>
+            </div>
+
+            <!-- Chart Section -->
+            <div class="chart-container">
+                <h3 class="chart-title">Distribution des Projets par Statut</h3>
+                <canvas id="statusChart" height="300"></canvas>
+            </div>
+
+            <!-- Activity Log -->
+            <div class="export-section">
+                <div class="export-header">
+                    <h2>Journal d'Activité Récente</h2>
+                </div>
+                <div id="activityLog" class="activity-log">
+                    <div style="text-align: center; padding: 40px; color: #9ca3af;">
+                        <div class="material-icons" style="font-size: 48px; margin-bottom: 10px;">history</div>
+                        <p>Aucune activité</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Budget Breakdown -->
+            <div class="export-section">
+                <div class="export-header">
+                    <h2>Répartition des Budgets</h2>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                    <div>
+                        <h4 style="margin-bottom: 10px;">Par Statut</h4>
+                        <div id="budgetByStatus" style="display: flex; flex-direction: column; gap: 10px;"></div>
+                    </div>
+                    <div>
+                        <h4 style="margin-bottom: 10px;">Par Type</h4>
+                        <div id="budgetByType" style="display: flex; flex-direction: column; gap: 10px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import AuthService from '../src/auth-service.js';
+        import ProjectStore from '../src/data-store.js';
+        import ReportService from '../src/report-service.js';
+        import { initAdminAvatar } from '../src/admin-avatar.js';
+
+        let allProjects = [];
+        let statusChart = null;
+
+        async function initialize() {
+            try {
+                await AuthService.authReady;
+                if (!AuthService.currentUser) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                await initAdminAvatar();
+
+                // Set default dates (last 30 days)
+                const today = new Date();
+                const lastMonth = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
+                document.getElementById('startDate').valueAsDate = lastMonth;
+                document.getElementById('endDate').valueAsDate = today;
+
+                await loadReports();
+            } catch (error) {
+                console.error('Error:', error);
+                window.location.href = 'login.html';
+            }
+        }
+
+        async function loadReports() {
+            try {
+                allProjects = await ProjectStore.getAll();
+                renderStatusChart(allProjects);
+                
+                // Load statistics
+                const stats = await ReportService.getProjectStats();
+                if (stats) {
+                    document.getElementById('totalProjects').textContent = stats.total;
+                    document.getElementById('avgProgress').textContent = stats.averageProgress + '%';
+                }
+
+                // Load budget summary
+                const budget = await ReportService.getBudgetSummary();
+                if (budget) {
+                    document.getElementById('totalBudget').textContent = 'FCFA ' + budget.totalBudget.toLocaleString('fr-FR');
+                }
+
+                // Load activity log
+                const activities = await ReportService.getActivityLog(10);
+                renderActivityLog(activities);
+            } catch (error) {
+                console.error('Error loading reports:', error);
+            }
+        }
+
+        function renderActivityLog(activities) {
+            const container = document.getElementById('activityLog');
+            
+            if (activities.length === 0) {
+                container.innerHTML = `<div style="text-align: center; padding: 40px; color: #9ca3af;">
+                    <div class="material-icons" style="font-size: 48px; margin-bottom: 10px;">history</div>
+                    <p>Aucune activité</p>
+                </div>`;
+                return;
+            }
+
+            container.innerHTML = activities.map(activity => `
+                <div class="activity-item">
+                    <div class="activity-icon"><span class="material-icons">info</span></div>
+                    <div class="activity-content">
+                        <p class="activity-title">${activity.action || 'Activité'}</p>
+                        <p class="activity-time">${new Date(activity.created_at).toLocaleString('fr-FR')}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderStatusChart(projects) {
+            const statusMeta = [
+                { key: 'active', label: 'Actif', color: '#10b981' },
+                { key: 'in_progress', label: 'En cours', color: '#3b82f6' },
+                { key: 'planning', label: 'Planning', color: '#60a5fa' },
+                { key: 'paused', label: 'En pause', color: '#f59e0b' },
+                { key: 'completed', label: 'Complété', color: '#22c55e' },
+                { key: 'cancelled', label: 'Annulé', color: '#ef4444' }
+            ];
+            const counts = Object.fromEntries(statusMeta.map(s => [s.key, 0]));
+            let other = 0;
+
+            projects.forEach(project => {
+                const status = (project.status || '').toLowerCase();
+                if (counts.hasOwnProperty(status)) {
+                    counts[status] += 1;
+                } else {
+                    other += 1;
+                }
+            });
+
+            const labels = statusMeta.map(s => s.label);
+            const data = statusMeta.map(s => counts[s.key]);
+            const colors = statusMeta.map(s => s.color);
+
+            if (other > 0) {
+                labels.push('Autres');
+                data.push(other);
+                colors.push('#9ca3af');
+            }
+
+            const ctx = document.getElementById('statusChart');
+            if (!ctx) return;
+
+            if (statusChart) statusChart.destroy();
+            statusChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels,
+                    datasets: [{ data, backgroundColor: colors }]
+                },
+                options: {
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+        }
+
+        window.generateReport = function() {
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            const format = document.getElementById('exportFormat').value;
+
+            if (!startDate || !endDate) {
+                alert('Veuillez sélectionner une période');
+                return;
+            }
+
+            if (format === 'pdf') {
+                window.print();
+                return;
+            }
+
+            if (format === 'csv') {
+                const filteredProjects = allProjects.filter(p => {
+                    const date = new Date(p.created_at);
+                    return date >= new Date(startDate) && date <= new Date(endDate);
+                });
+
+                ReportService.downloadCSV(filteredProjects, `rapport_${new Date().toISOString().split('T')[0]}.csv`);
+            } else {
+                alert(`Export ${format.toUpperCase()} non implémenté`);
+            }
+        };
+
+        window.logout = async function() {
+            if (confirm('Déconnecter?')) {
+                await AuthService.logout();
+                window.location.href = 'login.html';
+            }
+        };
+
+        window.addEventListener('load', initialize);
+    </script>
+</body>
+</html>

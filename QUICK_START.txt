@@ -1,0 +1,164 @@
+╔════════════════════════════════════════════════════════════════════════════╗
+║                                                                            ║
+║              ✨ DÉMARRAGE RAPIDE - TDE GROUP IMPLÉMENTATION ✨             ║
+║                                                                            ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+🎯 OBJECTIF: Mettre en place la plateforme complète TDE Group en 15 minutes
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⏱️ ÉTAPE 1: SUPABASE SETUP (5 minutes)
+─────────────────────────────────────
+
+1. Ouvrir: https://app.supabase.com/
+2. Créer nouveau projet:
+   - Name: "tde-group-main"
+   - Region: EU-West
+   - Créer et attendre 2-3 min ⏳
+
+3. Aller dans Settings → API
+   Copier:
+   - Project URL → .env.local VITE_SUPABASE_URL
+   - Anon public key → .env.local VITE_SUPABASE_ANON_KEY
+
+4. Valider .env.local contient:
+   ✓ VITE_SUPABASE_URL=https://xxxx.supabase.co
+   ✓ VITE_SUPABASE_ANON_KEY=eyJhbGci...
+
+📝 Voir: SUPABASE_SETUP.md pour plus de détails
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⏱️ ÉTAPE 2: CRÉER LES TABLES (3 minutes)
+──────────────────────────────────────
+
+1. Aller dans Supabase → SQL Editor → New Query
+2. Ouvrir le fichier: DATABASE_SCHEMA.sql
+3. Copier TOUT le contenu SQL
+4. Coller dans l'éditeur SQL de Supabase
+5. Cliquer "Run"
+
+✅ Résultat: Les tables et RLS sont créées!
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⏱️ ÉTAPE 3: CRÉER UTILISATEUR ADMIN (3 minutes)
+─────────────────────────────────────────────
+
+1. Aller dans Supabase → Authentication → Users
+2. Cliquer "Invite user"
+3. Entrer un email admin (ex: admin@tdegroup.com)
+4. Cliquer "Send invite"
+5. Accepter l'email d'invitation
+6. Créer un mot de passe fort
+7. Copier l'USER ID (UUID) affiché dans la liste Users
+8. Garder ce UUID pour l'étape suivante
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⏱️ ÉTAPE 4: CRÉER DONNÉES DE TEST (2 minutes)
+──────────────────────────────────────────
+
+1. Ouvrir: CREATE_ADMIN_AND_TEST_DATA.sql
+2. Remplacer:
+   - 'REPLACE_WITH_USER_ID_FROM_AUTH_UI' → UUID de l'admin (étape 3)
+3. Aller dans Supabase → SQL Editor → New Query
+4. Coller le script modifié
+5. Cliquer "Run"
+
+✅ Résultat: Admin créé + Projet test + Données d'exemple!
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⏱️ ÉTAPE 5: LANCER LE SERVEUR DEV (2 minutes)
+──────────────────────────────────────────
+
+Terminal:
+$ npm install
+$ npm run dev
+
+✅ Ouvrir: http://localhost:5173
+
+Console devrait afficher:
+✓ "✅ Supabase connected successfully"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🧪 TEST 1: ADMIN LOGIN
+
+1. Aller à: http://localhost:5173/admin
+2. Entrer l'email admin (admin@tdegroup.com)
+3. Entrer le mot de passe
+4. ✅ Vous devriez voir le dashboard admin!
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🧪 TEST 2: CLIENT LOGIN
+
+1. Aller à: http://localhost:5173/client
+2. Entrer:
+   - Project ID: (copier d'une ligne dans la console ou Supabase)
+   - PIN: 123456 (du CREATE_ADMIN_AND_TEST_DATA.sql)
+3. ✅ Vous devriez voir le dashboard client!
+
+PIN par défaut dans CREATE_ADMIN_AND_TEST_DATA.sql: 123456
+⚠️  Changerez-le en production!
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ C'EST TOUT! 🎉
+
+Vous avez maintenant:
+✓ Supabase configuré avec RLS
+✓ Tables créées et connectées
+✓ Admin user fonctionnel
+✓ Projet test avec phases
+✓ Client access configuré
+✓ Chat realtime activé
+✓ Données d'exemple prêtes
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📚 DOCUMENTATION
+
+- ARCHITECTURE.md          → Vue d'ensemble système
+- ADMIN_GUIDE.md          → Guide d'utilisation admin
+- CLIENT_GUIDE.md         → Guide d'utilisation client
+- SECURITY_AND_PERMISSIONS.md → Détails sécurité RLS
+- COMPLETE_GUIDE.md       → Déploiement production
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+❓ TROUBLESHOOTING
+
+Q: "RLS violation" error?
+A: Vérifiez que le user est bien créé dans public.profiles
+   Run: SELECT * FROM public.profiles;
+
+Q: "VITE_SUPABASE_URL not defined"?
+A: Redémarrez le serveur: npm run dev
+   Vérifiez .env.local existe et est correct
+
+Q: Client login ne marche pas?
+A: Vérifiez le PIN dans Supabase:
+   SELECT id, access_pin FROM public.projects;
+
+Q: Chat ne fonctionne pas?
+A: Vérifiez Realtime est activé en Supabase:
+   SQL Editor → ALTER PUBLICATION supabase_realtime ADD TABLE messages;
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🚀 PROCHAINES ÉTAPES
+
+1. Tester tous les workflows admin (créer projet, ajouter phases, etc)
+2. Tester client access (login avec PIN, voir timeline, chat)
+3. Vérifier RLS (client A ne peut pas voir client B)
+4. Ajouter vos vrais clients et projets
+5. Personnaliser les couleurs/textes
+6. Déployer en production (voir COMPLETE_GUIDE.md)
+
+╔════════════════════════════════════════════════════════════════════════════╗
+║                    Besoin d'aide? Voir les guides! 📖                      ║
+╚════════════════════════════════════════════════════════════════════════════╝

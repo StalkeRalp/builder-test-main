@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support - TDE Group Admin</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="./styles/admin-layout.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-logo"><img src="../logo.png" alt="TDE Group"><div class="logo-text"><span>TDE GROUP</span><small>TOGETHER WE MAKE IT!</small></div></div>
+        <nav class="sidebar-menu">
+            <a href="index.html" class="sidebar-item"><span class="material-icons">dashboard</span><span>Dashboard</span></a>
+            <a href="create-project.html" class="sidebar-item"><span class="material-icons">add_circle</span><span>Nouveau Projet</span></a>
+            <a href="clients.html" class="sidebar-item"><span class="material-icons">groups</span><span>Clients (CRM)</span></a>
+            <a href="tickets.html" class="sidebar-item active"><span class="material-icons">support_agent</span><span>Support</span></a>
+            <a href="messages.html" class="sidebar-item"><span class="material-icons">mail</span><span>Messages</span></a>
+            <a href="calendar.html" class="sidebar-item"><span class="material-icons">calendar_today</span><span>Calendrier</span></a>
+            <a href="reports.html" class="sidebar-item"><span class="material-icons">assessment</span><span>Rapports</span></a>
+            <a href="profile.html" class="sidebar-item"><span class="material-icons">account_circle</span><span>Profil</span></a>
+            <a href="../my-project.html" class="sidebar-item" target="_blank" rel="noopener"><span class="material-icons">visibility</span><span>My Project (Client)</span></a>
+            <div class="sidebar-logout">
+                <button class="sidebar-item" onclick="logout()"><span class="material-icons">logout</span><span>Déconnexion</span></button>
+            </div>
+        </nav>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <div class="header-title"><span class="material-icons">support_agent</span><span>Tickets de Support</span></div>
+            <div class="header-right">
+                <div class="search-box"><span class="material-icons">search</span><input type="text" id="searchInput" placeholder="Rechercher..."></div>
+                <div class="user-profile"><div class="user-avatar" id="userInitials">AD</div></div>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="page-header">
+                <h1>Tickets</h1>
+                <button class="btn-primary" onclick="createTicket()"><span class="material-icons">add</span><span>Nouveau</span></button>
+            </div>
+
+            <div class="filters">
+                <div class="filter-group"><label>Statut:</label><select id="statusFilter" onchange="applyFilters()"><option value="">Tous</option><option value="open">Ouvert</option><option value="in_progress">En cours</option><option value="resolved">Résolu</option></select></div>
+                <div class="filter-group"><label>Priorité:</label><select id="priorityFilter" onchange="applyFilters()"><option value="">Tous</option><option value="high">Haute</option><option value="medium">Moyenne</option><option value="low">Basse</option></select></div>
+                <button class="btn-primary" onclick="clearFilters()" style="background: #f3f4f6; color: #4b5563; margin-left: auto;"><span class="material-icons">clear_all</span><span>Réinitialiser</span></button>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr><th>ID</th><th>Client</th><th>Sujet</th><th>Priorité</th><th>Statut</th><th>Créé</th><th>Actions</th></tr>
+                    </thead>
+                    <tbody id="ticketsTableBody">
+                        <tr><td colspan="7" style="text-align: center; padding: 40px;"><div class="empty-state" style="margin: 0;"><div class="material-icons">inbox</div><h3>Aucun ticket</h3></div></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import AuthService from '../src/auth-service.js';
+        import TicketService from '../src/ticket-service.js';
+        import { initAdminAvatar } from '../src/admin-avatar.js';
+
+        let allTickets = [];
+
+        async function initialize() {
+            try {
+                await AuthService.authReady;
+                if (!AuthService.currentUser) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                await initAdminAvatar();
+
+                await loadTickets();
+            } catch (error) {
+                console.error('Error:', error);
+                window.location.href = 'login.html';
+            }
+        }
+
+        async function loadTickets() {
+            allTickets = await TicketService.getAll();
+            console.log('Admin tickets loaded:', allTickets.length, allTickets);
+            applyFilters();
+        }
+
+        function renderTickets(tickets) {
+            const tbody = document.getElementById('ticketsTableBody');
+
+            if (tickets.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px;"><div style="margin: 0;"><span class="material-icons" style="font-size: 48px; margin-bottom: 10px; display: block; color: #9ca3af;">inbox</span><p style="color: #9ca3af;">Aucun ticket</p></div></td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = tickets.map(ticket => {
+                const priorityClass = ticket.priority === 'high' ? 'red' : ticket.priority === 'medium' ? 'orange' : 'green';
+                const priorityIcon = ticket.priority === 'high' ? 'error' : ticket.priority === 'medium' ? 'warning' : 'info';
+                const statusBg = ticket.status === 'open' ? '#fee2e2' : ticket.status === 'in_progress' ? '#fef3c7' : '#d1fae5';
+                const statusColor = ticket.status === 'open' ? '#991b1b' : ticket.status === 'in_progress' ? '#92400e' : '#065f46';
+
+                return `
+                    <tr>
+                        <td>${ticket.id.substring(0, 8)}</td>
+                        <td>${ticket.created_by_display || ticket.created_by_email || ticket.created_by || 'Client'}</td>
+                        <td><strong>${ticket.title || ticket.subject || 'Ticket'}</strong></td>
+                        <td><span class="material-icons" style="color: ${ticket.priority === 'high' ? '#ef4444' : ticket.priority === 'medium' ? '#f59e0b' : '#10b981'}; font-size: 16px;">${priorityIcon}</span> ${ticket.priority}</td>
+                        <td><span style="background: ${statusBg}; color: ${statusColor}; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">${ticket.status}</span></td>
+                        <td>${new Date(ticket.created_at).toLocaleDateString('fr-FR')}</td>
+                        <td>
+                            <select id="status-${ticket.id}" data-current="${ticket.status}" onchange="updateTicketStatus('${ticket.id}', true)" style="padding: 4px 8px; border: 1px solid #e5e7eb; border-radius: 8px; margin-right: 8px;">
+                                <option value="open" ${ticket.status === 'open' ? 'selected' : ''}>Ouvert</option>
+                                <option value="in_progress" ${ticket.status === 'in_progress' ? 'selected' : ''}>En cours</option>
+                                <option value="resolved" ${ticket.status === 'resolved' ? 'selected' : ''}>Résolu</option>
+                                <option value="closed" ${ticket.status === 'closed' ? 'selected' : ''}>Fermé</option>
+                            </select>
+                            <button onclick="viewTicket('${ticket.id}')" class="action-btn" style="color: #3b82f6; background: none; border: none; cursor: pointer;"><span class="material-icons">open_in_new</span></button>
+                            <button onclick="deleteTicket('${ticket.id}')" class="action-btn" style="color: #ef4444; background: none; border: none; cursor: pointer;"><span class="material-icons">delete</span></button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        window.applyFilters = function() {
+            const status = document.getElementById('statusFilter').value;
+            const priority = document.getElementById('priorityFilter').value;
+
+            let filtered = allTickets;
+
+            if (status) filtered = filtered.filter(t => t.status === status);
+            if (priority) filtered = filtered.filter(t => t.priority === priority);
+
+            renderTickets(filtered);
+        };
+
+        window.clearFilters = function() {
+            document.getElementById('statusFilter').value = '';
+            document.getElementById('priorityFilter').value = '';
+            renderTickets(allTickets);
+        };
+
+        window.createTicket = function() {
+            const title = prompt('Titre du ticket:');
+            if (!title) return;
+
+            const description = prompt('Description:');
+            if (!description) return;
+
+            const priority = prompt('Priorité (high/medium/low):', 'medium');
+
+            TicketService.create({
+                title,
+                description,
+                priority,
+                status: 'open'
+            }).then(result => {
+                if (result.success) {
+                    showToast('success', 'Ticket créé');
+                    loadTickets();
+                } else {
+                    showToast('error', result.error || 'Erreur de création');
+                }
+            });
+        };
+
+        window.viewTicket = async function(id) {
+            const select = document.getElementById(`status-${id}`);
+            if (select && select.value === 'open') {
+                select.value = 'in_progress';
+                await updateTicketStatus(id, true, false);
+            }
+            showToast('info', `Ticket ${id} ouvert`);
+        };
+
+        window.updateTicketStatus = async function(id, isAuto = false, showSuccessToast = true) {
+            const select = document.getElementById(`status-${id}`);
+            if (!select) return;
+            const nextStatus = select.value;
+            const currentStatus = select.dataset.current || '';
+            if (nextStatus === currentStatus) return;
+
+            const result = await TicketService.update(id, { status: nextStatus });
+            if (result.success) {
+                select.dataset.current = nextStatus;
+                if (showSuccessToast) {
+                    showToast('success', isAuto
+                        ? `Statut mis à jour automatiquement: ${nextStatus}`
+                        : `Statut mis à jour: ${nextStatus}`);
+                }
+                await loadTickets();
+            } else {
+                select.value = currentStatus || 'open';
+                showToast('error', result.error || 'Erreur de mise à jour');
+            }
+        };
+
+        window.deleteTicket = async function(id) {
+            const ok = await confirmAction('Supprimer ce ticket ?');
+            if (!ok) return;
+            const result = await TicketService.delete(id);
+            if (result.success) {
+                showToast('success', 'Ticket supprimé');
+                await loadTickets();
+            } else {
+                showToast('error', result.error || 'Erreur de suppression');
+            }
+        };
+
+        window.logout = async function() {
+            const ok = await confirmAction('Êtes-vous sûr de vouloir vous déconnecter ?');
+            if (!ok) return;
+            await AuthService.logout();
+            showToast('success', 'Déconnexion réussie');
+            window.location.href = 'login.html';
+        };
+
+        function showToast(type, message) {
+            const container = document.getElementById('toastContainer');
+            if (!container) return;
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `<span class="material-icons">${type === 'success' ? 'check_circle' : type === 'error' ? 'error' : type === 'warning' ? 'warning' : 'info'}</span><span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3200);
+        }
+
+        function confirmAction(message) {
+            return new Promise((resolve) => {
+                const modal = document.getElementById('confirmModal');
+                const text = document.getElementById('confirmText');
+                text.textContent = message;
+                modal.classList.add('open');
+                const onYes = () => { cleanup(); resolve(true); };
+                const onNo = () => { cleanup(); resolve(false); };
+                function cleanup() {
+                    modal.classList.remove('open');
+                    document.getElementById('confirmYes').removeEventListener('click', onYes);
+                    document.getElementById('confirmNo').removeEventListener('click', onNo);
+                }
+                document.getElementById('confirmYes').addEventListener('click', onYes);
+                document.getElementById('confirmNo').addEventListener('click', onNo);
+            });
+        }
+
+        window.addEventListener('load', initialize);
+    </script>
+
+    <div id="toastContainer" class="toast-container"></div>
+
+    <div id="confirmModal" class="confirm-modal">
+        <div class="confirm-card">
+            <div class="confirm-body">
+                <div class="confirm-title">Confirmation</div>
+                <div id="confirmText" class="confirm-text">Êtes-vous sûr?</div>
+            </div>
+            <div class="confirm-actions">
+                <button class="confirm-btn" id="confirmNo"><span class="material-icons">close</span>Annuler</button>
+                <button class="confirm-btn primary" id="confirmYes"><span class="material-icons">check</span>Confirmer</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

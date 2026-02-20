@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messages - TDE Group Admin</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="./styles/admin-layout.css">
+    <style>
+        :root {
+            --primary: #0d9488;
+            --primary-dark: #0f766e;
+            --secondary: #2563eb;
+            --ink: #0f172a;
+            --muted: #64748b;
+            --soft: #e2e8f0;
+            --card: #ffffff;
+            --shadow-sm: 0 10px 22px rgba(15, 23, 42, 0.08);
+            --radius-lg: 18px;
+            --radius-md: 12px;
+        }
+
+        .admin-chat-shell {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 14px;
+            height: calc(100vh - 270px);
+            padding: 14px;
+            background: linear-gradient(135deg, rgba(13, 148, 136, 0.06), rgba(37, 99, 235, 0.05));
+        }
+
+        .chat-left, .chat-right {
+            background: var(--card);
+            border: 1px solid var(--soft);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+        }
+
+        .chat-left-head, .chat-right-head {
+            padding: 14px;
+            border-bottom: 1px solid var(--soft);
+            background: #f8fafc;
+        }
+
+        .chat-left-head h3, .chat-right-head h3 {
+            margin: 0;
+            font-size: 0.98rem;
+            color: var(--ink);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chat-left-head .material-icons, .chat-right-head .material-icons {
+            color: var(--primary);
+            font-size: 20px;
+        }
+
+        .session-recap {
+            margin: 0 14px;
+            padding: 10px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--soft);
+            background: linear-gradient(135deg, rgba(13, 148, 136, 0.08), rgba(37, 99, 235, 0.07));
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 8px;
+        }
+
+        .recap-item {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid #dbeafe;
+            border-radius: 10px;
+            padding: 7px 8px;
+        }
+
+        .recap-label {
+            margin: 0;
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+            color: #64748b;
+        }
+
+        .recap-value {
+            margin: 3px 0 0;
+            font-size: 0.86rem;
+            font-weight: 800;
+            color: #0f172a;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .recap-actions {
+            margin: 10px 14px 0;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .recap-btn {
+            border: 1px solid var(--soft);
+            background: #fff;
+            color: var(--ink);
+            border-radius: 10px;
+            padding: 8px 10px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+
+        .recap-btn.primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #fff;
+            border: none;
+        }
+
+        .conv-list {
+            height: calc(100% - 60px);
+            overflow-y: auto;
+        }
+
+        .conversation-item {
+            padding: 12px 14px;
+            border-bottom: 1px solid #f1f5f9;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .conversation-item:hover { background: #f8fafc; }
+        .conversation-item.active {
+            background: linear-gradient(90deg, rgba(13, 148, 136, 0.14), rgba(37, 99, 235, 0.08));
+            border-left: 3px solid var(--primary);
+        }
+
+        .conv-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .conv-name { font-weight: 700; color: var(--ink); font-size: 0.92rem; }
+        .conv-preview { color: var(--muted); font-size: 0.78rem; margin-top: 5px; }
+
+        .unread-pill {
+            min-width: 20px;
+            height: 20px;
+            border-radius: 999px;
+            padding: 0 6px;
+            background: linear-gradient(135deg, #ef4444, #f97316);
+            color: #fff;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+
+        .chat-right {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .messages-list {
+            flex: 1;
+            padding: 14px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            background:
+                radial-gradient(circle at 8% 6%, rgba(13, 148, 136, 0.06), transparent 34%),
+                radial-gradient(circle at 94% 6%, rgba(37, 99, 235, 0.05), transparent 34%),
+                #f8fafc;
+        }
+
+        .message-row {
+            display: flex;
+            gap: 8px;
+            align-items: flex-end;
+        }
+
+        .message-row.admin { justify-content: flex-end; }
+
+        .message-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, var(--secondary), #1d4ed8);
+            color: #fff;
+            font-size: 0.72rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .message-avatar.admin {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        }
+
+        .bubble-wrap {
+            max-width: min(520px, 78%);
+        }
+
+        .message-author {
+            margin: 0 0 4px;
+            color: var(--muted);
+            font-size: 0.74rem;
+            font-weight: 700;
+        }
+
+        .message-bubble {
+            border-radius: 16px;
+            padding: 10px 12px;
+            line-height: 1.45;
+            word-break: break-word;
+            box-shadow: 0 8px 16px rgba(15, 23, 42, 0.08);
+        }
+
+        .message-bubble.client {
+            background: #ffffff;
+            border: 1px solid var(--soft);
+            color: var(--ink);
+            border-bottom-left-radius: 6px;
+        }
+
+        .message-bubble.admin {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #fff;
+            border-bottom-right-radius: 6px;
+        }
+
+        .message-meta {
+            margin-top: 4px;
+            font-size: 0.72rem;
+            color: #94a3b8;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .composer {
+            border-top: 1px solid var(--soft);
+            padding: 12px;
+            background: #ffffff;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 8px;
+        }
+
+        .composer input {
+            border: 1px solid var(--soft);
+            border-radius: 999px;
+            padding: 11px 14px;
+            outline: none;
+            font-size: 0.9rem;
+        }
+
+        .composer input:focus {
+            border-color: rgba(13, 148, 136, 0.55);
+            box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.12);
+        }
+
+        .send-btn {
+            border: none;
+            border-radius: 999px;
+            padding: 10px 14px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #fff;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 700;
+        }
+
+        .empty-box {
+            text-align: center;
+            color: var(--muted);
+            padding: 24px 12px;
+        }
+
+        @media (max-width: 980px) {
+            .admin-chat-shell { grid-template-columns: 1fr; height: auto; }
+            .session-recap { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 12px; }
+            .chat-left { max-height: 260px; }
+            .chat-right { min-height: 460px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-logo"><img src="../logo.png" alt="TDE Group"><div class="logo-text"><span>TDE GROUP</span><small>TOGETHER WE MAKE IT!</small></div></div>
+        <nav class="sidebar-menu">
+            <a href="index.html" class="sidebar-item"><span class="material-icons">dashboard</span><span>Dashboard</span></a>
+            <a href="create-project.html" class="sidebar-item"><span class="material-icons">add_circle</span><span>Nouveau Projet</span></a>
+            <a href="clients.html" class="sidebar-item"><span class="material-icons">groups</span><span>Clients (CRM)</span></a>
+            <a href="tickets.html" class="sidebar-item"><span class="material-icons">support_agent</span><span>Support</span></a>
+            <a href="messages.html" class="sidebar-item active"><span class="material-icons">mail</span><span>Messages</span></a>
+            <a href="calendar.html" class="sidebar-item"><span class="material-icons">calendar_today</span><span>Calendrier</span></a>
+            <a href="reports.html" class="sidebar-item"><span class="material-icons">assessment</span><span>Rapports</span></a>
+            <a href="profile.html" class="sidebar-item"><span class="material-icons">account_circle</span><span>Profil</span></a>
+            <a href="../my-project.html" class="sidebar-item" target="_blank" rel="noopener"><span class="material-icons">visibility</span><span>My Project (Client)</span></a>
+            <div class="sidebar-logout">
+                <button class="sidebar-item" onclick="logout()"><span class="material-icons">logout</span><span>Déconnexion</span></button>
+            </div>
+        </nav>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <div class="header-title"><span class="material-icons">mail</span><span>Messages</span></div>
+            <div class="header-right">
+                <div class="search-box"><span class="material-icons">search</span><input type="text" id="searchInput" placeholder="Rechercher..."></div>
+                <div class="user-profile"><div class="user-avatar" id="userInitials">AD</div></div>
+            </div>
+        </div>
+
+        <div class="content" style="padding: 0;">
+            <section class="session-recap" id="sessionRecap">
+                <div class="recap-item">
+                    <p class="recap-label">Projet actif</p>
+                    <p class="recap-value" id="recapProject">-</p>
+                </div>
+                <div class="recap-item">
+                    <p class="recap-label">Client actif</p>
+                    <p class="recap-value" id="recapClient">-</p>
+                </div>
+                <div class="recap-item">
+                    <p class="recap-label">Reçus</p>
+                    <p class="recap-value" id="recapReceived">0</p>
+                </div>
+                <div class="recap-item">
+                    <p class="recap-label">Envoyés</p>
+                    <p class="recap-value" id="recapSent">0</p>
+                </div>
+                <div class="recap-item">
+                    <p class="recap-label">Non lus</p>
+                    <p class="recap-value" id="recapUnread">0</p>
+                </div>
+                <div class="recap-item">
+                    <p class="recap-label">Conversations</p>
+                    <p class="recap-value" id="recapConversations">0</p>
+                </div>
+                <div class="recap-item">
+                    <p class="recap-label">Session</p>
+                    <p class="recap-value" id="recapSession">0 min</p>
+                </div>
+                <div class="recap-item">
+                    <p class="recap-label">Dernier msg</p>
+                    <p class="recap-value" id="recapLastMessage">-</p>
+                </div>
+                <div class="recap-item">
+                    <p class="recap-label">Auto-lu dans</p>
+                    <p class="recap-value" id="recapAutoRead">-</p>
+                </div>
+                <div class="recap-item">
+                    <p class="recap-label">Dernière sync</p>
+                    <p class="recap-value" id="recapLastSync">-</p>
+                </div>
+            </section>
+            <div class="recap-actions">
+                <button id="toggleUnreadBtn" class="recap-btn" type="button">
+                    <span class="material-icons">filter_alt</span>
+                    <span>Filtrer non lus</span>
+                </button>
+                <button id="markReadNowBtn" class="recap-btn primary" type="button">
+                    <span class="material-icons">mark_chat_read</span>
+                    <span>Marquer lu maintenant</span>
+                </button>
+            </div>
+            <div class="admin-chat-shell">
+                <aside class="chat-left">
+                    <div class="chat-left-head">
+                        <h3><span class="material-icons">forum</span>Conversations</h3>
+                    </div>
+                    <div id="conversationsList" class="conv-list"></div>
+                </aside>
+
+                <section class="chat-right">
+                    <div class="chat-right-head">
+                        <h3><span class="material-icons">chat</span><span id="activeConversationName">Sélectionnez une conversation</span></h3>
+                    </div>
+                    <div class="messages-list" id="messagesList"></div>
+                    <form class="composer" id="messageForm">
+                        <input type="text" id="messageInput" placeholder="Écrire un message..." required>
+                        <button class="send-btn" type="submit"><span class="material-icons">send</span><span>Envoyer</span></button>
+                    </form>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import AuthService from '../src/auth-service.js';
+        import ChatService from '../src/chat-service.js';
+        import { initAdminAvatar } from '../src/admin-avatar.js';
+
+        let currentProjectId = null;
+        let currentMessages = [];
+        let allConversations = [];
+        let conversationSearch = '';
+        let pollingTimer = null;
+        const sessionStartedAt = Date.now();
+        let unreadOnlyMode = false;
+        let pendingReadTimer = null;
+        let pendingReadDeadline = null;
+        let pendingReadProjectId = null;
+        let lastSyncAt = null;
+
+        async function initialize() {
+            try {
+                await AuthService.authReady;
+                if (!AuthService.currentUser) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                await initAdminAvatar();
+
+                await loadConversations();
+                bindListeners();
+                startAutoRefresh();
+            } catch (error) {
+                console.error('Error:', error);
+                window.location.href = 'login.html';
+            }
+        }
+
+        function bindListeners() {
+            document.getElementById('messageForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                await window.sendMessage();
+            });
+
+            document.getElementById('searchInput').addEventListener('input', (event) => {
+                conversationSearch = event.target.value.trim().toLowerCase();
+                renderConversations();
+            });
+
+            document.getElementById('toggleUnreadBtn').addEventListener('click', () => {
+                unreadOnlyMode = !unreadOnlyMode;
+                document.getElementById('toggleUnreadBtn').classList.toggle('primary', unreadOnlyMode);
+                const label = document.querySelector('#toggleUnreadBtn span:last-child');
+                if (label) label.textContent = unreadOnlyMode ? 'Voir tout' : 'Filtrer non lus';
+                renderConversations();
+            });
+
+            document.getElementById('markReadNowBtn').addEventListener('click', async () => {
+                await markCurrentConversationAsReadNow();
+            });
+        }
+
+        function startAutoRefresh() {
+            stopAutoRefresh();
+            const tick = async () => {
+                try {
+                    await loadConversations(false);
+                    if (currentProjectId) {
+                        await loadMessages(currentProjectId, false);
+                    }
+                } finally {
+                    const delay = document.hidden ? 25000 : 7000;
+                    pollingTimer = setTimeout(tick, delay);
+                }
+            };
+            tick();
+        }
+
+        function stopAutoRefresh() {
+            if (pollingTimer) {
+                clearTimeout(pollingTimer);
+                pollingTimer = null;
+            }
+        }
+
+        async function loadConversations() {
+            const conversations = await ChatService.getAllConversations();
+            const container = document.getElementById('conversationsList');
+
+            allConversations = Array.isArray(conversations) ? conversations : [];
+            lastSyncAt = new Date();
+            renderConversations();
+            updateSessionRecap();
+
+            if (allConversations.length === 0) {
+                container.innerHTML = '<div class="empty-box"><span class="material-icons" style="font-size:34px;color:#94a3b8;">chat_bubble_outline</span><p>Aucune conversation</p></div>';
+                document.getElementById('messagesList').innerHTML = '<div class="empty-box">Aucun message à afficher.</div>';
+                updateSessionRecap();
+                return;
+            }
+
+            const stillExists = allConversations.some((c) => c.projectId === currentProjectId);
+            if (!stillExists) {
+                currentProjectId = allConversations[0].projectId;
+                renderConversations();
+                await loadMessages(currentProjectId, true);
+            }
+        }
+
+        function renderConversations() {
+            const container = document.getElementById('conversationsList');
+            const rows = allConversations.filter((conv) => {
+                const text = `${conv.projectName || ''} ${conv.clientName || ''} ${conv.lastMessage?.content || ''}`.toLowerCase();
+                const bySearch = !conversationSearch || text.includes(conversationSearch);
+                const byUnread = !unreadOnlyMode || Number(conv.unreadCount || 0) > 0;
+                return bySearch && byUnread;
+            });
+
+            if (!rows.length) {
+                container.innerHTML = '<div class="empty-box">Aucun résultat.</div>';
+                return;
+            }
+
+            container.innerHTML = rows.map((conv) => `
+                <div class="conversation-item ${conv.projectId === currentProjectId ? 'active' : ''}" onclick="selectConversation('${conv.projectId}')">
+                    <div class="conv-row">
+                        <div class="conv-name">${escapeHtml(conv.projectName || 'Projet')}</div>
+                        ${conv.unreadCount > 0 ? `<span class="unread-pill">${conv.unreadCount > 9 ? '9+' : conv.unreadCount}</span>` : ''}
+                    </div>
+                    <div class="conv-preview">${escapeHtml(conv.clientName || 'Client')}</div>
+                    <div class="conv-preview">${escapeHtml((conv.lastMessage?.content || '').slice(0, 60))}</div>
+                </div>
+            `).join('');
+        }
+
+        window.selectConversation = async function(projectId) {
+            currentProjectId = projectId;
+            renderConversations();
+            await loadMessages(projectId, true);
+        }
+
+        async function loadMessages(projectId, markRead = true) {
+            const messages = await ChatService.getConversation(projectId);
+            currentMessages = Array.isArray(messages) ? messages : [];
+            renderMessages(currentMessages);
+
+            const active = allConversations.find((c) => c.projectId === projectId);
+            document.getElementById('activeConversationName').textContent =
+                active
+                    ? `${active.projectName || 'Projet'} · ${active.clientName || 'Client'}`
+                    : `Projet ${String(projectId).slice(0, 8)}`;
+
+            scheduleDelayedRead(projectId);
+            updateSessionRecap();
+        }
+
+        function renderMessages(messages) {
+            const container = document.getElementById('messagesList');
+            if (!messages || messages.length === 0) {
+                container.innerHTML = '<div class="empty-box">Aucun message pour cette conversation.</div>';
+                return;
+            }
+
+            container.innerHTML = messages.map(msg => {
+                const isAdmin = msg.sender_role === 'admin';
+                const sender = escapeHtml(
+                    msg.sender_name ||
+                    (isAdmin
+                        ? (AuthService.currentProfile?.name || AuthService.currentProfile?.full_name || 'Admin')
+                        : (allConversations.find((c) => c.projectId === currentProjectId)?.clientName || 'Client'))
+                );
+                const text = escapeHtml(msg.content || '');
+                return `
+                    <article class="message-row ${isAdmin ? 'admin' : 'client'}">
+                        ${isAdmin ? '' : `<div class="message-avatar">${sender.charAt(0).toUpperCase()}</div>`}
+                        <div class="bubble-wrap">
+                            ${isAdmin ? '' : `<p class="message-author">${sender}</p>`}
+                            <div class="message-bubble ${isAdmin ? 'admin' : 'client'}">${text}</div>
+                            <div class="message-meta">
+                                <span class="material-icons" style="font-size:13px;">schedule</span>
+                                <span>${new Date(msg.created_at).toLocaleTimeString('fr-FR')}</span>
+                            </div>
+                        </div>
+                        ${isAdmin ? `<div class="message-avatar admin">${sender.charAt(0).toUpperCase()}</div>` : ''}
+                    </article>
+                `;
+            }).join('');
+
+            // Scroll to bottom
+            container.scrollTop = container.scrollHeight;
+        }
+
+        window.sendMessage = async function() {
+            const input = document.getElementById('messageInput');
+            const content = input.value.trim();
+
+            if (!content) return;
+            if (!currentProjectId) {
+                showToast('warning', 'Sélectionnez une conversation avant d’envoyer un message.');
+                return;
+            }
+
+            try {
+                await ChatService.sendMessage(
+                    currentProjectId,
+                    'admin',
+                    AuthService.currentProfile?.name || AuthService.currentProfile?.full_name || 'Admin',
+                    content
+                );
+                input.value = '';
+                await loadMessages(currentProjectId, false);
+                await loadConversations();
+                showToast('success', 'Message envoyé');
+            } catch (error) {
+                console.error('Admin send message error:', error);
+                showToast('error', `Envoi impossible: ${error?.message || 'erreur inconnue'}`);
+            }
+        };
+
+        function showToast(type, message) {
+            const container = document.getElementById('toastContainer');
+            if (!container) return;
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `<span class="material-icons">${type === 'success' ? 'check_circle' : type === 'error' ? 'error' : type === 'warning' ? 'warning' : 'info'}</span><span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3200);
+        }
+
+        function updateSessionRecap() {
+            const activeConversation = allConversations.find((c) => c.projectId === currentProjectId) || null;
+            const totalReceived = allConversations.reduce((sum, c) => sum + Number(c.totalClientMessages || 0), 0);
+            const totalSent = allConversations.reduce((sum, c) => sum + Number(c.totalAdminMessages || 0), 0);
+            const totalUnread = allConversations.reduce((sum, c) => sum + Number(c.unreadCount || 0), 0);
+            const activeLastMessage = currentMessages.length ? currentMessages[currentMessages.length - 1] : null;
+
+            const sessionMinutes = Math.max(0, Math.floor((Date.now() - sessionStartedAt) / 60000));
+            const lastMessageText = activeLastMessage?.created_at
+                ? new Date(activeLastMessage.created_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
+                : '-';
+            const autoReadText = pendingReadDeadline
+                ? `${Math.max(0, Math.ceil((pendingReadDeadline - Date.now()) / 1000))}s`
+                : '-';
+            const lastSyncText = lastSyncAt
+                ? lastSyncAt.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
+                : '-';
+
+            setText('recapProject', activeConversation?.projectName || '-');
+            setText('recapClient', activeConversation?.clientName || '-');
+            setText('recapReceived', String(totalReceived));
+            setText('recapSent', String(totalSent));
+            setText('recapUnread', String(totalUnread));
+            setText('recapConversations', String(allConversations.length));
+            setText('recapSession', `${sessionMinutes} min`);
+            setText('recapLastMessage', lastMessageText);
+            setText('recapAutoRead', autoReadText);
+            setText('recapLastSync', lastSyncText);
+        }
+
+        function setText(id, value) {
+            const node = document.getElementById(id);
+            if (node) node.textContent = value;
+        }
+
+        function scheduleDelayedRead(projectId) {
+            const unreadIncoming = (currentMessages || []).filter((m) => m.sender_role !== 'admin' && !m.read);
+            if (!unreadIncoming.length) {
+                if (pendingReadTimer) {
+                    clearTimeout(pendingReadTimer);
+                    pendingReadTimer = null;
+                }
+                pendingReadDeadline = null;
+                pendingReadProjectId = null;
+                updateSessionRecap();
+                return;
+            }
+
+            if (pendingReadTimer && pendingReadProjectId === projectId) {
+                updateSessionRecap();
+                return;
+            }
+
+            if (pendingReadTimer) {
+                clearTimeout(pendingReadTimer);
+                pendingReadTimer = null;
+            }
+
+            pendingReadProjectId = projectId;
+            pendingReadDeadline = Date.now() + 60000;
+            updateSessionRecap();
+            pendingReadTimer = setTimeout(async () => {
+                try {
+                    await ChatService.markAsRead(projectId, 'admin');
+                    await loadConversations();
+                    await loadMessages(projectId, false);
+                } finally {
+                    pendingReadTimer = null;
+                    pendingReadDeadline = null;
+                    pendingReadProjectId = null;
+                    updateSessionRecap();
+                }
+            }, 60000);
+        }
+
+        async function markCurrentConversationAsReadNow() {
+            if (!currentProjectId) {
+                showToast('warning', 'Aucune conversation active.');
+                return;
+            }
+            if (pendingReadTimer) {
+                clearTimeout(pendingReadTimer);
+                pendingReadTimer = null;
+            }
+            pendingReadDeadline = null;
+            pendingReadProjectId = null;
+            await ChatService.markAsRead(currentProjectId, 'admin');
+            await loadConversations();
+            await loadMessages(currentProjectId, false);
+            showToast('success', 'Conversation marquée comme lue');
+        }
+
+        function confirmAction(message) {
+            return new Promise((resolve) => {
+                const modal = document.getElementById('confirmModal');
+                const text = document.getElementById('confirmText');
+                text.textContent = message;
+                modal.classList.add('open');
+                const onYes = () => { cleanup(); resolve(true); };
+                const onNo = () => { cleanup(); resolve(false); };
+                function cleanup() {
+                    modal.classList.remove('open');
+                    document.getElementById('confirmYes').removeEventListener('click', onYes);
+                    document.getElementById('confirmNo').removeEventListener('click', onNo);
+                }
+                document.getElementById('confirmYes').addEventListener('click', onYes);
+                document.getElementById('confirmNo').addEventListener('click', onNo);
+            });
+        }
+
+        window.logout = async function() {
+            const ok = await confirmAction('Êtes-vous sûr de vouloir vous déconnecter ?');
+            if (!ok) return;
+            await AuthService.logout();
+            showToast('success', 'Déconnexion réussie');
+            window.location.href = 'login.html';
+        };
+
+        function escapeHtml(value) {
+            return String(value || '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        window.addEventListener('load', initialize);
+        setInterval(updateSessionRecap, 1000);
+        window.addEventListener('beforeunload', () => {
+            stopAutoRefresh();
+            if (pendingReadTimer) clearTimeout(pendingReadTimer);
+        });
+    </script>
+
+    <div id="toastContainer" class="toast-container"></div>
+
+    <div id="confirmModal" class="confirm-modal">
+        <div class="confirm-card">
+            <div class="confirm-body">
+                <div class="confirm-title">Confirmation</div>
+                <div id="confirmText" class="confirm-text">Êtes-vous sûr?</div>
+            </div>
+            <div class="confirm-actions">
+                <button class="confirm-btn" id="confirmNo"><span class="material-icons">close</span>Annuler</button>
+                <button class="confirm-btn primary" id="confirmYes"><span class="material-icons">check</span>Confirmer</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

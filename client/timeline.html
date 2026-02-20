@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Timeline - Portail Client TDE Group</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="../src/style.css" />
+    <link rel="stylesheet" href="./styles/client-theme.css" />
+
+    <style>
+        :root {
+            --primary: #0d9488;
+            --primary-dark: #0f766e;
+            --secondary: #3b82f6;
+            --amber: #f59e0b;
+            --rose: #e11d48;
+            --ink: #0f172a;
+            --muted: #64748b;
+            --soft: #e2e8f0;
+            --surface: #f1f5f9;
+            --card: #ffffff;
+            --radius-lg: 18px;
+            --radius-md: 12px;
+            --shadow-sm: 0 8px 24px rgba(15, 23, 42, 0.08);
+            --shadow-md: 0 18px 38px rgba(15, 23, 42, 0.14);
+            --transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body.client-portal {
+            background:
+                radial-gradient(circle at 8% 6%, rgba(13, 148, 136, 0.08) 0%, transparent 38%),
+                radial-gradient(circle at 92% 12%, rgba(59, 130, 246, 0.08) 0%, transparent 35%),
+                var(--surface);
+        }
+
+        .timeline-layout {
+            min-height: 100vh;
+            display: flex;
+        }
+
+        .timeline-main {
+            flex: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .timeline-header {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            background: rgba(255, 255, 255, 0.88);
+            border-bottom: 1px solid var(--soft);
+            backdrop-filter: blur(10px);
+            padding: 20px 20px 18px;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            align-items: flex-start;
+            max-width: 1240px;
+            margin: 0 auto;
+        }
+
+        .header-title h1 {
+            margin: 0;
+            font-family: 'Sora', sans-serif;
+            font-size: clamp(1.35rem, 2.2vw, 2rem);
+            color: var(--ink);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-title h1 .material-icons {
+            color: var(--primary);
+            font-size: 1.8rem;
+        }
+
+        .header-title p {
+            margin: 8px 0 0;
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+
+        .header-badge {
+            align-self: center;
+            border: 1px solid rgba(13, 148, 136, 0.2);
+            background: rgba(13, 148, 136, 0.08);
+            color: var(--primary-dark);
+            border-radius: 999px;
+            padding: 8px 12px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .timeline-wrap {
+            width: min(1240px, 100%);
+            margin: 0 auto;
+            padding: 24px 20px 44px;
+        }
+
+        .top-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .bonus-card {
+            background: var(--card);
+            border: 1px solid var(--soft);
+            border-radius: var(--radius-lg);
+            padding: 18px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .bonus-title {
+            margin: 0 0 12px;
+            font-family: 'Sora', sans-serif;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--ink);
+        }
+
+        .bonus-title .material-icons {
+            color: var(--primary);
+            font-size: 20px;
+        }
+
+        .project-name {
+            margin: 0;
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--ink);
+        }
+
+        .project-meta {
+            margin-top: 8px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .meta-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.8rem;
+            color: #0f172a;
+            background: #f8fafc;
+            border: 1px solid var(--soft);
+            padding: 6px 10px;
+            border-radius: 999px;
+        }
+
+        .meta-pill .material-icons {
+            font-size: 14px;
+            color: var(--primary);
+        }
+
+        .session-tiles {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .session-tile {
+            border-radius: var(--radius-md);
+            border: 1px solid var(--soft);
+            background: linear-gradient(135deg, rgba(13, 148, 136, 0.08), #ffffff 80%);
+            padding: 12px;
+        }
+
+        .session-label {
+            font-size: 0.74rem;
+            color: var(--muted);
+            margin: 0 0 4px;
+        }
+
+        .session-value {
+            margin: 0;
+            color: var(--ink);
+            font-weight: 800;
+            font-family: 'Sora', sans-serif;
+            font-size: 1.05rem;
+        }
+
+        .actions-bar,
+        .controls-bar {
+            background: var(--card);
+            border: 1px solid var(--soft);
+            border-radius: var(--radius-lg);
+            padding: 12px;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .actions-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .quick-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 12px;
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 0.84rem;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+        }
+
+        .quick-btn .material-icons {
+            font-size: 18px;
+        }
+
+        .quick-btn.primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); }
+        .quick-btn.secondary { background: linear-gradient(135deg, #2563eb, #1d4ed8); }
+        .quick-btn.warning { background: linear-gradient(135deg, #f59e0b, #d97706); }
+        .quick-btn.ghost {
+            color: var(--ink);
+            border: 1px solid var(--soft);
+            background: #f8fafc;
+        }
+
+        .quick-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(15, 23, 42, 0.2);
+        }
+
+        .controls-bar {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .filter-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .chip {
+            border: 1px solid var(--soft);
+            background: #ffffff;
+            border-radius: 999px;
+            padding: 8px 12px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--muted);
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .chip .material-icons {
+            font-size: 14px;
+        }
+
+        .chip.active,
+        .chip:hover {
+            color: var(--primary-dark);
+            border-color: rgba(13, 148, 136, 0.35);
+            background: rgba(13, 148, 136, 0.09);
+        }
+
+        .control-right {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .control-select {
+            border: 1px solid var(--soft);
+            border-radius: 10px;
+            padding: 8px 10px;
+            background: #fff;
+            color: var(--ink);
+            font-size: 0.85rem;
+        }
+
+        .timeline-list {
+            display: grid;
+            gap: 14px;
+        }
+
+        .timeline-card {
+            background: var(--card);
+            border: 1px solid var(--soft);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+            opacity: 0;
+            transform: translateY(16px);
+            animation: slideIn 0.5s ease forwards;
+        }
+
+        .timeline-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+            border-color: rgba(13, 148, 136, 0.25);
+        }
+
+        .timeline-list.compact .phase-content {
+            display: none;
+        }
+
+        .phase-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 16px 18px;
+            background: linear-gradient(135deg, rgba(13, 148, 136, 0.1), rgba(59, 130, 246, 0.08));
+            border-bottom: 1px solid var(--soft);
+        }
+
+        .phase-main {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .phase-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: rgba(13, 148, 136, 0.16);
+            color: var(--primary-dark);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .phase-icon .material-icons {
+            font-size: 20px;
+        }
+
+        .phase-title {
+            margin: 0;
+            font-size: 1.04rem;
+            font-family: 'Sora', sans-serif;
+            color: var(--ink);
+        }
+
+        .phase-desc {
+            margin: 4px 0 0;
+            color: var(--muted);
+            font-size: 0.88rem;
+        }
+
+        .phase-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .phase-progress {
+            font-weight: 800;
+            color: var(--primary-dark);
+            font-family: 'Sora', sans-serif;
+            font-size: 0.95rem;
+        }
+
+        .status-pill {
+            border-radius: 999px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 6px 10px;
+            border: 1px solid transparent;
+        }
+
+        .status-pill.completed { background: rgba(16, 185, 129, 0.16); color: #047857; border-color: rgba(16, 185, 129, 0.35); }
+        .status-pill.in_progress { background: rgba(59, 130, 246, 0.14); color: #1d4ed8; border-color: rgba(59, 130, 246, 0.35); }
+        .status-pill.planning,
+        .status-pill.planned { background: rgba(245, 158, 11, 0.16); color: #b45309; border-color: rgba(245, 158, 11, 0.36); }
+        .status-pill.paused,
+        .status-pill.delayed { background: rgba(225, 29, 72, 0.12); color: #be123c; border-color: rgba(225, 29, 72, 0.3); }
+
+        .phase-content {
+            padding: 16px 18px 18px;
+        }
+
+        .phase-metrics {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .metric {
+            border: 1px solid var(--soft);
+            border-radius: 12px;
+            padding: 10px;
+            background: #fafcff;
+        }
+
+        .metric label {
+            display: block;
+            color: var(--muted);
+            font-size: 0.74rem;
+            margin-bottom: 4px;
+        }
+
+        .metric p {
+            margin: 0;
+            font-size: 0.88rem;
+            color: var(--ink);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .metric p .material-icons {
+            font-size: 15px;
+            color: var(--primary);
+        }
+
+        .progress-track {
+            width: 100%;
+            height: 8px;
+            border-radius: 999px;
+            background: #dbe8ef;
+            overflow: hidden;
+            margin: 10px 0 14px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: inherit;
+            transition: width 0.6s ease;
+        }
+
+        .phase-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .mini-btn {
+            border: 1px solid var(--soft);
+            border-radius: 10px;
+            padding: 8px 10px;
+            background: #fff;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--muted);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: var(--transition);
+        }
+
+        .mini-btn .material-icons {
+            font-size: 15px;
+        }
+
+        .mini-btn:hover {
+            color: var(--primary-dark);
+            border-color: rgba(13, 148, 136, 0.35);
+            background: rgba(13, 148, 136, 0.08);
+        }
+
+        .phase-notes {
+            margin-top: 12px;
+            border: 1px solid rgba(59, 130, 246, 0.24);
+            background: rgba(59, 130, 246, 0.08);
+            border-radius: 12px;
+            padding: 10px;
+            font-size: 0.85rem;
+            color: #1e3a8a;
+            display: none;
+        }
+
+        .phase-notes.open {
+            display: block;
+            animation: fadeIn 0.25s ease;
+        }
+
+        .photo-grid {
+            margin-top: 12px;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .photo-card {
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            border: 1px solid var(--soft);
+        }
+
+        .photo-card img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.35s ease;
+        }
+
+        .photo-card:hover img {
+            transform: scale(1.08);
+        }
+
+        .photo-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 40%, rgba(15, 23, 42, 0.78) 100%);
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            padding: 8px;
+            color: #fff;
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+
+        .photo-overlay .material-icons {
+            font-size: 17px;
+        }
+
+        .empty-box {
+            background: #ffffff;
+            border: 1px dashed #cbd5e1;
+            border-radius: 14px;
+            color: var(--muted);
+            text-align: center;
+            padding: 24px;
+            font-size: 0.95rem;
+        }
+
+        .image-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.84);
+            backdrop-filter: blur(8px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 120;
+            padding: 16px;
+        }
+
+        .image-modal.open {
+            display: flex;
+            animation: fadeIn 0.25s ease;
+        }
+
+        .image-frame {
+            width: min(980px, 100%);
+            background: #fff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+        }
+
+        .image-frame img {
+            width: 100%;
+            max-height: 72vh;
+            object-fit: contain;
+            background: #0f172a;
+        }
+
+        .image-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 14px;
+            border-top: 1px solid var(--soft);
+        }
+
+        .image-meta p {
+            margin: 0;
+            color: var(--ink);
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .image-close {
+            border: 1px solid var(--soft);
+            border-radius: 10px;
+            background: #fff;
+            padding: 8px 10px;
+            color: var(--muted);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @media (max-width: 1100px) {
+            .top-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 980px) {
+            .phase-metrics {
+                grid-template-columns: 1fr;
+            }
+
+            .photo-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .timeline-header {
+                padding: 14px 14px 12px;
+            }
+
+            .timeline-wrap {
+                padding: 14px 12px 28px;
+            }
+
+            .header-top {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .controls-bar {
+                flex-direction: column;
+            }
+
+            .photo-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .phase-head {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body class="client-portal antialiased">
+    <div class="timeline-layout">
+        <aside class="client-sidebar hidden lg:flex w-72 flex-col sticky top-0 h-screen z-20">
+            <div class="p-6 border-b border-white/10">
+                <div class="sidebar-brand cursor-pointer" onclick="window.location.href='./dashboard.html'">
+                    <img src="/logo.png" alt="TDE Group">
+                    <div>
+                        <h2 class="font-bold">My Project</h2>
+                        <p class="text-xs">Client Portal</p>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav flex-1 overflow-y-auto p-4 space-y-2">
+                <a href="./dashboard.html" class="nav-item nav-link flex items-center gap-3 px-4 py-3 rounded-lg transition-colors">
+                    <span class="material-icons">dashboard</span>
+                    <span>Tableau de bord</span>
+                </a>
+                <a href="./timeline.html" class="nav-item nav-link active flex items-center gap-3 px-4 py-3 rounded-lg transition-colors">
+                    <span class="material-icons">timeline</span>
+                    <span>Timeline</span>
+                </a>
+                <a href="./documents.html" class="nav-item nav-link flex items-center gap-3 px-4 py-3 rounded-lg transition-colors">
+                    <span class="material-icons">folder</span>
+                    <span>Documents</span>
+                </a>
+                <a href="./chat.html" class="nav-item nav-link flex items-center gap-3 px-4 py-3 rounded-lg transition-colors">
+                    <span class="material-icons">chat</span>
+                    <span>Messages</span>
+                    <span id="chatBadge" class="badge-count" hidden>0</span>
+                </a>
+                <a href="./tickets.html" class="nav-item nav-link flex items-center gap-3 px-4 py-3 rounded-lg transition-colors">
+                    <span class="material-icons">support_agent</span>
+                    <span>Tickets</span>
+                    <span id="ticketBadge" class="badge-count" hidden>0</span>
+                </a>
+                <a href="./profile.html" class="nav-item nav-link flex items-center gap-3 px-4 py-3 rounded-lg transition-colors">
+                    <span class="material-icons">person</span>
+                    <span>Profil</span>
+                </a>
+            </nav>
+
+            <div class="p-4 border-t border-white/10">
+                <button id="logoutBtn" class="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg font-medium" type="button">
+                    <span class="material-icons">logout</span>
+                    <span>Déconnexion</span>
+                </button>
+            </div>
+        </aside>
+
+        <main class="timeline-main">
+            <header class="timeline-header">
+                <div class="header-top">
+                    <div class="header-title">
+                        <h1>
+                            <span class="material-icons">insights</span>
+                            Timeline Projet
+                        </h1>
+                        <p>Vue dynamique des phases, interactions rapides et suivi détaillé.</p>
+                    </div>
+                    <div class="header-badge" id="phaseCountBadge">0 phase</div>
+                </div>
+            </header>
+
+            <div class="timeline-wrap">
+                <section class="top-grid">
+                    <article class="bonus-card">
+                        <h2 class="bonus-title">
+                            <span class="material-icons">workspaces</span>
+                            Bonus Projet
+                        </h2>
+                        <p class="project-name" id="projectName">Chargement...</p>
+                        <div class="project-meta">
+                            <span class="meta-pill"><span class="material-icons">badge</span><span id="projectIdShort">-</span></span>
+                            <span class="meta-pill"><span class="material-icons">person</span><span id="projectManager">-</span></span>
+                            <span class="meta-pill"><span class="material-icons">percent</span><span id="projectProgress">0%</span></span>
+                            <span class="meta-pill"><span class="material-icons">payments</span><span id="projectBudget">-</span></span>
+                        </div>
+                    </article>
+
+                    <article class="bonus-card">
+                        <h2 class="bonus-title">
+                            <span class="material-icons">schedule</span>
+                            Bonus Session
+                        </h2>
+                        <div class="session-tiles">
+                            <div class="session-tile">
+                                <p class="session-label">Temps restant</p>
+                                <p class="session-value" id="sessionRemaining">-</p>
+                            </div>
+                            <div class="session-tile">
+                                <p class="session-label">Statut</p>
+                                <p class="session-value" id="sessionStatus">Connecté</p>
+                            </div>
+                            <div class="session-tile">
+                                <p class="session-label">Phases terminées</p>
+                                <p class="session-value" id="completedCount">0</p>
+                            </div>
+                            <div class="session-tile">
+                                <p class="session-label">Prochaine échéance</p>
+                                <p class="session-value" id="nextDeadline">-</p>
+                            </div>
+                        </div>
+                    </article>
+                </section>
+
+                <section class="actions-bar" aria-label="Actions rapides">
+                    <a href="./chat.html" class="quick-btn primary">
+                        <span class="material-icons">chat</span>
+                        Message équipe
+                    </a>
+                    <a href="./documents.html" class="quick-btn secondary">
+                        <span class="material-icons">folder_open</span>
+                        Ouvrir documents
+                    </a>
+                    <a href="./tickets.html" class="quick-btn warning">
+                        <span class="material-icons">add_alert</span>
+                        Créer ticket
+                    </a>
+                    <button id="focusCurrentBtn" class="quick-btn ghost" type="button">
+                        <span class="material-icons">my_location</span>
+                        Phase actuelle
+                    </button>
+                    <button id="refreshTimelineBtn" class="quick-btn ghost" type="button">
+                        <span class="material-icons">refresh</span>
+                        Rafraîchir
+                    </button>
+                </section>
+
+                <section class="controls-bar">
+                    <div class="filter-chips" id="filterChips">
+                        <button class="chip active" type="button" data-filter="all"><span class="material-icons">apps</span>Toutes</button>
+                        <button class="chip" type="button" data-filter="in_progress"><span class="material-icons">play_circle</span>En cours</button>
+                        <button class="chip" type="button" data-filter="completed"><span class="material-icons">check_circle</span>Terminées</button>
+                        <button class="chip" type="button" data-filter="planning"><span class="material-icons">edit_calendar</span>Planifiées</button>
+                    </div>
+
+                    <div class="control-right">
+                        <select id="sortSelect" class="control-select">
+                            <option value="start">Tri: date début</option>
+                            <option value="end">Tri: date fin</option>
+                            <option value="progress">Tri: progression</option>
+                            <option value="name">Tri: nom</option>
+                        </select>
+                        <button id="compactToggleBtn" class="mini-btn" type="button">
+                            <span class="material-icons">view_stream</span>
+                            Vue compacte
+                        </button>
+                    </div>
+                </section>
+
+                <section id="phasesList" class="timeline-list" aria-live="polite">
+                    <!-- Loaded dynamically -->
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <div id="imageModal" class="image-modal" onclick="if(event.target===this){closeImageModal();}">
+        <div class="image-frame">
+            <img id="modalImage" src="" alt="Photo projet">
+            <div class="image-meta">
+                <p id="modalCaption">Photo</p>
+                <button class="image-close" type="button" onclick="closeImageModal()">
+                    <span class="material-icons">close</span>
+                    <span>Fermer</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../src/client-auth-service.js"></script>
+    <script src="../src/client-data-service.js"></script>
+    <script src="../src/client-profile-shortcut.js"></script>
+    <script src="../src/client-ui-helpers.js"></script>
+    <script>
+        if (!clientAuthService.isAuthenticated()) {
+            window.location.href = './login.html';
+        }
+
+        const phaseState = {
+            all: [],
+            filtered: [],
+            filter: 'all',
+            sort: 'start',
+            compact: false,
+            project: null
+        };
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            bindInteractions();
+            await loadTimeline();
+            startSessionTicker();
+        });
+
+        function bindInteractions() {
+            document.getElementById('logoutBtn').addEventListener('click', () => {
+                ClientUIHelpers.showConfirmDialog(
+                    'Confirmer la déconnexion',
+                    'Souhaitez-vous vraiment vous déconnecter ?',
+                    () => {
+                        clientAuthService.logout();
+                        window.location.href = './login.html';
+                    }
+                );
+            });
+
+            document.getElementById('filterChips').addEventListener('click', (event) => {
+                const button = event.target.closest('[data-filter]');
+                if (!button) return;
+
+                phaseState.filter = button.dataset.filter;
+                document.querySelectorAll('#filterChips .chip').forEach((chip) => chip.classList.remove('active'));
+                button.classList.add('active');
+                applyFiltersAndRender();
+            });
+
+            document.getElementById('sortSelect').addEventListener('change', (event) => {
+                phaseState.sort = event.target.value;
+                applyFiltersAndRender();
+            });
+
+            document.getElementById('compactToggleBtn').addEventListener('click', () => {
+                phaseState.compact = !phaseState.compact;
+                document.getElementById('phasesList').classList.toggle('compact', phaseState.compact);
+                document.getElementById('compactToggleBtn').innerHTML = phaseState.compact
+                    ? '<span class="material-icons">view_agenda</span>Vue détaillée'
+                    : '<span class="material-icons">view_stream</span>Vue compacte';
+            });
+
+            document.getElementById('refreshTimelineBtn').addEventListener('click', async () => {
+                await loadTimeline(true);
+                ClientUIHelpers.showNotification('Timeline mise à jour', 'success');
+            });
+
+            document.getElementById('focusCurrentBtn').addEventListener('click', focusCurrentPhase);
+        }
+
+        async function loadTimeline(isManualRefresh = false) {
+            try {
+                const [project, phases] = await Promise.all([
+                    clientDataService.getProject(),
+                    clientDataService.getPhases()
+                ]);
+
+                phaseState.project = project || null;
+                phaseState.all = Array.isArray(phases) ? phases : [];
+
+                populateBonuses();
+                applyFiltersAndRender();
+
+                if (isManualRefresh) {
+                    pulsePhaseCards();
+                }
+            } catch (error) {
+                console.error('Timeline load error:', error);
+                ClientUIHelpers.showNotification('Erreur lors du chargement de la timeline', 'error');
+            }
+        }
+
+        function applyFiltersAndRender() {
+            const phases = [...phaseState.all]
+                .filter((phase) => phaseState.filter === 'all' || normalizeStatus(phase.status) === phaseState.filter)
+                .sort(sortPhases);
+
+            phaseState.filtered = phases;
+            renderPhases(phases);
+            updateHeaderBadge(phases.length);
+            updateSessionMetrics();
+        }
+
+        function sortPhases(a, b) {
+            const mode = phaseState.sort;
+
+            if (mode === 'end') {
+                return toDate(a.endDate) - toDate(b.endDate);
+            }
+
+            if (mode === 'progress') {
+                return (Number(b.progress) || 0) - (Number(a.progress) || 0);
+            }
+
+            if (mode === 'name') {
+                return String(a.name || '').localeCompare(String(b.name || ''), 'fr');
+            }
+
+            return toDate(a.startDate) - toDate(b.startDate);
+        }
+
+        function renderPhases(phases) {
+            const container = document.getElementById('phasesList');
+
+            if (!phases.length) {
+                container.innerHTML = '<div class="empty-box">Aucune phase ne correspond au filtre actif.</div>';
+                return;
+            }
+
+            container.innerHTML = phases.map((phase, index) => {
+                const safeName = escapeHtml(phase.name || 'Phase');
+                const safeDescription = escapeHtml(phase.description || 'Aucune description fournie.');
+                const safeNotes = phase.notes ? escapeHtml(phase.notes) : '';
+                const normalized = normalizeStatus(phase.status);
+                const statusLabel = getStatusLabel(normalized);
+                const statusIcon = getStatusIcon(normalized);
+                const progress = clampProgress(phase.progress);
+                const delay = Math.min(index * 70, 450);
+                const duration = getDurationLabel(phase.startDate, phase.endDate);
+
+                return `
+                    <article class="timeline-card" data-status="${normalized}" data-phase-index="${index}" style="animation-delay:${delay}ms">
+                        <header class="phase-head">
+                            <div class="phase-main">
+                                <div class="phase-icon">
+                                    <span class="material-icons">${statusIcon}</span>
+                                </div>
+                                <div>
+                                    <h3 class="phase-title">${safeName}</h3>
+                                    <p class="phase-desc">${safeDescription}</p>
+                                </div>
+                            </div>
+                            <div class="phase-right">
+                                <span class="phase-progress">${progress}%</span>
+                                <span class="status-pill ${normalized}">${statusLabel}</span>
+                            </div>
+                        </header>
+
+                        <div class="phase-content">
+                            <div class="phase-metrics">
+                                <div class="metric">
+                                    <label>Début</label>
+                                    <p><span class="material-icons">event_upcoming</span>${formatDate(phase.startDate)}</p>
+                                </div>
+                                <div class="metric">
+                                    <label>Fin</label>
+                                    <p><span class="material-icons">event_available</span>${formatDate(phase.endDate)}</p>
+                                </div>
+                                <div class="metric">
+                                    <label>Durée</label>
+                                    <p><span class="material-icons">hourglass_bottom</span>${duration}</p>
+                                </div>
+                            </div>
+
+                            <div class="progress-track">
+                                <div class="progress-fill" style="width:${progress}%"></div>
+                            </div>
+
+                            <div class="phase-actions">
+                                <button type="button" class="mini-btn" onclick="toggleNotes(${index})">
+                                    <span class="material-icons">description</span>
+                                    ${phase.notes ? 'Voir note' : 'Pas de note'}
+                                </button>
+                                <button type="button" class="mini-btn" onclick="openPhaseInTickets('${escapeAttr(phase.name || '')}')">
+                                    <span class="material-icons">support_agent</span>
+                                    Créer ticket lié
+                                </button>
+                                <button type="button" class="mini-btn" onclick="scrollToTopSmooth()">
+                                    <span class="material-icons">north</span>
+                                    Haut de page
+                                </button>
+                            </div>
+
+                            <div id="phase-note-${index}" class="phase-notes ${phase.notes ? '' : 'open'}">
+                                ${phase.notes ? safeNotes : 'Aucune note pour cette phase.'}
+                            </div>
+
+                            ${renderPhotos(phase.photos)}
+                        </div>
+                    </article>
+                `;
+            }).join('');
+        }
+
+        function renderPhotos(photos) {
+            if (!Array.isArray(photos) || photos.length === 0) {
+                return '';
+            }
+
+            const cards = photos.map((photo) => {
+                const url = escapeAttr(photo.url || '');
+                const caption = escapeHtml(photo.caption || 'Photo chantier');
+                const captionAttr = escapeAttr(photo.caption || 'Photo chantier');
+
+                return `
+                    <div class="photo-card" onclick="openImageModal('${url}', '${captionAttr}')">
+                        <img src="${url}" alt="${captionAttr}">
+                        <div class="photo-overlay">
+                            <span>${caption}</span>
+                            <span class="material-icons">zoom_in</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            return `<div class="photo-grid">${cards}</div>`;
+        }
+
+        function populateBonuses() {
+            const project = phaseState.project || {};
+            const projectId = project.id || clientAuthService.getProjectId() || '-';
+
+            document.getElementById('projectName').textContent = project.name || 'Projet client';
+            document.getElementById('projectIdShort').textContent = projectId !== '-' ? `#${String(projectId).slice(0, 8)}` : '-';
+            document.getElementById('projectManager').textContent = project.manager || project.project_manager || '-';
+            document.getElementById('projectProgress').textContent = `${clampProgress(project.progress)}%`;
+            document.getElementById('projectBudget').textContent = formatBudget(project.budget, project.currency || 'EUR');
+            document.getElementById('sessionStatus').textContent = clientAuthService.isAuthenticated() ? 'Connecté' : 'Expiré';
+        }
+
+        function updateHeaderBadge(count) {
+            const badge = document.getElementById('phaseCountBadge');
+            badge.textContent = `${count} ${count > 1 ? 'phases' : 'phase'}`;
+        }
+
+        function updateSessionMetrics() {
+            const remaining = Math.max(0, Number(clientAuthService.getSessionTimeRemaining()) || 0);
+            document.getElementById('sessionRemaining').textContent = `${remaining} min`;
+
+            const all = phaseState.all;
+            const completed = all.filter((phase) => normalizeStatus(phase.status) === 'completed').length;
+            document.getElementById('completedCount').textContent = String(completed);
+
+            const nextPhase = [...all]
+                .filter((phase) => phase.endDate)
+                .sort((a, b) => toDate(a.endDate) - toDate(b.endDate))
+                .find((phase) => toDate(phase.endDate) >= new Date());
+
+            document.getElementById('nextDeadline').textContent = nextPhase ? formatDate(nextPhase.endDate) : '-';
+        }
+
+        function startSessionTicker() {
+            updateSessionMetrics();
+            setInterval(updateSessionMetrics, 60000);
+        }
+
+        function focusCurrentPhase() {
+            const preferred = document.querySelector('.timeline-card[data-status="in_progress"]')
+                || document.querySelector('.timeline-card[data-status="planning"]')
+                || document.querySelector('.timeline-card');
+
+            if (!preferred) {
+                ClientUIHelpers.showNotification('Aucune phase à afficher', 'info');
+                return;
+            }
+
+            preferred.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            preferred.style.boxShadow = '0 0 0 3px rgba(13, 148, 136, 0.35), 0 18px 38px rgba(15, 23, 42, 0.14)';
+            setTimeout(() => {
+                preferred.style.boxShadow = '';
+            }, 1300);
+        }
+
+        function pulsePhaseCards() {
+            document.querySelectorAll('.timeline-card').forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.transform = 'translateY(-4px)';
+                    setTimeout(() => {
+                        card.style.transform = '';
+                    }, 160);
+                }, index * 40);
+            });
+        }
+
+        function toggleNotes(index) {
+            const node = document.getElementById(`phase-note-${index}`);
+            if (!node) return;
+            node.classList.toggle('open');
+        }
+
+        function openPhaseInTickets(phaseName) {
+            sessionStorage.setItem('prefill_ticket_phase', phaseName || '');
+            window.location.href = './tickets.html';
+        }
+
+        function scrollToTopSmooth() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function openImageModal(url, caption) {
+            const modal = document.getElementById('imageModal');
+            const img = document.getElementById('modalImage');
+            const text = document.getElementById('modalCaption');
+
+            img.src = url;
+            img.alt = caption || 'Photo chantier';
+            text.textContent = caption || 'Photo chantier';
+            modal.classList.add('open');
+        }
+
+        function closeImageModal() {
+            const modal = document.getElementById('imageModal');
+            modal.classList.remove('open');
+        }
+
+        function normalizeStatus(status) {
+            const value = String(status || '').toLowerCase();
+            if (value === 'en_cours' || value === 'active' || value === 'in_work') return 'in_progress';
+            if (value === 'planned') return 'planning';
+            return value || 'planning';
+        }
+
+        function getStatusLabel(status) {
+            const map = {
+                planning: 'Planifiée',
+                planned: 'Planifiée',
+                in_progress: 'En cours',
+                completed: 'Terminée',
+                paused: 'En pause',
+                delayed: 'Retardée'
+            };
+            return map[status] || status;
+        }
+
+        function getStatusIcon(status) {
+            const map = {
+                planning: 'edit_calendar',
+                planned: 'edit_calendar',
+                in_progress: 'autorenew',
+                completed: 'task_alt',
+                paused: 'pause_circle',
+                delayed: 'warning'
+            };
+            return map[status] || 'timeline';
+        }
+
+        function clampProgress(value) {
+            const num = Number(value) || 0;
+            return Math.max(0, Math.min(100, Math.round(num)));
+        }
+
+        function formatDate(value) {
+            if (!value) return '-';
+            const date = new Date(value);
+            if (Number.isNaN(date.getTime())) return '-';
+            return date.toLocaleDateString('fr-FR', {
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric'
+            });
+        }
+
+        function getDurationLabel(startDate, endDate) {
+            if (!startDate || !endDate) return '-';
+            const start = toDate(startDate);
+            const end = toDate(endDate);
+            const diff = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+            if (!Number.isFinite(diff)) return '-';
+            return `${Math.max(diff, 0)} j`;
+        }
+
+        function toDate(value) {
+            const date = new Date(value);
+            return Number.isNaN(date.getTime()) ? new Date(0) : date;
+        }
+
+        function formatBudget(amount, currency = 'EUR') {
+            const num = Number(amount);
+            if (!Number.isFinite(num)) return '-';
+            try {
+                return new Intl.NumberFormat('fr-FR', {
+                    style: 'currency',
+                    currency
+                }).format(num);
+            } catch {
+                return `${num.toLocaleString('fr-FR')} ${currency}`;
+            }
+        }
+
+        function escapeHtml(value) {
+            return String(value || '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function escapeAttr(value) {
+            return escapeHtml(value).replace(/`/g, '&#96;');
+        }
+
+        window.openImageModal = openImageModal;
+        window.closeImageModal = closeImageModal;
+        window.toggleNotes = toggleNotes;
+        window.openPhaseInTickets = openPhaseInTickets;
+        window.scrollToTopSmooth = scrollToTopSmooth;
+    </script>
+</body>
+
+</html>
