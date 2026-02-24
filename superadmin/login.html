@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connexion Super Admin - TDE Group</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #0d9488;
+      --dark: #0f172a;
+      --muted: #64748b;
+      --bg: #f1f5f9;
+      --danger: #dc2626;
+      --border: #e2e8f0;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(circle at 15% 15%, rgba(13, 148, 136, 0.14), transparent 45%),
+        radial-gradient(circle at 80% 0%, rgba(15, 23, 42, 0.12), transparent 40%),
+        var(--bg);
+      display: grid;
+      place-items: center;
+      padding: 20px;
+    }
+    .card {
+      width: 100%;
+      max-width: 420px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: 0 18px 35px rgba(15, 23, 42, 0.12);
+      overflow: hidden;
+    }
+    .head {
+      background: linear-gradient(135deg, var(--dark), #1e293b 55%, var(--primary));
+      color: #fff;
+      padding: 22px 20px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      letter-spacing: 0.3px;
+    }
+    .brand img { width: 34px; height: 34px; object-fit: contain; }
+    .badge {
+      margin-top: 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      padding: 6px 10px;
+      border: 1px solid rgba(255,255,255,0.32);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.12);
+    }
+    .body { padding: 18px; }
+    .field { margin-bottom: 12px; }
+    .field label {
+      display: inline-block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: #1e293b;
+      font-size: 13px;
+    }
+    .input-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0 10px;
+      background: #fff;
+    }
+    .input-wrap .material-icons { color: var(--muted); font-size: 18px; }
+    .input-wrap input {
+      border: 0;
+      outline: 0;
+      width: 100%;
+      height: 40px;
+      font-size: 14px;
+    }
+    .toggle-visibility {
+      border: 0;
+      background: transparent;
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--muted);
+      transition: 0.2s ease;
+    }
+    .toggle-visibility:hover {
+      color: var(--primary);
+      background: rgba(13, 148, 136, 0.1);
+    }
+    .toggle-visibility .material-icons {
+      font-size: 18px;
+      color: currentColor;
+    }
+    .toggle-visibility:focus-visible {
+      outline: 2px solid var(--primary);
+      outline-offset: 2px;
+    }
+    .btn {
+      width: 100%;
+      border: 0;
+      border-radius: 10px;
+      height: 42px;
+      cursor: pointer;
+      color: #fff;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--primary), #0f766e);
+    }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .error {
+      display: none;
+      margin-bottom: 12px;
+      border: 1px solid #fecaca;
+      background: #fee2e2;
+      color: #991b1b;
+      border-radius: 10px;
+      padding: 10px;
+      font-size: 13px;
+    }
+    .hint {
+      margin-top: 8px;
+      color: #64748b;
+      font-size: 12px;
+    }
+    .foot {
+      margin-top: 10px;
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      font-size: 13px;
+    }
+    .foot a {
+      color: #0f766e;
+      text-decoration: none;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="head">
+      <div class="brand">
+        <img src="/logo.png" alt="TDE Group">
+        <span>TDE GROUP</span>
+      </div>
+      <div class="badge">
+        <span class="material-icons" style="font-size:14px;">shield</span>
+        <span>Connexion Super Admin</span>
+      </div>
+    </div>
+
+    <div class="body">
+      <div id="errorBox" class="error"></div>
+
+      <form id="loginForm" novalidate>
+        <div class="field">
+          <label for="stealthCode">Code d'accès</label>
+          <div class="input-wrap">
+            <span class="material-icons">vpn_key</span>
+            <input id="stealthCode" name="stealthCode" type="password" autocomplete="off" required placeholder="••••••••">
+            <button
+              type="button"
+              class="toggle-visibility"
+              data-toggle-target="stealthCode"
+              aria-label="Afficher le code d'accès"
+              aria-pressed="false"
+            >
+              <span class="material-icons">visibility</span>
+            </button>
+          </div>
+          <div class="hint">Zone restreinte. Code requis (défaut: TDE-2026).</div>
+        </div>
+
+        <div class="field">
+          <label for="email">Email</label>
+          <div class="input-wrap">
+            <span class="material-icons">mail</span>
+            <input id="email" name="email" type="email" autocomplete="email" required placeholder="superadmin@tdegroup.com">
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="password">Mot de passe</label>
+          <div class="input-wrap">
+            <span class="material-icons">lock</span>
+            <input id="password" name="password" type="password" autocomplete="current-password" required>
+            <button
+              type="button"
+              class="toggle-visibility"
+              data-toggle-target="password"
+              aria-label="Afficher le mot de passe"
+              aria-pressed="false"
+            >
+              <span class="material-icons">visibility</span>
+            </button>
+          </div>
+        </div>
+
+        <button id="submitBtn" type="submit" class="btn">Se connecter</button>
+      </form>
+
+    </div>
+  </div>
+
+  <script type="module">
+    import authService from '../src/auth-service.js';
+    import { supabase } from '../src/supabase-client.js';
+    import superadminStealth from '../src/superadmin-stealth.js';
+
+    const form = document.getElementById('loginForm');
+    const stealthInput = document.getElementById('stealthCode');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const submitBtn = document.getElementById('submitBtn');
+    const errorBox = document.getElementById('errorBox');
+    const visibilityToggles = Array.from(document.querySelectorAll('[data-toggle-target]'));
+
+    const hashValue = (window.location.hash || '').replace(/^#/, '');
+    const fromQuery = new URLSearchParams(window.location.search).get('k') || '';
+    const stealthSeed = hashValue || fromQuery;
+    if (stealthSeed) {
+      superadminStealth.unlockStealthAccess(stealthSeed);
+      if (superadminStealth.hasStealthAccess()) {
+        stealthInput.value = stealthSeed;
+      }
+    }
+
+    function showError(message) {
+      errorBox.textContent = message;
+      errorBox.style.display = 'block';
+    }
+
+    function clearError() {
+      errorBox.textContent = '';
+      errorBox.style.display = 'none';
+    }
+
+    visibilityToggles.forEach((toggleBtn) => {
+      const targetId = toggleBtn.getAttribute('data-toggle-target');
+      const targetInput = document.getElementById(targetId);
+      if (!targetInput) {
+        return;
+      }
+
+      toggleBtn.addEventListener('click', () => {
+        const isHidden = targetInput.type === 'password';
+        targetInput.type = isHidden ? 'text' : 'password';
+        toggleBtn.setAttribute('aria-pressed', isHidden ? 'true' : 'false');
+        toggleBtn.querySelector('.material-icons').textContent = isHidden
+          ? 'visibility_off'
+          : 'visibility';
+
+        const label = targetId === 'stealthCode' ? "code d'accès" : 'mot de passe';
+        toggleBtn.setAttribute('aria-label', isHidden ? `Masquer le ${label}` : `Afficher le ${label}`);
+      });
+    });
+
+    window.addEventListener('load', async () => {
+      await authService.authReady;
+      if (superadminStealth.hasStealthAccess() && authService.isSuperAdmin && authService.isSuperAdmin()) {
+        window.location.href = 'dashboard.html';
+      }
+    });
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      clearError();
+
+      const stealthCode = String(stealthInput.value || '');
+      const email = String(emailInput.value || '').trim();
+      const password = String(passwordInput.value || '');
+      if (!stealthCode || !email || !password) {
+        showError('Veuillez remplir tous les champs.');
+        return;
+      }
+      if (!superadminStealth.unlockStealthAccess(stealthCode)) {
+        showError('Connexion impossible.');
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Connexion...';
+
+      try {
+        const result = await authService.loginAdmin(email, password);
+        if (!result?.success) {
+          showError(result?.error || 'Connexion impossible.');
+          return;
+        }
+
+        const role = String(result?.profile?.role || '').toLowerCase();
+        if (role !== 'superadmin') {
+          await supabase.auth.signOut();
+          showError('Ce portail est réservé aux super admins.');
+          return;
+        }
+
+        window.location.href = 'dashboard.html';
+      } catch (error) {
+        showError(error?.message || 'Erreur de connexion.');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Se connecter';
+      }
+    });
+  </script>
+</body>
+</html>

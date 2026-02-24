@@ -804,7 +804,7 @@
                 <span class="material-icons">account_circle</span>
                 <span>Profil</span>
             </a>
-            <a href="../my-project.html" class="sidebar-item" target="_blank" rel="noopener">
+            <a href="../client/login.html" class="sidebar-item" target="_blank" rel="noopener">
                 <span class="material-icons">visibility</span>
                 <span>My Project (Client)</span>
             </a>
@@ -1220,7 +1220,7 @@
         window.addEventListener('load', async () => {
             try {
                 await authService.authReady;
-                if (!authService.currentUser) {
+                if (!authService.isAdmin || !authService.isAdmin()) {
                     window.location.href = 'login.html';
                     return;
                 }

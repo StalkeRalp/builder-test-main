@@ -9,6 +9,11 @@ class AuthenticationService {
     constructor() {
         this.currentUser = null;
         this.currentProfile = null;
+        this._adminLoginPromise = null;
+        this.ADMIN_SESSION_KEY = 'admin_session';
+        this.ADMIN_SESSION_DURATION = 24 * 60 * 60 * 1000; // 24h
+        this.ADMIN_PROFILE_CACHE_KEY = 'tde_admin_profile_cache_v1';
+        this.BOOTSTRAP_ADMIN_EMAILS = this._getBootstrapAdminEmails();
         this.authReady = new Promise(resolve => {
             this._resolveAuthReady = resolve;
         });
@@ -23,6 +28,13 @@ class AuthenticationService {
             const { data: { session } } = await supabase.auth.getSession();
 
             if (session) {
+                // Keep user early to avoid false negatives during profile fetch.
+                this.currentUser = session.user;
+                this._setAdminSession(session.user.id);
+                const cachedProfile = this._readCachedAdminProfile(session.user.id);
+                if (cachedProfile) {
+                    this.currentProfile = cachedProfile;
+                }
                 await this._loadUserProfile(session.user.id);
             }
         } catch (error) {
@@ -36,31 +48,189 @@ class AuthenticationService {
             console.log('Auth state changed:', event);
 
             if (session) {
+                this.currentUser = session.user;
+                this._setAdminSession(session.user.id);
+                const cachedProfile = this._readCachedAdminProfile(session.user.id);
+                if (cachedProfile) {
+                    this.currentProfile = cachedProfile;
+                }
                 await this._loadUserProfile(session.user.id);
             } else {
                 this.currentUser = null;
                 this.currentProfile = null;
+                this._clearCachedAdminProfile();
+                this._clearAdminSession();
             }
         });
     }
 
     async _loadUserProfile(userId) {
-        const { data, error } = await supabase
+        const { data: userData } = await supabase.auth.getUser();
+        this.currentUser = userData?.user || this.currentUser || null;
+
+        let { data, error } = await supabase
             .from('profiles')
             .select('*')
             .eq('id', userId)
             .single();
 
         if (error) {
+            const bootstrapped = await this._ensureBootstrapAdminProfile(this.currentUser);
+            if (bootstrapped) {
+                ({ data, error } = await supabase
+                    .from('profiles')
+                    .select('*')
+                    .eq('id', userId)
+                    .single());
+            }
+        }
+
+        if (error) {
             console.error('Error loading profile:', error);
+            const cachedProfile = this._readCachedAdminProfile(userId);
+            if (cachedProfile) {
+                this.currentProfile = cachedProfile;
+                this._setAdminSession(userId);
+            }
             return;
         }
 
         this.currentProfile = data;
-        this.currentUser = (await supabase.auth.getUser()).data.user;
+        this._writeCachedAdminProfile(data);
+        const role = String(data?.role || '').toLowerCase();
+        if (role === 'admin' || role === 'superadmin') {
+            this._setAdminSession(userId);
+        } else {
+            this._clearAdminSession();
+        }
+    }
+
+    _getBootstrapAdminEmails() {
+        const defaults = ['nkada@justin.com'];
+        const fromEnv = String(import.meta.env.VITE_BOOTSTRAP_ADMIN_EMAILS || '')
+            .split(',')
+            .map((email) => email.trim().toLowerCase())
+            .filter(Boolean);
+        return new Set([...defaults, ...fromEnv]);
+    }
+
+    _isBootstrapAdminEmail(email) {
+        return this.BOOTSTRAP_ADMIN_EMAILS.has(String(email || '').trim().toLowerCase());
+    }
+
+    async _ensureBootstrapAdminProfile(user) {
+        const userId = user?.id || null;
+        const email = String(user?.email || '').trim().toLowerCase();
+        if (!userId || !email || !this._isBootstrapAdminEmail(email)) return false;
+
+        const fullName = String(
+            user?.user_metadata?.name
+            || user?.user_metadata?.full_name
+            || 'Administrator'
+        ).trim();
+
+        const { error } = await supabase
+            .from('profiles')
+            .upsert({
+                id: userId,
+                email,
+                full_name: fullName,
+                role: 'admin'
+            }, { onConflict: 'id' });
+
+        if (error) {
+            console.error('Bootstrap admin upsert error:', error);
+            return false;
+        }
+        return true;
+    }
+
+    _readAdminSession() {
+        try {
+            const raw = sessionStorage.getItem(this.ADMIN_SESSION_KEY);
+            if (!raw) return null;
+            const parsed = JSON.parse(raw);
+            if (!parsed || typeof parsed !== 'object') return null;
+            if (!parsed.userId || !parsed.expiresAt) return null;
+            if (Date.now() > Number(parsed.expiresAt)) {
+                this._clearAdminSession();
+                return null;
+            }
+            return parsed;
+        } catch {
+            return null;
+        }
+    }
+
+    _setAdminSession(userId) {
+        if (!userId) return;
+        try {
+            const current = this._readAdminSession();
+            const loginTime = current?.loginTime || Date.now();
+            const next = {
+                userId: String(userId),
+                loginTime,
+                expiresAt: Date.now() + this.ADMIN_SESSION_DURATION
+            };
+            sessionStorage.setItem(this.ADMIN_SESSION_KEY, JSON.stringify(next));
+        } catch {
+            // ignore
+        }
+    }
+
+    _clearAdminSession() {
+        try {
+            sessionStorage.removeItem(this.ADMIN_SESSION_KEY);
+        } catch {
+            // ignore
+        }
+    }
+
+    _readCachedAdminProfile(userId = null) {
+        try {
+            const raw = localStorage.getItem(this.ADMIN_PROFILE_CACHE_KEY);
+            if (!raw) return null;
+            const parsed = JSON.parse(raw);
+            if (!parsed || typeof parsed !== 'object') return null;
+            if (!parsed.id || !parsed.role) return null;
+            if (userId && String(parsed.id) !== String(userId)) return null;
+            if (!['admin', 'superadmin'].includes(String(parsed.role).toLowerCase())) return null;
+            return parsed;
+        } catch {
+            return null;
+        }
+    }
+
+    _writeCachedAdminProfile(profile) {
+        if (!profile || !profile.id) return;
+        const role = String(profile.role || '').toLowerCase();
+        if (!['admin', 'superadmin'].includes(role)) return;
+        try {
+            localStorage.setItem(this.ADMIN_PROFILE_CACHE_KEY, JSON.stringify(profile));
+        } catch (error) {
+            console.warn('Unable to cache admin profile:', error?.message || error);
+        }
+    }
+
+    _clearCachedAdminProfile() {
+        try {
+            localStorage.removeItem(this.ADMIN_PROFILE_CACHE_KEY);
+        } catch {
+            // ignore
+        }
     }
 
     // --- AUTHENTICATION METHODS ---
+
+    _isAbortError(error) {
+        const name = String(error?.name || '');
+        const message = String(error?.message || '').toLowerCase();
+        return name === 'AbortError' || message.includes('signal is aborted');
+    }
+
+    _delay(ms) {
+        return new Promise((resolve) => setTimeout(resolve, ms));
+    }
 
     /**
      * Admin Login using Supabase Auth
@@ -69,22 +239,59 @@ class AuthenticationService {
      * @returns {Promise<Object>} { success, error, user }
      */
     async loginAdmin(email, password) {
+        if (this._adminLoginPromise) {
+            return this._adminLoginPromise;
+        }
+
+        this._adminLoginPromise = this._loginAdminInternal(email, password);
         try {
-            const { data, error } = await supabase.auth.signInWithPassword({
-                email,
-                password
-            });
+            return await this._adminLoginPromise;
+        } finally {
+            this._adminLoginPromise = null;
+        }
+    }
+
+    async _loginAdminInternal(email, password) {
+        try {
+            await this.authReady;
+
+            let data = null;
+            let error = null;
+
+            for (let attempt = 1; attempt <= 2; attempt += 1) {
+                ({ data, error } = await supabase.auth.signInWithPassword({
+                    email,
+                    password
+                }));
+
+                if (!error) break;
+                if (!this._isAbortError(error) || attempt === 2) break;
+
+                // Short retry for transient Supabase/browser aborts.
+                await this._delay(250);
+            }
 
             if (error) throw error;
 
             // Verify user is admin
-            const { data: profile, error: profileError } = await supabase
+            let { data: profile, error: profileError } = await supabase
                 .from('profiles')
                 .select('*')
                 .eq('id', data.user.id)
                 .single();
 
-            if (profileError || profile.role !== 'admin') {
+            if (profileError || !['admin', 'superadmin'].includes(String(profile?.role || '').toLowerCase())) {
+                const bootstrapped = await this._ensureBootstrapAdminProfile(data.user);
+                if (bootstrapped) {
+                    ({ data: profile, error: profileError } = await supabase
+                        .from('profiles')
+                        .select('*')
+                        .eq('id', data.user.id)
+                        .single());
+                }
+            }
+
+            if (profileError || !['admin', 'superadmin'].includes(String(profile?.role || '').toLowerCase())) {
                 await supabase.auth.signOut();
                 return {
                     success: false,
@@ -94,6 +301,8 @@ class AuthenticationService {
 
             this.currentUser = data.user;
             this.currentProfile = profile;
+            this._writeCachedAdminProfile(profile);
+            this._setAdminSession(data.user.id);
 
             return {
                 success: true,
@@ -104,7 +313,9 @@ class AuthenticationService {
             console.error('Admin login error:', error);
             return {
                 success: false,
-                error: error.message
+                error: this._isAbortError(error)
+                    ? 'Connexion interrompue temporairement. Réessaie dans 1 seconde.'
+                    : error.message
             };
         }
     }
@@ -224,6 +435,8 @@ class AuthenticationService {
 
         // Clear client session if exists
         localStorage.removeItem('tde_client_session');
+        this._clearCachedAdminProfile();
+        this._clearAdminSession();
 
         this.currentUser = null;
         this.currentProfile = null;
@@ -245,7 +458,34 @@ class AuthenticationService {
      * @returns {boolean}
      */
     isAdmin() {
-        return this.currentProfile && this.currentProfile.role === 'admin';
+        if (!this.currentUser) return false;
+
+        const adminSession = this._readAdminSession();
+        if (adminSession && String(adminSession.userId) !== String(this.currentUser.id)) {
+            this._clearAdminSession();
+            return false;
+        }
+
+        const role = String(this.currentProfile?.role || '').toLowerCase();
+        if (role === 'admin' || role === 'superadmin') {
+            this._setAdminSession(this.currentUser.id);
+            return true;
+        }
+
+        const cachedRole = String(this._readCachedAdminProfile(this.currentUser.id)?.role || '').toLowerCase();
+        if (cachedRole === 'admin' || cachedRole === 'superadmin') {
+            this._setAdminSession(this.currentUser.id);
+            return true;
+        }
+        return false;
+    }
+
+    isSuperAdmin() {
+        if (!this.currentUser) return false;
+        const role = String(this.currentProfile?.role || '').toLowerCase();
+        if (role === 'superadmin') return true;
+        const cachedRole = String(this._readCachedAdminProfile(this.currentUser.id)?.role || '').toLowerCase();
+        return cachedRole === 'superadmin';
     }
 
     /**
@@ -321,8 +561,16 @@ class AuthenticationService {
         await this.authReady;
 
         if (!this.isAdmin()) {
-            sessionStorage.setItem('redirect_after_login', window.location.pathname);
+            const nextPath = `${window.location.pathname || ''}${window.location.search || ''}${window.location.hash || ''}`;
+            sessionStorage.setItem('redirect_after_login', nextPath);
             window.location.href = 'login.html';
+        }
+    }
+
+    async requireSuperAdmin() {
+        await this.authReady;
+        if (!this.isSuperAdmin()) {
+            window.location.href = 'index.html';
         }
     }
 
@@ -353,7 +601,14 @@ class AuthenticationService {
     getRedirectUrl() {
         const redirect = sessionStorage.getItem('redirect_after_login');
         sessionStorage.removeItem('redirect_after_login');
-        return redirect || (this.isAdmin() ? 'admin-dashboard.html' : 'client-dashboard.html');
+        return redirect || (this.isAdmin() ? 'index.html' : 'my-project.html');
+    }
+
+    getAdminSessionTimeRemaining() {
+        const session = this._readAdminSession();
+        if (!session) return 0;
+        const remaining = Number(session.expiresAt) - Date.now();
+        return Math.max(0, Math.floor(remaining / 60000));
     }
 
     // --- UTILITY METHODS ---

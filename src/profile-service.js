@@ -37,15 +37,44 @@ class ProfileService {
             .from('profiles')
             .select('*')
             .eq('id', user.id)
-            .eq('role', 'admin')
             .single();
 
-        if (error || !data) {
+        const role = String(data?.role || '').toLowerCase();
+        if (error || !data || !['admin', 'superadmin'].includes(role)) {
             console.error('Error fetching admin profile:', error);
+            const fallbackProfile = await this._ensureAdminProfileForUser(user);
+            if (fallbackProfile) {
+                return this._normalizeProfile(fallbackProfile);
+            }
             return this._getDefaultAdminProfile();
         }
 
         return this._normalizeProfile(data);
+    }
+
+    async _ensureAdminProfileForUser(user) {
+        if (!user?.id || !user?.email) return null;
+        const safeName = String(
+            user?.user_metadata?.name
+            || user?.user_metadata?.full_name
+            || 'Administrator'
+        ).trim();
+        const payload = {
+            id: user.id,
+            email: user.email,
+            full_name: safeName,
+            role: 'admin'
+        };
+        const { data, error } = await supabase
+            .from('profiles')
+            .upsert(payload, { onConflict: 'id' })
+            .select()
+            .single();
+        if (error) {
+            console.error('Error ensuring admin profile:', error);
+            return null;
+        }
+        return data;
     }
 
     _getDefaultAdminProfile() {
@@ -79,8 +108,13 @@ class ProfileService {
 
         let { data, error } = await supabase
             .from('profiles')
-            .update(updateData)
-            .eq('id', user.id)
+            .upsert({
+                id: user.id,
+                email: updates.email || user.email,
+                full_name: mergedName || null,
+                phone: updates.phone || null,
+                role: String(updates.role || '').toLowerCase() === 'superadmin' ? 'superadmin' : 'admin'
+            }, { onConflict: 'id' })
             .select()
             .single();
 

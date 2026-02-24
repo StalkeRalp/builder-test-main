@@ -25,6 +25,33 @@
         .btn-save:hover { background: #0f766e; }
         .btn-cancel { background: #e5e7eb; color: #1f2937; }
         .btn-cancel:hover { background: #d1d5db; }
+        .status-message {
+            display: none;
+            margin: 14px 0 0;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid transparent;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .status-message.success {
+            display: block;
+            background: #ecfdf5;
+            border-color: #bbf7d0;
+            color: #166534;
+        }
+        .status-message.error {
+            display: block;
+            background: #fef2f2;
+            border-color: #fecaca;
+            color: #991b1b;
+        }
+        .status-message.info {
+            display: block;
+            background: #eff6ff;
+            border-color: #bfdbfe;
+            color: #1d4ed8;
+        }
     </style>
 </head>
 <body>
@@ -39,7 +66,7 @@
             <a href="calendar.html" class="sidebar-item"><span class="material-icons">calendar_today</span><span>Calendrier</span></a>
             <a href="reports.html" class="sidebar-item"><span class="material-icons">assessment</span><span>Rapports</span></a>
             <a href="profile.html" class="sidebar-item active"><span class="material-icons">account_circle</span><span>Profil</span></a>
-            <a href="../my-project.html" class="sidebar-item" target="_blank" rel="noopener"><span class="material-icons">visibility</span><span>My Project (Client)</span></a>
+            <a href="../client/login.html" class="sidebar-item" target="_blank" rel="noopener"><span class="material-icons">visibility</span><span>My Project (Client)</span></a>
             <div class="sidebar-logout">
                 <button class="sidebar-item" onclick="logout()"><span class="material-icons">logout</span><span>Déconnexion</span></button>
             </div>
@@ -58,6 +85,7 @@
         <div class="content">
             <div class="page-header">
                 <h1>Paramètres du Profil</h1>
+                <div id="statusMessage" class="status-message"></div>
             </div>
 
             <div class="profile-container">
@@ -129,11 +157,83 @@
         import authService from '../src/auth-service.js';
         import ProfileService from '../src/profile-service.js';
         import { initAdminAvatar } from '../src/admin-avatar.js';
+        import { supabase } from '../src/supabase-client.js';
+
+        let initialFormState = {
+            firstName: '',
+            lastName: '',
+            email: '',
+            phone: '',
+            city: ''
+        };
+
+        function getCityStorageKey() {
+            const userId = authService.currentUser?.id || 'anonymous';
+            return `admin_profile_city_${userId}`;
+        }
+
+        function showStatus(type, message) {
+            const box = document.getElementById('statusMessage');
+            if (!box) return;
+            box.className = `status-message ${type}`;
+            box.textContent = message;
+        }
+
+        function clearStatus() {
+            const box = document.getElementById('statusMessage');
+            if (!box) return;
+            box.className = 'status-message';
+            box.textContent = '';
+        }
+
+        function deriveNameParts(name = '') {
+            const safe = String(name || '').trim();
+            if (!safe) return { firstName: '', lastName: '' };
+            const parts = safe.split(' ').filter(Boolean);
+            if (parts.length === 1) return { firstName: parts[0], lastName: '' };
+            return {
+                firstName: parts.slice(0, -1).join(' '),
+                lastName: parts.slice(-1).join('')
+            };
+        }
+
+        function applyProfileToForm(profile) {
+            const name = profile?.name || profile?.full_name || '';
+            const { firstName, lastName } = deriveNameParts(name);
+            const email = profile?.email || authService.currentUser?.email || '';
+            const phone = profile?.phone || '';
+            const city = localStorage.getItem(getCityStorageKey()) || '';
+
+            initialFormState = { firstName, lastName, email, phone, city };
+
+            document.getElementById('profileName').textContent = name || 'Admin';
+            document.getElementById('profileEmail').textContent = email || '—';
+            document.getElementById('email').value = email;
+            document.getElementById('firstName').value = firstName;
+            document.getElementById('lastName').value = lastName;
+            document.getElementById('phone').value = phone;
+            document.getElementById('city').value = city;
+
+            if (profile?.photo_url) {
+                document.getElementById('profileAvatar').innerHTML = `<img src="${profile.photo_url}" style="width:120px;height:120px;border-radius:50%;object-fit:cover;">`;
+            } else {
+                document.getElementById('profileAvatar').textContent = (firstName || email || 'AD').substring(0, 2).toUpperCase();
+            }
+        }
+
+        async function loadProfile() {
+            clearStatus();
+            const profile = await ProfileService.getAdminProfile();
+            applyProfileToForm(profile || {});
+        }
 
         window.addEventListener('load', async () => {
             try {
                 await authService.authReady;
-                if (!authService.currentUser) window.location.href = 'login.html';
+                if (!authService.isAdmin || !authService.isAdmin()) {
+                    window.location.href = 'login.html';
+                    return;
+                }
                 await initAdminAvatar();
                 await loadProfile();
             } catch (error) {
@@ -141,77 +241,115 @@
             }
         });
 
-        async function loadProfile() {
-            const profile = await ProfileService.getAdminProfile();
-            const name = profile.name || '';
-            const parts = name.split(' ');
-            const firstName = profile.first_name || parts.slice(0, -1).join(' ') || name;
-            const lastName = profile.last_name || parts.slice(-1).join(' ');
-
-            document.getElementById('profileName').textContent = name || 'Admin';
-            document.getElementById('profileEmail').textContent = profile.email || authService.currentUser.email;
-            document.getElementById('email').value = profile.email || authService.currentUser.email;
-            document.getElementById('firstName').value = firstName || '';
-            document.getElementById('lastName').value = lastName || '';
-            document.getElementById('phone').value = profile.phone || '';
-            document.getElementById('city').value = profile.city || '';
-
-            if (profile.photo_url) {
-                document.getElementById('profileAvatar').innerHTML = `<img src="${profile.photo_url}" style="width:120px;height:120px;border-radius:50%;object-fit:cover;">`;
-            } else {
-                document.getElementById('profileAvatar').textContent = (firstName || 'AD').substring(0, 2).toUpperCase();
-            }
-        }
-
         document.getElementById('photoInput').addEventListener('change', async (e) => {
-            const file = e.target.files[0];
+            const file = e.target.files?.[0];
             if (!file) return;
             try {
+                clearStatus();
                 const userId = authService.currentUser?.id;
                 if (!userId) throw new Error('Utilisateur non authentifié');
                 const publicUrl = await ProfileService.uploadProfilePhoto(file, userId);
                 document.getElementById('profileAvatar').innerHTML = `<img src="${publicUrl}" style="width:120px;height:120px;border-radius:50%;object-fit:cover;">`;
                 await initAdminAvatar();
+                showStatus('success', 'Photo de profil mise à jour.');
             } catch (err) {
-                alert('Erreur upload photo: ' + err.message);
+                showStatus('error', `Erreur upload photo: ${err.message}`);
+            } finally {
+                document.getElementById('photoInput').value = '';
             }
         });
 
         window.saveProfile = async () => {
             try {
+                clearStatus();
                 const firstName = document.getElementById('firstName').value.trim();
                 const lastName = document.getElementById('lastName').value.trim();
+                const email = document.getElementById('email').value.trim();
+                const phone = document.getElementById('phone').value.trim();
+                const city = document.getElementById('city').value.trim();
                 const name = `${firstName} ${lastName}`.trim();
+
+                if (!email) {
+                    showStatus('error', 'Email requis.');
+                    return;
+                }
+
                 const updates = {
                     name,
                     first_name: firstName,
                     last_name: lastName,
-                    email: document.getElementById('email').value.trim(),
-                    phone: document.getElementById('phone').value.trim(),
-                    city: document.getElementById('city').value.trim()
+                    email,
+                    phone
                 };
+
                 await ProfileService.updateAdminProfile(updates);
-                document.getElementById('profileName').textContent = name || 'Admin';
-                document.getElementById('profileEmail').textContent = updates.email;
-                alert('Profil mis à jour');
+                localStorage.setItem(getCityStorageKey(), city);
+                await loadProfile();
+                showStatus('success', 'Profil mis à jour avec succès.');
             } catch (err) {
-                alert('Erreur: ' + err.message);
+                showStatus('error', `Erreur: ${err.message}`);
             }
         };
 
         window.resetForm = () => {
-            document.getElementById('firstName').value = '';
-            document.getElementById('lastName').value = '';
-            document.getElementById('phone').value = '';
-            document.getElementById('city').value = '';
+            clearStatus();
+            document.getElementById('firstName').value = initialFormState.firstName || '';
+            document.getElementById('lastName').value = initialFormState.lastName || '';
+            document.getElementById('email').value = initialFormState.email || '';
+            document.getElementById('phone').value = initialFormState.phone || '';
+            document.getElementById('city').value = initialFormState.city || '';
+            showStatus('info', 'Modifications annulées.');
         };
 
-        window.changePassword = () => alert('Mot de passe changé');
-        window.resetPasswordForm = () => { 
-            document.getElementById('currentPassword').value = ''; 
-            document.getElementById('newPassword').value = ''; 
-            document.getElementById('confirmPassword').value = ''; 
+        window.changePassword = async () => {
+            try {
+                clearStatus();
+                const currentPassword = document.getElementById('currentPassword').value;
+                const newPassword = document.getElementById('newPassword').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                const email = authService.currentUser?.email || document.getElementById('email').value.trim();
+
+                if (!currentPassword || !newPassword || !confirmPassword) {
+                    showStatus('error', 'Tous les champs mot de passe sont requis.');
+                    return;
+                }
+                if (newPassword.length < 8) {
+                    showStatus('error', 'Le nouveau mot de passe doit contenir au moins 8 caractères.');
+                    return;
+                }
+                if (newPassword !== confirmPassword) {
+                    showStatus('error', 'La confirmation ne correspond pas.');
+                    return;
+                }
+
+                const { error: signInError } = await supabase.auth.signInWithPassword({
+                    email,
+                    password: currentPassword
+                });
+                if (signInError) {
+                    showStatus('error', 'Mot de passe actuel invalide.');
+                    return;
+                }
+
+                const { error: updateError } = await supabase.auth.updateUser({ password: newPassword });
+                if (updateError) {
+                    showStatus('error', updateError.message || 'Impossible de mettre à jour le mot de passe.');
+                    return;
+                }
+
+                window.resetPasswordForm();
+                showStatus('success', 'Mot de passe mis à jour avec succès.');
+            } catch (error) {
+                showStatus('error', error?.message || 'Erreur lors du changement de mot de passe.');
+            }
         };
+
+        window.resetPasswordForm = () => {
+            document.getElementById('currentPassword').value = '';
+            document.getElementById('newPassword').value = '';
+            document.getElementById('confirmPassword').value = '';
+        };
+
         window.logout = async () => {
             if (confirm('Déconnecter?')) {
                 await authService.logout();

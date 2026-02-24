@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calendrier - Portail Client TDE Group</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="../src/style.css" />
+    <link rel="stylesheet" href="./styles/client-theme.css" />
+    <style>
+        :root {
+            --primary: #0d9488;
+            --primary-dark: #0f766e;
+            --secondary: #2563eb;
+            --ink: #0f172a;
+            --muted: #64748b;
+            --surface: #f1f5f9;
+            --soft: #e2e8f0;
+            --card: #ffffff;
+            --radius-lg: 18px;
+            --radius-md: 12px;
+            --shadow-sm: 0 10px 22px rgba(15, 23, 42, 0.08);
+        }
+
+        body.client-portal {
+            background:
+                radial-gradient(circle at 8% 10%, rgba(13, 148, 136, 0.09), transparent 36%),
+                radial-gradient(circle at 92% 14%, rgba(37, 99, 235, 0.08), transparent 38%),
+                var(--surface);
+        }
+
+        .calendar-layout { min-height: 100vh; display: flex; }
+        .calendar-main { flex: 1; min-height: 100vh; display: flex; flex-direction: column; }
+
+        .calendar-header {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            background: rgba(255, 255, 255, 0.9);
+            border-bottom: 1px solid var(--soft);
+            backdrop-filter: blur(10px);
+            padding: 18px 20px;
+        }
+
+        .header-grid {
+            width: min(1220px, 100%);
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .header-title h1 {
+            margin: 0;
+            font-family: 'Sora', sans-serif;
+            color: var(--ink);
+            font-size: clamp(1.35rem, 2.2vw, 2rem);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-title h1 .material-icons { color: var(--primary); font-size: 1.9rem; }
+        .header-title p { margin: 6px 0 0; color: var(--muted); font-size: 0.92rem; }
+
+        .header-badge {
+            border: 1px solid rgba(13, 148, 136, 0.24);
+            border-radius: 999px;
+            background: rgba(13, 148, 136, 0.08);
+            color: var(--primary-dark);
+            padding: 8px 12px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .calendar-wrap {
+            width: min(1220px, 100%);
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .actions-bar {
+            background: #fff;
+            border: 1px solid var(--soft);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            padding: 12px;
+            margin-bottom: 12px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .month-nav { display: inline-flex; align-items: center; gap: 10px; }
+
+        .month-nav button {
+            border: 1px solid var(--soft);
+            background: #fff;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            cursor: pointer;
+            color: var(--primary);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .month-nav h2 {
+            margin: 0;
+            min-width: 210px;
+            text-align: center;
+            color: var(--ink);
+            font-size: 1.05rem;
+            text-transform: capitalize;
+        }
+
+        .btn-link {
+            border: 1px solid var(--soft);
+            background: #fff;
+            color: var(--ink);
+            text-decoration: none;
+            border-radius: 10px;
+            padding: 9px 12px;
+            font-size: 0.84rem;
+            font-weight: 700;
+            display: inline-flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .calendar-grid-wrap {
+            background: #fff;
+            border: 1px solid var(--soft);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            padding: 14px;
+        }
+
+        .week-header {
+            display: grid;
+            grid-template-columns: repeat(7, minmax(0, 1fr));
+            border: 1px solid var(--soft);
+            border-bottom: none;
+            border-radius: 12px 12px 0 0;
+            overflow: hidden;
+        }
+
+        .week-day {
+            background: #0f172a;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, minmax(0, 1fr));
+            gap: 1px;
+            background: var(--soft);
+            border: 1px solid var(--soft);
+            border-radius: 0 0 12px 12px;
+            overflow: hidden;
+        }
+
+        .calendar-day {
+            background: #fff;
+            min-height: 112px;
+            padding: 9px;
+            cursor: pointer;
+        }
+        .calendar-day:hover { background: #f8fafc; }
+        .calendar-day.other-month { background: #f8fafc; color: #94a3b8; }
+        .calendar-day.today { box-shadow: inset 0 0 0 2px var(--primary); }
+        .calendar-day.selected { box-shadow: inset 0 0 0 2px var(--secondary); }
+        .day-number { font-size: 13px; font-weight: 700; margin-bottom: 8px; }
+        .day-events { display: flex; flex-direction: column; gap: 4px; }
+        .event-pill {
+            font-size: 11px;
+            border-radius: 6px;
+            padding: 3px 6px;
+            line-height: 1.2;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            border: 1px solid transparent;
+        }
+        .event-pill.high { background: #fee2e2; color: #991b1b; border-color: #fecaca; }
+        .event-pill.medium { background: #fef3c7; color: #92400e; border-color: #fde68a; }
+        .event-pill.low { background: #d1fae5; color: #065f46; border-color: #a7f3d0; }
+
+        .list-wrap {
+            margin-top: 12px;
+            background: #fff;
+            border: 1px solid var(--soft);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            padding: 14px;
+        }
+
+        .list-head {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .list-head h3 {
+            margin: 0;
+            font-size: 1rem;
+            color: var(--ink);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .events-list { display: flex; flex-direction: column; gap: 10px; }
+
+        .event-card {
+            border: 1px solid var(--soft);
+            border-left: 4px solid var(--primary);
+            border-radius: 10px;
+            padding: 10px 12px;
+            background: #fff;
+        }
+
+        .event-title { margin: 0; font-size: 14px; font-weight: 700; color: var(--ink); }
+        .event-meta {
+            margin-top: 4px;
+            color: var(--muted);
+            font-size: 12px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .event-reminder-note {
+            margin-top: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #b91c1c;
+            background: #fee2e2;
+            border: 1px solid #fecaca;
+            border-radius: 999px;
+            padding: 4px 10px;
+        }
+
+        .empty {
+            border: 1px dashed #cbd5e1;
+            border-radius: 10px;
+            color: #64748b;
+            text-align: center;
+            padding: 18px;
+        }
+
+        @media (max-width: 1024px) {
+            .calendar-day { min-height: 88px; padding: 7px; }
+            .month-nav h2 { min-width: 170px; font-size: 0.95rem; }
+        }
+    </style>
+</head>
+<body class="client-portal antialiased">
+    <div class="calendar-layout">
+        <aside class="client-sidebar hidden lg:flex w-72 flex-col sticky top-0 h-screen z-20">
+            <div class="p-6 border-b border-white/10">
+                <div class="sidebar-brand cursor-pointer" onclick="window.location.href='./dashboard.html'">
+                    <img src="/logo.png" alt="TDE Group">
+                    <div>
+                        <h2 class="font-bold text-gray-900">My Project</h2>
+                        <p class="text-xs text-gray-500">Client Portal</p>
+                    </div>
+                </div>
+            </div>
+            <nav class="sidebar-nav flex-1 overflow-y-auto p-4 space-y-2">
+                <a href="./dashboard.html" class="nav-item nav-link flex items-center gap-3 px-4 py-3 rounded-lg transition-colors">
+                    <span class="material-icons">dashboard</span><span>Tableau de bord</span>
+                </a>
+                <a href="./timeline.html" class="nav-item nav-link flex items-center gap-3 px-4 py-3 rounded-lg transition-colors">
+                    <span class="material-icons">timeline</span><span>Timeline</span>
+                </a>
+                <a href="./calendar.html" class="nav-item nav-link active flex items-center gap-3 px-4 py-3 rounded-lg transition-colors">
+                    <span class="material-icons">calendar_month</span><span>Calendrier</span>
+                </a>
+                <a href="./documents.html" class="nav-item nav-link flex items-center gap-3 px-4 py-3 rounded-lg transition-colors">
+                    <span class="material-icons">folder</span><span>Documents</span>
+                </a>
+                <a href="./chat.html" class="nav-item nav-link flex items-center gap-3 px-4 py-3 rounded-lg transition-colors">
+                    <span class="material-icons">chat</span><span>Messages</span><span id="chatBadge" class="badge-count" hidden>0</span>
+                </a>
+                <a href="./tickets.html" class="nav-item nav-link flex items-center gap-3 px-4 py-3 rounded-lg transition-colors">
+                    <span class="material-icons">support_agent</span><span>Tickets</span><span id="ticketBadge" class="badge-count" hidden>0</span>
+                </a>
+                <a href="./profile.html" class="nav-item nav-link flex items-center gap-3 px-4 py-3 rounded-lg transition-colors">
+                    <span class="material-icons">person</span><span>Profil</span>
+                </a>
+            </nav>
+            <div class="p-4 border-t border-gray-200 space-y-3">
+                <button id="logoutBtn" class="w-full flex items-center justify-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors font-medium" type="button">
+                    <span class="material-icons">logout</span><span>Déconnexion</span>
+                </button>
+            </div>
+        </aside>
+
+        <main class="calendar-main">
+            <header class="calendar-header">
+                <div class="header-grid">
+                    <div class="header-title">
+                        <h1><span class="material-icons">calendar_month</span>Calendrier client</h1>
+                        <p>Consultez les événements planifiés par l'équipe admin (lecture seule).</p>
+                    </div>
+                    <div class="header-badge" id="eventCountBadge">0 événement</div>
+                </div>
+            </header>
+
+            <div class="calendar-wrap">
+                <section class="actions-bar">
+                    <div class="month-nav">
+                        <button id="prevMonthBtn" type="button" aria-label="Mois précédent"><span class="material-icons">chevron_left</span></button>
+                        <h2 id="monthYear">-</h2>
+                        <button id="nextMonthBtn" type="button" aria-label="Mois suivant"><span class="material-icons">chevron_right</span></button>
+                        <button id="todayBtn" type="button" class="btn-link"><span class="material-icons">today</span>Aujourd'hui</button>
+                    </div>
+                    <div>
+                        <a href="./timeline.html" class="btn-link"><span class="material-icons">timeline</span>Timeline</a>
+                        <a href="./dashboard.html" class="btn-link"><span class="material-icons">dashboard</span>Dashboard</a>
+                    </div>
+                </section>
+
+                <section class="calendar-grid-wrap">
+                    <div class="week-header">
+                        <div class="week-day">Lun</div><div class="week-day">Mar</div><div class="week-day">Mer</div>
+                        <div class="week-day">Jeu</div><div class="week-day">Ven</div><div class="week-day">Sam</div><div class="week-day">Dim</div>
+                    </div>
+                    <div class="calendar-grid" id="calendarGrid"></div>
+                </section>
+
+                <section class="list-wrap">
+                    <div class="list-head">
+                        <h3><span class="material-icons">event_note</span><span id="listTitle">Événements du mois</span></h3>
+                    </div>
+                    <div id="eventsList" class="events-list"></div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script src="../src/client-auth-service.js"></script>
+    <script src="../src/client-data-service.js"></script>
+    <script src="../src/client-profile-shortcut.js"></script>
+    <script src="../src/client-ui-helpers.js"></script>
+    <script>
+        if (!clientAuthService.isAuthenticated()) {
+            window.location.href = './login.html';
+        }
+
+        const state = {
+            currentDate: new Date(),
+            selectedDateKey: null,
+            events: [],
+            lastReminderKey: ''
+        };
+
+        const dom = {
+            monthYear: document.getElementById('monthYear'),
+            calendarGrid: document.getElementById('calendarGrid'),
+            eventsList: document.getElementById('eventsList'),
+            eventCountBadge: document.getElementById('eventCountBadge'),
+            listTitle: document.getElementById('listTitle'),
+            prevMonthBtn: document.getElementById('prevMonthBtn'),
+            nextMonthBtn: document.getElementById('nextMonthBtn'),
+            todayBtn: document.getElementById('todayBtn')
+        };
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            bindEvents();
+            await loadCalendar();
+            startSessionTicker();
+        });
+
+        function bindEvents() {
+            dom.prevMonthBtn.addEventListener('click', () => {
+                state.currentDate.setMonth(state.currentDate.getMonth() - 1);
+                state.selectedDateKey = null;
+                renderCalendar();
+                renderEventsList();
+            });
+
+            dom.nextMonthBtn.addEventListener('click', () => {
+                state.currentDate.setMonth(state.currentDate.getMonth() + 1);
+                state.selectedDateKey = null;
+                renderCalendar();
+                renderEventsList();
+            });
+
+            dom.todayBtn.addEventListener('click', () => {
+                state.currentDate = new Date();
+                state.selectedDateKey = dateKeyFromDate(new Date());
+                renderCalendar();
+                renderEventsList();
+            });
+
+            document.getElementById('logoutBtn').addEventListener('click', () => {
+                ClientUIHelpers.showConfirmDialog(
+                    'Confirmer la déconnexion',
+                    'Souhaitez-vous vraiment vous déconnecter ?',
+                    () => {
+                        clientAuthService.logout();
+                        window.location.href = './login.html';
+                    }
+                );
+            });
+        }
+
+        async function loadCalendar() {
+            try {
+                const [events, messages, tickets] = await Promise.all([
+                    clientDataService.getAdminEvents(),
+                    clientDataService.getMessages(),
+                    clientDataService.getTickets()
+                ]);
+                state.events = Array.isArray(events) ? events : [];
+                updateBadges(messages, tickets);
+
+                const params = new URLSearchParams(window.location.search);
+                const requestedDate = (params.get('date') || '').trim();
+                if (/^\d{4}-\d{2}-\d{2}$/.test(requestedDate)) {
+                    state.selectedDateKey = requestedDate;
+                    state.currentDate = new Date(`${requestedDate}T00:00:00`);
+                } else {
+                    state.selectedDateKey = dateKeyFromDate(new Date());
+                }
+
+                renderCalendar();
+                renderEventsList();
+            } catch (error) {
+                console.error('Calendar load error:', error);
+                ClientUIHelpers.showNotification('Impossible de charger le calendrier', 'error');
+            }
+        }
+
+        function renderCalendar() {
+            const year = state.currentDate.getFullYear();
+            const month = state.currentDate.getMonth();
+            dom.monthYear.textContent = state.currentDate.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
+
+            const eventsByDate = state.events.reduce((acc, event) => {
+                const key = event.date;
+                if (!key) return acc;
+                if (!acc[key]) acc[key] = [];
+                acc[key].push(event);
+                return acc;
+            }, {});
+
+            const firstDay = new Date(year, month, 1);
+            const monthDays = new Date(year, month + 1, 0).getDate();
+            const leadingDays = (firstDay.getDay() + 6) % 7;
+
+            dom.calendarGrid.innerHTML = '';
+
+            for (let i = leadingDays - 1; i >= 0; i--) {
+                const prev = new Date(year, month, -i);
+                dom.calendarGrid.appendChild(buildDayCell(prev, true, eventsByDate[dateKeyFromDate(prev)] || []));
+            }
+
+            for (let day = 1; day <= monthDays; day++) {
+                const date = new Date(year, month, day);
+                dom.calendarGrid.appendChild(buildDayCell(date, false, eventsByDate[dateKeyFromDate(date)] || []));
+            }
+
+            const filled = leadingDays + monthDays;
+            const trailingDays = (7 - (filled % 7)) % 7;
+            for (let day = 1; day <= trailingDays; day++) {
+                const next = new Date(year, month + 1, day);
+                dom.calendarGrid.appendChild(buildDayCell(next, true, eventsByDate[dateKeyFromDate(next)] || []));
+            }
+        }
+
+        function buildDayCell(date, otherMonth, events) {
+            const key = dateKeyFromDate(date);
+            const todayKey = dateKeyFromDate(new Date());
+            const dayDiv = document.createElement('div');
+            dayDiv.className = 'calendar-day';
+            if (otherMonth) dayDiv.classList.add('other-month');
+            if (key === todayKey) dayDiv.classList.add('today');
+            if (key === state.selectedDateKey) dayDiv.classList.add('selected');
+
+            const shown = events.slice(0, 3).map((event) =>
+                `<div class="event-pill ${escapeHtml(event.priority || 'medium')}" title="${escapeHtml(event.title)}">${escapeHtml((event.time ? `${event.time} ` : '') + event.title)}</div>`
+            ).join('');
+            const more = events.length > 3 ? `<div class="event-pill medium">+${events.length - 3} autre(s)</div>` : '';
+
+            dayDiv.innerHTML = `<div class="day-number">${date.getDate()}</div><div class="day-events">${shown}${more}</div>`;
+            dayDiv.addEventListener('click', () => {
+                state.selectedDateKey = key;
+                renderCalendar();
+                renderEventsList();
+            });
+            return dayDiv;
+        }
+
+        function renderEventsList() {
+            const month = state.currentDate.getMonth();
+            const year = state.currentDate.getFullYear();
+            const today = new Date();
+            const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+            const daysUntil = (dateValue) => {
+                const d = new Date(dateValue);
+                const start = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+                return Math.floor((start - startOfToday) / (24 * 60 * 60 * 1000));
+            };
+            const reminderText = (daysLeft) => {
+                if (daysLeft < 0) return `Délai dépassé (${Math.abs(daysLeft)}j)`;
+                if (daysLeft === 0) return 'Deadline aujourd\'hui';
+                if (daysLeft <= 3) return `Rappel auto J-${daysLeft}`;
+                return '';
+            };
+
+            const items = state.events.filter((event) => {
+                const eventDate = new Date(`${event.date}T${event.time || '00:00'}:00`);
+                const sameMonth = eventDate.getMonth() === month && eventDate.getFullYear() === year;
+                const sameDay = !state.selectedDateKey || event.date === state.selectedDateKey;
+                return sameMonth && sameDay;
+            }).map((event) => {
+                const shouldRemind = String(event.type || '').toLowerCase() === 'deadline';
+                const reminder = shouldRemind ? reminderText(daysUntil(event.date)) : '';
+                return { ...event, reminder };
+            }).sort((a, b) => new Date(`${a.date}T${a.time || '00:00'}:00`) - new Date(`${b.date}T${b.time || '00:00'}:00`));
+
+            const totalText = `${state.events.length} événement${state.events.length > 1 ? 's' : ''}`;
+            dom.eventCountBadge.textContent = totalText;
+            dom.listTitle.textContent = state.selectedDateKey ? `Événements du ${formatDate(state.selectedDateKey)}` : 'Événements du mois';
+            const reminders = items.filter((item) => item.reminder);
+            const reminderKey = reminders.map((item) => `${item.id}:${item.reminder}`).join('|');
+
+            if (!items.length) {
+                dom.eventsList.innerHTML = '<div class="empty"><span class="material-icons" style="display:block;font-size:30px;margin-bottom:6px;">event_busy</span>Aucun événement pour ce filtre.</div>';
+                return;
+            }
+
+            if (reminders.length > 0 && reminderKey && reminderKey !== state.lastReminderKey) {
+                state.lastReminderKey = reminderKey;
+                ClientUIHelpers.showNotification(`${reminders.length} rappel(s) deadline actif(s) (J-3).`, 'warning');
+            }
+
+            dom.eventsList.innerHTML = items.map((event) => `
+                <article class="event-card">
+                    <h4 class="event-title">${escapeHtml(event.title)}</h4>
+                    <div class="event-meta">
+                        <span><span class="material-icons" style="font-size:12px;vertical-align:middle;">event</span> ${formatDate(event.date)}${event.time ? ` • ${event.time}` : ''}</span>
+                        <span><span class="material-icons" style="font-size:12px;vertical-align:middle;">flag</span> ${escapeHtml((event.priority || 'medium').toUpperCase())}</span>
+                        <span><span class="material-icons" style="font-size:12px;vertical-align:middle;">label</span> ${escapeHtml(event.type || 'general')}</span>
+                    </div>
+                    ${event.notes ? `<div class="event-meta">${escapeHtml(event.notes)}</div>` : ''}
+                    ${event.reminder ? `<p class="event-reminder-note"><span class="material-icons" style="font-size:14px;">notifications_active</span>${escapeHtml(event.reminder)}</p>` : ''}
+                </article>
+            `).join('');
+        }
+
+        function updateBadges(messages, tickets) {
+            const unread = (messages || []).filter((msg) => msg.role === 'team' && !msg.read).length;
+            const openTickets = (tickets || []).filter((ticket) => {
+                const status = String(ticket.status || '').toLowerCase();
+                return status === 'open' || status === 'in_progress' || status === 'active';
+            }).length;
+
+            const chatBadge = document.getElementById('chatBadge');
+            const ticketBadge = document.getElementById('ticketBadge');
+            if (chatBadge) {
+                chatBadge.textContent = String(unread);
+                chatBadge.hidden = unread <= 0;
+            }
+            if (ticketBadge) {
+                ticketBadge.textContent = String(openTickets);
+                ticketBadge.hidden = openTickets <= 0;
+            }
+        }
+
+        function startSessionTicker() {
+            const update = () => {
+                if (!clientAuthService.isAuthenticated()) {
+                    window.location.href = './login.html';
+                }
+            };
+            update();
+            setInterval(update, 15000);
+        }
+
+        function dateKeyFromDate(date) {
+            const d = new Date(date);
+            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        }
+
+        function formatDate(value) {
+            if (!value) return '—';
+            return new Date(value).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        }
+
+        function escapeHtml(value) {
+            return String(value || '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+    </script>
+</body>
+</html>

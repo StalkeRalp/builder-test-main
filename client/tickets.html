@@ -392,6 +392,52 @@
             border-color: rgba(13, 148, 136, 0.34);
         }
 
+        .tag.sla-soon {
+            background: rgba(245, 158, 11, 0.14);
+            color: #b45309;
+            border-color: rgba(245, 158, 11, 0.34);
+        }
+
+        .tag.sla-late {
+            background: rgba(220, 38, 38, 0.14);
+            color: #b91c1c;
+            border-color: rgba(220, 38, 38, 0.32);
+        }
+
+        .tag.sla-met {
+            background: rgba(16, 185, 129, 0.14);
+            color: #047857;
+            border-color: rgba(16, 185, 129, 0.32);
+        }
+
+        .tag.sla-waiting {
+            background: rgba(59, 130, 246, 0.12);
+            color: #1d4ed8;
+            border-color: rgba(59, 130, 246, 0.32);
+        }
+
+        .sla-alert {
+            margin-bottom: 12px;
+            border-radius: 12px;
+            border: 1px solid #fecaca;
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 11px 12px;
+            font-size: 0.84rem;
+            font-weight: 700;
+            display: none;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sla-alert.show {
+            display: flex;
+        }
+
+        .sla-alert .material-icons {
+            font-size: 18px;
+        }
+
         .ticket-desc {
             margin: 10px 0;
             color: #334155;
@@ -657,6 +703,10 @@
                     <span class="material-icons">timeline</span>
                     <span>Timeline</span>
                 </a>
+                <a href="./calendar.html" class="nav-item nav-link flex items-center gap-3 px-4 py-3 rounded-lg transition-colors">
+                    <span class="material-icons">calendar_month</span>
+                    <span>Calendrier</span>
+                </a>
                 <a href="./documents.html" class="nav-item nav-link flex items-center gap-3 px-4 py-3 rounded-lg transition-colors">
                     <span class="material-icons">folder</span>
                     <span>Documents</span>
@@ -764,6 +814,11 @@
                     </button>
                 </section>
 
+                <div id="slaSoonAlert" class="sla-alert" role="status" aria-live="polite">
+                    <span class="material-icons">priority_high</span>
+                    <span id="slaSoonAlertText">Certaines demandes nécessitent une action prochaine.</span>
+                </div>
+
                 <section class="tools-bar">
                     <div class="search-wrap">
                         <span class="material-icons">search</span>
@@ -782,6 +837,13 @@
                             <option value="high">Haute</option>
                             <option value="medium">Moyenne</option>
                             <option value="low">Basse</option>
+                        </select>
+                        <select id="slaFilter" class="tool-select">
+                            <option value="all">SLA: Tous</option>
+                            <option value="soon">À traiter bientôt</option>
+                            <option value="late">En retard</option>
+                            <option value="waiting">En attente équipe</option>
+                            <option value="met">Pris en charge à temps</option>
                         </select>
                     </div>
                 </section>
@@ -854,8 +916,10 @@
             project: null,
             query: '',
             status: 'all',
-            priority: 'all'
+            priority: 'all',
+            sla: 'all'
         };
+        const SLA_HOURS = { high: 2, medium: 8, low: 24 };
 
         document.addEventListener('DOMContentLoaded', async () => {
             setupListeners();
@@ -886,6 +950,11 @@
                 renderTickets();
             });
 
+            document.getElementById('slaFilter').addEventListener('change', (event) => {
+                ticketState.sla = event.target.value;
+                renderTickets();
+            });
+
             document.getElementById('newTicketForm').addEventListener('submit', handleCreateTicket);
 
             document.getElementById('logoutBtn').addEventListener('click', () => {
@@ -898,6 +967,38 @@
                     }
                 );
             });
+
+            applyUrlFilters();
+        }
+
+        function applyUrlFilters() {
+            const params = new URLSearchParams(window.location.search);
+            const status = (params.get('status') || '').trim().toLowerCase();
+            const priority = (params.get('priority') || '').trim().toLowerCase();
+            const sla = (params.get('sla') || '').trim().toLowerCase();
+            const query = (params.get('q') || '').trim();
+
+            const statusSelect = document.getElementById('statusFilter');
+            const prioritySelect = document.getElementById('priorityFilter');
+            const slaSelect = document.getElementById('slaFilter');
+            const searchInput = document.getElementById('ticketSearch');
+
+            if (status && Array.from(statusSelect.options).some((o) => o.value === status)) {
+                statusSelect.value = status;
+                ticketState.status = status;
+            }
+            if (priority && Array.from(prioritySelect.options).some((o) => o.value === priority)) {
+                prioritySelect.value = priority;
+                ticketState.priority = priority;
+            }
+            if (sla && Array.from(slaSelect.options).some((o) => o.value === sla)) {
+                slaSelect.value = sla;
+                ticketState.sla = sla;
+            }
+            if (query) {
+                searchInput.value = query;
+                ticketState.query = query.toLowerCase();
+            }
         }
 
         async function loadPageData(manual = false) {
@@ -929,28 +1030,35 @@
             const query = ticketState.query;
             const status = ticketState.status;
             const priority = ticketState.priority;
+            const sla = ticketState.sla;
 
             const visible = ticketState.all.filter((ticket) => {
-                const matchesStatus = status === 'all' || String(ticket.status || '').toLowerCase() === status;
-                const matchesPriority = priority === 'all' || String(ticket.priority || '').toLowerCase() === priority;
+                const statusKey = normalizeStatus(ticket.status);
+                const priorityKey = normalizePriority(ticket.priority);
+                const matchesStatus = status === 'all' || statusKey === status;
+                const matchesPriority = priority === 'all' || priorityKey === priority;
+                const slaState = getTicketSlaState(ticket).state;
+                const matchesSla = sla === 'all' || slaState === sla;
                 const searchable = `${ticket.title || ''} ${ticket.description || ''}`.toLowerCase();
                 const matchesQuery = !query || searchable.includes(query);
-                return matchesStatus && matchesPriority && matchesQuery;
+                return matchesStatus && matchesPriority && matchesSla && matchesQuery;
             });
 
-            ticketState.visible = visible;
+            ticketState.visible = [...visible].sort((a, b) => getTicketSlaState(b).score - getTicketSlaState(a).score);
 
             const list = document.getElementById('ticketsList');
-            if (!visible.length) {
+            if (!ticketState.visible.length) {
                 list.innerHTML = '<div class="empty-state">Aucun ticket ne correspond aux filtres actifs.</div>';
                 updateStats([]);
+                updateSlaAlert([]);
                 return;
             }
 
-            list.innerHTML = visible.map((ticket, index) => {
+            list.innerHTML = ticketState.visible.map((ticket, index) => {
                 const delay = Math.min(index * 40, 280);
                 const statusKey = normalizeStatus(ticket.status);
                 const priorityKey = normalizePriority(ticket.priority);
+                const slaInfo = getTicketSlaState(ticket);
                 return `
                     <article class="ticket-card" style="animation-delay:${delay}ms;">
                         <div class="ticket-head">
@@ -961,6 +1069,7 @@
                             <div class="ticket-badges">
                                 <span class="tag status-${statusKey}">${escapeHtml(getStatusLabel(statusKey))}</span>
                                 <span class="tag priority-${priorityKey}">${escapeHtml(getPriorityLabel(priorityKey))}</span>
+                                <span class="tag sla-${slaInfo.state}">${escapeHtml(slaInfo.label)}</span>
                             </div>
                         </div>
 
@@ -986,7 +1095,8 @@
                 `;
             }).join('');
 
-            updateStats(visible);
+            updateStats(ticketState.visible);
+            updateSlaAlert(ticketState.all);
         }
 
         async function handleCreateTicket(event) {
@@ -1039,12 +1149,16 @@
             const open = all.filter((t) => ['open', 'in_progress'].includes(normalizeStatus(t.status))).length;
             const resolved = all.filter((t) => ['resolved', 'closed', 'completed'].includes(normalizeStatus(t.status))).length;
             const high = all.filter((t) => normalizePriority(t.priority) === 'high').length;
+            const soon = all.filter((t) => getTicketSlaState(t).state === 'soon').length;
+            const late = all.filter((t) => getTicketSlaState(t).state === 'late').length;
 
             document.getElementById('totalCount').textContent = String(all.length);
-            document.getElementById('openCount').textContent = String(open);
+            document.getElementById('openCount').textContent = late > 0 ? `${open} (${late} retard)` : String(open);
             document.getElementById('resolvedCount').textContent = String(resolved);
-            document.getElementById('highPriorityCount').textContent = String(high);
-            document.getElementById('ticketStatusBadge').textContent = `${open} ticket(s) ouvert(s)`;
+            document.getElementById('highPriorityCount').textContent = soon > 0 ? `${high} (${soon} bientôt)` : String(high);
+            document.getElementById('ticketStatusBadge').textContent = late > 0
+                ? `${late} ticket(s) en retard de prise en charge`
+                : `${open} ticket(s) ouvert(s)`;
 
             if (Array.isArray(visibleTickets) && visibleTickets.length === 0 && all.length > 0) {
                 document.getElementById('ticketStatusBadge').textContent = 'Aucun résultat pour ce filtre';
@@ -1113,6 +1227,78 @@
         function copyTicketTitle(title) {
             if (!title) return;
             ClientUIHelpers.copyToClipboard(title);
+        }
+
+        function getTicketDate(ticket, ...fields) {
+            for (const field of fields) {
+                const value = ticket?.[field];
+                if (!value) continue;
+                const t = new Date(value).getTime();
+                if (Number.isFinite(t)) return t;
+            }
+            return null;
+        }
+
+        function formatMinutes(minutesRaw) {
+            const minutes = Math.max(0, Number(minutesRaw) || 0);
+            if (minutes >= 60 * 24) return `${Math.round(minutes / (60 * 24))}j`;
+            if (minutes >= 60) return `${Math.round(minutes / 60)}h`;
+            return `${minutes}min`;
+        }
+
+        function getTicketSlaState(ticket) {
+            const createdAt = getTicketDate(ticket, 'created_at', 'createdDate', 'createdAt');
+            if (!createdAt) {
+                return { state: 'waiting', label: 'En attente équipe', score: 10 };
+            }
+            const priority = normalizePriority(ticket?.priority);
+            const dueAt = createdAt + ((SLA_HOURS[priority] || SLA_HOURS.medium) * 60 * 60 * 1000);
+            const responseAt = getTicketDate(ticket, 'first_response_at', 'responded_at', 'response_at');
+            const fallbackResponseAt = ticket?.response ? getTicketDate(ticket, 'updated_at', 'updatedDate', 'resolved_at') : null;
+            const effectiveResponse = responseAt || fallbackResponseAt;
+
+            if (effectiveResponse) {
+                if (effectiveResponse <= dueAt) {
+                    const delta = Math.round((effectiveResponse - createdAt) / 60000);
+                    return { state: 'met', label: `Pris en charge (${formatMinutes(delta)})`, score: 20 };
+                }
+                const late = Math.round((effectiveResponse - dueAt) / 60000);
+                return { state: 'late', label: `Retard (${formatMinutes(late)})`, score: 120 + Math.min(300, late) };
+            }
+
+            const status = normalizeStatus(ticket?.status);
+            if (!['open', 'in_progress'].includes(status)) {
+                return { state: 'waiting', label: 'En attente équipe', score: 10 };
+            }
+
+            const remaining = Math.round((dueAt - Date.now()) / 60000);
+            if (remaining < 0) {
+                return { state: 'late', label: `Retard (${formatMinutes(Math.abs(remaining))})`, score: 150 + Math.min(300, Math.abs(remaining)) };
+            }
+            if (remaining <= 60) {
+                return { state: 'soon', label: `À traiter bientôt (${formatMinutes(remaining)})`, score: 90 + (60 - remaining) };
+            }
+            return { state: 'waiting', label: 'En attente équipe', score: 40 };
+        }
+
+        function updateSlaAlert(tickets) {
+            const soonCount = (tickets || []).filter((t) => getTicketSlaState(t).state === 'soon').length;
+            const lateCount = (tickets || []).filter((t) => getTicketSlaState(t).state === 'late').length;
+            const alert = document.getElementById('slaSoonAlert');
+            const text = document.getElementById('slaSoonAlertText');
+            if (!alert || !text) return;
+
+            if (lateCount > 0) {
+                alert.classList.add('show');
+                text.textContent = `${lateCount} ticket(s) en retard de prise en charge.`;
+                return;
+            }
+            if (soonCount > 0) {
+                alert.classList.add('show');
+                text.textContent = `${soonCount} ticket(s) à traiter bientôt par l'équipe.`;
+                return;
+            }
+            alert.classList.remove('show');
         }
 
         function normalizeStatus(status) {

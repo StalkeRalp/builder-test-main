@@ -1,132 +1,778 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
-
+<html lang="fr">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Client Login - TDE Group</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TDE Group Client - Connexion sécurisée</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Sora:wght@500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../src/style.css" />
-    <link rel="stylesheet" href="./styles/client-theme.css" />
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
     <style>
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 18px 40px 0 rgba(13, 148, 136, 0.18);
+        :root {
+            --primary: #0d9488;
+            --primary-dark: #0f766e;
+            --primary-light: #14b8a6;
+            --primary-soft: rgba(13, 148, 136, 0.08);
+            --primary-glow: rgba(13, 148, 136, 0.2);
+            --dark: #0f172a;
+            --dark-soft: #1e293b;
+            --gray: #64748b;
+            --gray-light: #94a3b8;
+            --gray-soft: #f1f5f9;
+            --light: #ffffff;
+            --success: #10b981;
+            --success-light: #d1fae5;
+            --danger: #ef4444;
+            --danger-light: #fee2e2;
+            --border: #e2e8f0;
+
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            --shadow-primary: 0 10px 25px -5px var(--primary-glow);
+
+            --radius-md: 12px;
+            --radius-xl: 24px;
+
+            --transition-fast: 0.2s ease;
+            --transition-base: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-smooth: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        
-        .pin-input {
-            width: 50px;
-            height: 50px;
-            font-size: 24px;
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .background-pattern {
+            position: absolute;
+            inset: 0;
+            background: url('/images/acceuil.jpeg') center/cover no-repeat;
+        }
+
+        .background-pattern::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, rgba(67, 56, 202, 0.92), rgba(14, 116, 144, 0.8), rgba(15, 23, 42, 0.65));
+            mix-blend-mode: multiply;
+        }
+
+        .background-pattern::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.2), transparent 45%);
+        }
+
+        .login-wrapper {
+            position: relative;
+            z-index: 20;
+            width: 100%;
+            max-width: 480px;
+            padding: 20px;
+            animation: fadeInUp 0.8s var(--transition-smooth);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-card {
+            background: var(--light);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-xl);
+            overflow: hidden;
+            border: 1px solid rgba(13, 148, 136, 0.15);
+            transition: var(--transition-base);
+        }
+
+        .login-card:hover {
+            box-shadow: 0 30px 40px -15px rgba(13, 148, 136, 0.3);
+            border-color: rgba(13, 148, 136, 0.3);
+        }
+
+        .login-header {
+            background: linear-gradient(135deg, var(--dark), var(--dark-soft), var(--primary-dark));
+            padding: 40px 40px 30px;
             text-align: center;
-            border: 2px solid #e5e7eb;
-            border-radius: 12px;
-            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
         }
-        
-        .pin-input:focus {
-            border-color: #0d9488;
-            box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.18);
+
+        .login-header::before {
+            content: '';
+            position: absolute;
+            top: -60%;
+            right: -20%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.12) 0%, transparent 60%);
+            border-radius: 50%;
         }
-        
-        .pin-input.filled {
-            background: rgba(20, 184, 166, 0.12);
-            border-color: #0d9488;
+
+        .login-header::after {
+            content: '';
+            position: absolute;
+            bottom: -60%;
+            left: -20%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(13, 148, 136, 0.2) 0%, transparent 60%);
+            border-radius: 50%;
+        }
+
+        .brand-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 24px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .brand-icon {
+            width: 64px;
+            height: 64px;
+            background: rgba(255, 255, 255, 0.12);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 15px 25px -8px rgba(0, 0, 0, 0.3);
+            transform: rotate(-2deg);
+            transition: var(--transition-base);
+            overflow: hidden;
+        }
+
+        .brand-icon img {
+            width: 44px;
+            height: 44px;
+            object-fit: contain;
+            transform: rotate(2deg);
+        }
+
+        .brand-text {
+            text-align: left;
+        }
+
+        .brand-text h1 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 32px;
+            font-weight: 800;
+            color: white;
+            letter-spacing: -0.5px;
+            line-height: 1.2;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .brand-text .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(5px);
+            padding: 6px 14px;
+            border-radius: 40px;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-top: 6px;
+        }
+
+        .brand-text .badge .material-icons {
+            font-size: 14px;
+            color: var(--primary-light);
+        }
+
+        .security-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .security-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            border-radius: 50px;
+            color: white;
+            font-size: 13px;
+            font-weight: 500;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            transition: var(--transition-base);
+        }
+
+        .security-chip:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .security-chip .material-icons {
+            font-size: 16px;
+            color: var(--primary-light);
+        }
+
+        .login-body {
+            padding: 40px;
+            background: white;
+        }
+
+        .error-message {
+            background: var(--danger-light);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            margin-bottom: 28px;
+            display: none;
+            align-items: center;
+            gap: 12px;
+            animation: shake 0.4s var(--transition-base);
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-5px); }
+            40% { transform: translateX(5px); }
+            60% { transform: translateX(-3px); }
+            80% { transform: translateX(3px); }
+        }
+
+        .error-message .material-icons {
+            font-size: 22px;
+            color: var(--danger);
+        }
+
+        .error-message span:last-child {
+            color: var(--danger);
+            font-size: 14px;
+            font-weight: 500;
+            flex: 1;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .form-group label .material-icons {
+            font-size: 18px;
+            color: var(--primary);
+            background: var(--primary-soft);
+            padding: 4px;
+            border-radius: 8px;
+        }
+
+        .input-field {
+            position: relative;
+        }
+
+        .input-field .material-icons {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+            font-size: 20px;
+            transition: var(--transition-fast);
+            pointer-events: none;
+        }
+
+        .input-field input {
+            width: 100%;
+            padding: 16px 16px 16px 52px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-md);
+            font-family: 'Inter', sans-serif;
+            font-size: 15px;
+            transition: var(--transition-fast);
+            background: white;
+        }
+
+        .input-field input:hover {
+            border-color: var(--primary-light);
+        }
+
+        .input-field input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px var(--primary-glow);
+        }
+
+        .input-field input:focus + .material-icons {
+            color: var(--primary);
+        }
+
+        .input-field input::placeholder {
+            color: var(--gray-light);
+            font-weight: 400;
+        }
+
+        .input-field.has-toggle input {
+            padding-right: 54px;
+        }
+
+        .password-toggle {
+            position: absolute;
+            top: 50%;
+            right: 12px;
+            transform: translateY(-50%);
+            border: 0;
+            background: transparent;
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--gray);
+            transition: var(--transition-fast);
+        }
+
+        .password-toggle .material-icons {
+            position: static;
+            transform: none;
+            font-size: 20px;
+            color: currentColor;
+            pointer-events: none;
+        }
+
+        .password-toggle:hover {
+            color: var(--primary);
+            background: var(--primary-soft);
+        }
+
+        .password-toggle:focus-visible {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+
+        .input-pin {
+            letter-spacing: 4px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            text-align: center;
+        }
+
+        .form-options {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 32px;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .checkbox-container input[type="checkbox"] {
+            display: none;
+        }
+
+        .checkbox-custom {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition-fast);
+            background: white;
+        }
+
+        .checkbox-custom .material-icons {
+            font-size: 16px;
+            color: var(--primary);
+            opacity: 0;
+            transform: scale(0);
+            transition: var(--transition-fast);
+        }
+
+        .checkbox-container input[type="checkbox"]:checked + .checkbox-custom {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .checkbox-container input[type="checkbox"]:checked + .checkbox-custom .material-icons {
+            opacity: 1;
+            transform: scale(1);
+            color: white;
+        }
+
+        .checkbox-container span:last-child {
+            color: var(--gray);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .forgot-link {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: var(--transition-fast);
+            padding: 6px 10px;
+            border-radius: 40px;
+            background: var(--primary-soft);
+        }
+
+        .forgot-link:hover {
+            background: var(--primary-glow);
+            gap: 10px;
+        }
+
+        .forgot-link .material-icons {
+            font-size: 16px;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 18px 24px;
+            background: linear-gradient(135deg, var(--dark), var(--dark-soft));
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: var(--transition-base);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .login-btn:hover {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-primary);
+        }
+
+        .login-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .login-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .login-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+            background: linear-gradient(135deg, var(--gray), var(--gray-light));
+        }
+
+        .login-btn .material-icons {
+            font-size: 22px;
+            transition: transform 0.3s;
+            position: relative;
+            z-index: 2;
+        }
+
+        .login-btn:hover .material-icons {
+            transform: translateX(5px);
+        }
+
+        .login-btn span:last-child {
+            position: relative;
+            z-index: 2;
+        }
+
+        .login-footer {
+            margin-top: 30px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .security-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--gray);
+            font-size: 13px;
+            padding: 8px 16px;
+            background: var(--gray-soft);
+            border-radius: 40px;
+        }
+
+        .security-badge .material-icons {
+            font-size: 16px;
+            color: var(--success);
+        }
+
+        .back-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            transition: var(--transition-fast);
+            padding: 8px 20px;
+            border-radius: 40px;
+            background: var(--gray-soft);
+        }
+
+        .back-link:hover {
+            background: var(--primary-soft);
+            color: var(--primary);
+            gap: 12px;
+        }
+
+        .back-link .material-icons {
+            font-size: 16px;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .spinning {
+            animation: spin 1s linear infinite;
+        }
+
+        .validation-message {
+            font-size: 12px;
+            margin-top: 6px;
+            padding-left: 16px;
+            color: var(--gray);
+        }
+
+        .validation-message.error {
+            color: var(--danger);
+        }
+
+        .validation-message.success {
+            color: var(--success);
+        }
+
+        @media (max-width: 520px) {
+            .login-wrapper {
+                padding: 16px;
+            }
+
+            .login-header {
+                padding: 30px 20px;
+            }
+
+            .login-body {
+                padding: 30px 20px;
+            }
+
+            .brand-icon {
+                width: 56px;
+                height: 56px;
+            }
+
+            .brand-text h1 {
+                font-size: 26px;
+            }
+
+            .form-options {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
         }
     </style>
 </head>
+<body>
+    <div class="background-pattern"></div>
 
-<body class="client-portal bg-gray-50 text-slate-800 font-sans antialiased overflow-x-hidden">
-
-    <!-- LOGIN VIEW -->
-    <div class="min-h-screen flex items-center justify-center relative overflow-hidden bg-slate-900">
-        <!-- Background Effects -->
-        <div class="absolute inset-0 z-0">
-            <img src="/images/acceuil.jpeg" class="w-full h-full object-cover opacity-20" alt="Background">
-            <div
-                class="absolute inset-0 bg-gradient-to-tr from-tde-dark/95 via-tde-primary/90 to-purple-900/80 mix-blend-multiply">
-            </div>
-            <!-- Animated shapes -->
-            <div
-                class="absolute top-0 left-0 w-96 h-96 bg-purple-500 rounded-full blur-[150px] opacity-20 animate-pulse-slow">
-            </div>
-            <div class="absolute bottom-0 right-0 w-96 h-96 bg-pink-500 rounded-full blur-[150px] opacity-20 animate-pulse-slow"
-                style="animation-delay: 1.5s;"></div>
-        </div>
-
-        <div class="relative z-10 w-full max-w-md px-4">
-            <div class="glass-panel p-8 md:p-10 rounded-3xl animate-slide-up shadow-2xl">
-                <div class="text-center mb-8">
-                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-600 to-indigo-600 mb-6 shadow-lg">
-                        <img src="/logo.png" alt="TDE Group" class="w-10 h-10 object-contain">
+    <div class="login-wrapper">
+        <div class="login-card">
+            <header class="login-header">
+                <div class="brand-container">
+                    <div class="brand-icon">
+                        <img src="/logo.png" alt="TDE Group">
                     </div>
-                    <h1 class="font-display font-bold text-3xl text-slate-900 mb-2">🏢 My Project</h1>
-                    <p class="text-slate-500">TDE Group Client Portal</p>
+                    <div class="brand-text">
+                        <h1>TDE GROUP</h1>
+                        <div class="badge">
+                            <span class="material-icons">verified</span>
+                            <span>Client Portal</span>
+                        </div>
+                    </div>
                 </div>
 
-                <form id="loginForm" class="space-y-6">
-                    <!-- Project ID Input -->
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-2">Project UUID</label>
-                        <div class="relative group">
-                            <span class="absolute left-4 top-3.5 text-gray-400 group-focus-within:text-purple-600 transition-colors">
-                                <i data-lucide="hash" class="w-5 h-5"></i>
-                            </span>
-                            <input type="text" id="projectId" required
-                                class="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all duration-300 placeholder-gray-400"
-                                placeholder="5312fad0-1a40-4a83-b3dc-ccba9e59cb12" autocomplete="off">
+                <div class="security-indicator">
+                    <div class="security-chip">
+                        <span class="material-icons">lock</span>
+                        <span>Accès client</span>
+                    </div>
+                    <div class="security-chip">
+                        <span class="material-icons">shield</span>
+                        <span>Session sécurisée</span>
+                    </div>
+                </div>
+            </header>
+
+            <main class="login-body">
+                <div id="errorMessage" class="error-message">
+                    <span class="material-icons">error_outline</span>
+                    <span id="errorText"></span>
+                </div>
+
+                <form id="loginForm" novalidate>
+                    <div class="form-group">
+                        <label for="projectId">
+                            <span class="material-icons">badge</span>
+                            Project UUID
+                        </label>
+                        <div class="input-field">
+                            <input
+                                type="text"
+                                id="projectId"
+                                name="projectId"
+                                placeholder="5312fad0-1a40-4a83-b3dc-ccba9e59cb12"
+                                required
+                                autocomplete="off"
+                            >
+                            <span class="material-icons">fingerprint</span>
                         </div>
-                        <p class="text-xs text-gray-500 mt-1">Copier le Project UUID reçu par email</p>
+                        <div id="projectValidation" class="validation-message"></div>
                     </div>
 
-                    <!-- PIN Input -->
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-3">Password (PIN)</label>
-                        <div class="relative">
-                            <span class="absolute left-4 top-3.5 text-gray-400 pointer-events-none">
-                                <i data-lucide="lock" class="w-5 h-5"></i>
-                            </span>
-                            <input type="password" id="pinInput" maxlength="6" required
-                                class="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all duration-300 placeholder-gray-400 text-center tracking-widest font-mono text-lg"
-                                placeholder="••••••">
+                    <div class="form-group">
+                        <label for="pinInput">
+                            <span class="material-icons">pin</span>
+                            PIN (6 chiffres)
+                        </label>
+                        <div class="input-field has-toggle">
+                            <input
+                                type="password"
+                                id="pinInput"
+                                name="pin"
+                                placeholder="••••••"
+                                required
+                                maxlength="6"
+                                inputmode="numeric"
+                                class="input-pin"
+                                autocomplete="current-password"
+                            >
+                            <span class="material-icons">vpn_key</span>
+                            <button
+                                type="button"
+                                id="togglePin"
+                                class="password-toggle"
+                                aria-label="Afficher le PIN"
+                                aria-pressed="false"
+                            >
+                                <span class="material-icons">visibility</span>
+                            </button>
                         </div>
-                        <p class="text-xs text-gray-500 mt-1">6 chiffres</p>
+                        <div id="pinValidation" class="validation-message"></div>
                     </div>
 
-                    <!-- Remember Me -->
-                    <label class="flex items-center gap-3 cursor-pointer group">
-                        <input type="checkbox" id="rememberMe" class="w-4 h-4 accent-purple-600 cursor-pointer">
-                        <span class="text-sm text-gray-600 group-hover:text-gray-900 transition-colors">Se souvenir de moi</span>
-                    </label>
+                    <div class="form-options">
+                        <label class="checkbox-container" for="rememberMe">
+                            <input type="checkbox" id="rememberMe" name="rememberMe">
+                            <span class="checkbox-custom">
+                                <span class="material-icons">check</span>
+                            </span>
+                            <span>Se souvenir de moi</span>
+                        </label>
 
-                    <!-- Error Message -->
-                    <div id="errorMessage" class="hidden p-3 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm flex items-center gap-2">
-                        <i data-lucide="alert-circle" class="w-4 h-4 flex-shrink-0"></i>
-                        <span id="errorText">Identifiants invalides</span>
+                        <a href="mailto:support@tdegroup.com" class="forgot-link">
+                            <span class="material-icons">help</span>
+                            <span>Besoin d'aide?</span>
+                        </a>
                     </div>
 
-                    <!-- Submit Button -->
-                    <button type="submit" id="loginBtn"
-                        class="w-full py-3 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold rounded-xl shadow-lg shadow-purple-600/30 hover:shadow-purple-600/50 hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-2">
-                        <span>Sign In</span>
-                        <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                    <button type="submit" class="login-btn" id="loginBtn">
+                        <span class="material-icons" id="btnIcon">login</span>
+                        <span id="btnText">Se connecter</span>
                     </button>
-
-                    <!-- Help Text -->
-                    <p class="text-xs text-gray-500 text-center">
-                        Besoin d'aide? Contactez <a href="mailto:support@tdegroup.com" class="text-purple-600 hover:underline">support@tdegroup.com</a>
-                    </p>
                 </form>
 
-                <div class="mt-8 pt-6 border-t border-gray-100 text-center space-y-3">
-                    <p class="text-xs text-slate-400">&copy; 2026 TDE Group. Secure Client Portal.</p>
-                </div>
-            </div>
+                <footer class="login-footer">
+                    <div class="security-badge">
+                        <span class="material-icons">verified_user</span>
+                        <span>Connexion sécurisée</span>
+                    </div>
+
+                    <a href="/my-project.html" class="back-link">
+                        <span class="material-icons">arrow_back</span>
+                        <span>Retour au site</span>
+                    </a>
+                </footer>
+            </main>
         </div>
     </div>
 
@@ -134,93 +780,143 @@
     <script src="../src/client-data-service.js"></script>
     <script src="../src/client-ui-helpers.js"></script>
     <script>
-        lucide.createIcons();
+        const elements = {
+            form: document.getElementById('loginForm'),
+            projectId: document.getElementById('projectId'),
+            pin: document.getElementById('pinInput'),
+            togglePin: document.getElementById('togglePin'),
+            projectValidation: document.getElementById('projectValidation'),
+            pinValidation: document.getElementById('pinValidation'),
+            errorMessage: document.getElementById('errorMessage'),
+            errorText: document.getElementById('errorText'),
+            btnText: document.getElementById('btnText'),
+            btnIcon: document.getElementById('btnIcon'),
+            loginBtn: document.getElementById('loginBtn'),
+            rememberMe: document.getElementById('rememberMe')
+        };
 
-        const loginForm = document.getElementById('loginForm');
-        const projectIdInput = document.getElementById('projectId');
-        const pinInput = document.getElementById('pinInput');
-        const rememberMeCheckbox = document.getElementById('rememberMe');
-        const loginBtn = document.getElementById('loginBtn');
-        const errorMessage = document.getElementById('errorMessage');
-        const errorText = document.getElementById('errorText');
-
-        // Charger le Project ID mémorisé
         const rememberedProjectId = clientAuthService.getRememberedProjectId();
         if (rememberedProjectId) {
-            projectIdInput.value = rememberedProjectId;
-            rememberMeCheckbox.checked = true;
+            elements.projectId.value = rememberedProjectId;
+            elements.rememberMe.checked = true;
         }
 
-        // Validation du PIN en temps réel
-        pinInput.addEventListener('input', (e) => {
-            e.target.value = e.target.value.replace(/[^0-9]/g, '').slice(0, 6);
-            e.target.classList.toggle('filled', e.target.value.length > 0);
+        elements.projectId.addEventListener('input', function () {
+            const value = this.value.trim();
+            const isValid = value.length === 0 || clientAuthService.validateProjectId(value);
+            elements.projectValidation.textContent = value.length === 0
+                ? ''
+                : (isValid ? '✓ UUID valide' : '✗ Format UUID invalide');
+            elements.projectValidation.className = 'validation-message ' + (isValid ? 'success' : 'error');
         });
 
-        // Gestion du formulaire
-        loginForm.addEventListener('submit', async (e) => {
+        elements.pin.addEventListener('input', function () {
+            this.value = this.value.replace(/[^0-9]/g, '').slice(0, 6);
+            const isValid = this.value.length === 0 || clientAuthService.validatePin(this.value);
+            elements.pinValidation.textContent = this.value.length === 0
+                ? ''
+                : (isValid ? '✓ PIN valide' : '✗ 6 chiffres requis');
+            elements.pinValidation.className = 'validation-message ' + (isValid ? 'success' : 'error');
+        });
+
+        elements.togglePin.addEventListener('click', () => {
+            const isHidden = elements.pin.type === 'password';
+            elements.pin.type = isHidden ? 'text' : 'password';
+            elements.togglePin.setAttribute('aria-pressed', isHidden ? 'true' : 'false');
+            elements.togglePin.setAttribute('aria-label', isHidden ? 'Masquer le PIN' : 'Afficher le PIN');
+            elements.togglePin.querySelector('.material-icons').textContent = isHidden
+                ? 'visibility_off'
+                : 'visibility';
+        });
+
+        elements.form.addEventListener('submit', async (e) => {
             e.preventDefault();
+            hideError();
 
-            const projectId = projectIdInput.value.trim();
-            const pin = pinInput.value;
+            const projectId = elements.projectId.value.trim();
+            const pin = elements.pin.value;
 
-            // Validation de base
             if (!projectId || !pin) {
-                errorText.textContent = 'Veuillez remplir tous les champs';
-                errorMessage.classList.remove('hidden');
+                showError('Veuillez remplir tous les champs');
                 return;
             }
 
             if (!clientAuthService.validateProjectId(projectId)) {
-                errorText.textContent = 'Format Project ID invalide. Utilisez un UUID valide.';
-                errorMessage.classList.remove('hidden');
+                showError('Format Project UUID invalide');
                 return;
             }
 
             if (!clientAuthService.validatePin(pin)) {
-                errorText.textContent = 'Le PIN doit contenir 6 chiffres';
-                errorMessage.classList.remove('hidden');
+                showError('Le PIN doit contenir exactement 6 chiffres');
                 return;
             }
 
-            // État de chargement
-            loginBtn.disabled = true;
-            const originalHTML = loginBtn.innerHTML;
-            loginBtn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> Connexion...';
-            lucide.createIcons();
+            setLoadingState(true);
 
             try {
                 const { default: clientBackendService } = await import('../src/client-backend-service.js');
                 const result = await clientBackendService.loginWithProjectPin(
                     projectId,
                     pin,
-                    rememberMeCheckbox.checked
+                    elements.rememberMe.checked
                 );
 
-                if (!result?.success) {
-                    throw new Error(result?.error || 'Invalid credentials');
+                if (!result || !result.success) {
+                    throw new Error(result && result.error ? result.error : 'Identifiants incorrects');
                 }
 
-                loginBtn.innerHTML = '<i data-lucide="check" class="w-5 h-5"></i> Succès!';
-                lucide.createIcons();
-
-                setTimeout(() => {
-                    window.location.href = './dashboard.html';
-                }, 500);
+                await handleSuccess();
             } catch (error) {
-                errorText.textContent = error?.message || 'Identifiants invalides. Veuillez vérifier votre Project ID et PIN.';
-                errorMessage.classList.remove('hidden');
-                loginBtn.disabled = false;
-                loginBtn.innerHTML = originalHTML;
-                lucide.createIcons();
-
-                // Animation de shake
-                loginForm.classList.add('animate-pulse');
-                setTimeout(() => loginForm.classList.remove('animate-pulse'), 500);
+                showError(error && error.message ? error.message : 'Erreur de connexion au serveur');
+                setLoadingState(false);
             }
         });
 
+        function showError(message) {
+            elements.errorText.textContent = message;
+            elements.errorMessage.style.display = 'flex';
+
+            setTimeout(() => {
+                hideError();
+            }, 5000);
+        }
+
+        function hideError() {
+            elements.errorMessage.style.display = 'none';
+        }
+
+        function setLoadingState(isLoading) {
+            if (isLoading) {
+                elements.loginBtn.disabled = true;
+                elements.btnText.textContent = 'Connexion en cours...';
+                elements.btnIcon.textContent = 'refresh';
+                elements.btnIcon.classList.add('spinning');
+            } else {
+                elements.loginBtn.disabled = false;
+                elements.btnText.textContent = 'Se connecter';
+                elements.btnIcon.textContent = 'login';
+                elements.btnIcon.classList.remove('spinning');
+            }
+        }
+
+        async function handleSuccess() {
+            elements.loginBtn.style.background = 'linear-gradient(135deg, var(--success), #059669)';
+            elements.btnText.textContent = 'Connexion réussie!';
+            elements.btnIcon.textContent = 'check_circle';
+            elements.btnIcon.classList.remove('spinning');
+
+            setTimeout(() => {
+                window.location.href = './dashboard.html';
+            }, 700);
+        }
+
+        window.addEventListener('load', () => {
+            if (clientAuthService.isAuthenticated()) {
+                window.location.href = './dashboard.html';
+                return;
+            }
+            elements.projectId.focus();
+        });
     </script>
 </body>
-
 </html>

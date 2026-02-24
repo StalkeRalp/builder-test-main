@@ -668,7 +668,7 @@
                 <span class="material-icons">account_circle</span>
                 <span>Profil</span>
             </a>
-            <a href="../my-project.html" class="sidebar-item" target="_blank" rel="noopener">
+            <a href="../client/login.html" class="sidebar-item" target="_blank" rel="noopener">
                 <span class="material-icons">visibility</span>
                 <span>My Project (Client)</span>
             </a>
@@ -714,7 +714,7 @@
             <!-- Filters -->
             <div class="filters">
                 <div class="filter-group">
-                    <label>Statut:</label>
+                    <label for="statusFilter">Statut:</label>
                     <select id="statusFilter" onchange="applyFilters()">
                         <option value="">Tous</option>
                         <option value="active">Actif</option>
@@ -722,7 +722,7 @@
                     </select>
                 </div>
                 <div class="filter-group">
-                    <label>Projets:</label>
+                    <label for="projectFilter">Projets:</label>
                     <select id="projectFilter" onchange="applyFilters()">
                         <option value="">Tous</option>
                         <option value="1">1+ projet</option>
@@ -791,7 +791,7 @@
         window.addEventListener('load', async () => {
             try {
                 await authService.authReady;
-                if (!authService.currentUser) {
+                if (!authService.isAdmin || !authService.isAdmin()) {
                     window.location.href = 'login.html';
                     return;
                 }

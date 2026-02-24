@@ -369,6 +369,46 @@
             font-weight: 400;
         }
 
+        .input-field.has-toggle input {
+            padding-right: 54px;
+        }
+
+        .password-toggle {
+            position: absolute;
+            top: 50%;
+            right: 12px;
+            transform: translateY(-50%);
+            border: 0;
+            background: transparent;
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--gray);
+            transition: var(--transition-fast);
+        }
+
+        .password-toggle .material-icons {
+            position: static;
+            transform: none;
+            font-size: 20px;
+            color: currentColor;
+            pointer-events: none;
+        }
+
+        .password-toggle:hover {
+            color: var(--primary);
+            background: var(--primary-soft);
+        }
+
+        .password-toggle:focus-visible {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+
         /* Options du formulaire */
         .form-options {
             display: flex;
@@ -710,7 +750,7 @@
                             <span class="material-icons">lock</span>
                             Mot de passe
                         </label>
-                        <div class="input-field">
+                        <div class="input-field has-toggle">
                             <span class="material-icons">vpn_key</span>
                             <input 
                                 type="password" 
@@ -721,6 +761,15 @@
                                 autocomplete="current-password"
                                 minlength="6"
                             >
+                            <button
+                                type="button"
+                                id="togglePassword"
+                                class="password-toggle"
+                                aria-label="Afficher le mot de passe"
+                                aria-pressed="false"
+                            >
+                                <span class="material-icons">visibility</span>
+                            </button>
                         </div>
                         <div id="passwordValidation" class="validation-message"></div>
                     </div>
@@ -755,7 +804,7 @@
                         <span>Connexion sécurisée</span>
                     </div>
                     
-                    <a href="/my-project.html" class="back-link">
+                    <a href="/client/login.html" class="back-link">
                         <span class="material-icons">arrow_back</span>
                         <span>Retour au site</span>
                     </a>
@@ -772,6 +821,7 @@
             form: document.getElementById('loginForm'),
             email: document.getElementById('email'),
             password: document.getElementById('password'),
+            togglePassword: document.getElementById('togglePassword'),
             emailValidation: document.getElementById('emailValidation'),
             passwordValidation: document.getElementById('passwordValidation'),
             errorMessage: document.getElementById('errorMessage'),
@@ -792,6 +842,19 @@
             const isValid = this.value.length >= 6;
             elements.passwordValidation.textContent = isValid ? '✓ Mot de passe valide' : '✗ Minimum 6 caractères';
             elements.passwordValidation.className = `validation-message ${isValid ? 'success' : 'error'}`;
+        });
+
+        elements.togglePassword.addEventListener('click', () => {
+            const isHidden = elements.password.type === 'password';
+            elements.password.type = isHidden ? 'text' : 'password';
+            elements.togglePassword.setAttribute('aria-pressed', isHidden ? 'true' : 'false');
+            elements.togglePassword.setAttribute(
+                'aria-label',
+                isHidden ? 'Masquer le mot de passe' : 'Afficher le mot de passe'
+            );
+            elements.togglePassword.querySelector('.material-icons').textContent = isHidden
+                ? 'visibility_off'
+                : 'visibility';
         });
 
         // Gestionnaire de soumission
@@ -875,21 +938,10 @@
 
             // Redirection
             setTimeout(() => {
-                window.location.href = 'index.html';
+                const target = authService.getRedirectUrl ? authService.getRedirectUrl() : 'index.html';
+                window.location.href = target || 'index.html';
             }, 800);
         }
-
-        // Vérification auto-login
-        window.addEventListener('load', async () => {
-            try {
-                await authService.authReady;
-                if (authService.isAdmin && authService.isAdmin()) {
-                    window.location.href = 'index.html';
-                }
-            } catch (error) {
-                console.log('Non authentifié');
-            }
-        });
 
         // Focus auto sur le premier champ
         elements.email.focus();

@@ -62,6 +62,15 @@
             background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
             color: var(--dark);
             min-height: 100vh;
+            transition: background 0.35s ease;
+        }
+
+        body.vibrant-mode {
+            background:
+                radial-gradient(circle at 12% 8%, rgba(20, 184, 166, 0.18), transparent 36%),
+                radial-gradient(circle at 92% 12%, rgba(139, 92, 246, 0.16), transparent 42%),
+                radial-gradient(circle at 30% 90%, rgba(59, 130, 246, 0.12), transparent 36%),
+                linear-gradient(135deg, #f8fafc 0%, #eef6ff 100%);
         }
 
         /* ===== LAYOUT ===== */
@@ -113,8 +122,10 @@
             box-shadow: 0 8px 16px -4px var(--primary-glow);
         }
 
-        .brand-icon .material-icons {
-            font-size: 28px;
+        .brand-icon img {
+            width: 28px;
+            height: 28px;
+            object-fit: contain;
         }
 
         .brand-text h2 {
@@ -330,6 +341,13 @@
             gap: 10px;
         }
 
+        .header-actions {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
         .search-wrapper {
             flex: 1;
             position: relative;
@@ -419,6 +437,11 @@
         .hero-section:hover {
             box-shadow: var(--shadow-lg);
             border-color: var(--primary-soft);
+        }
+
+        body.vibrant-mode .hero-section {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(240, 253, 250, 0.92));
+            border-color: rgba(20, 184, 166, 0.26);
         }
 
         .hero-grid {
@@ -767,6 +790,143 @@
             transform: translateX(2px);
         }
 
+        body.vibrant-mode .action-card {
+            border-color: rgba(139, 92, 246, 0.2);
+            background: linear-gradient(135deg, #ffffff, rgba(245, 243, 255, 0.8));
+        }
+
+        .bonus-tools-grid {
+            display: grid;
+            grid-template-columns: 1.3fr 1fr;
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .tool-card {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-sm);
+            padding: 18px;
+        }
+
+        .tool-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .tool-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Sora', sans-serif;
+            font-size: 1rem;
+            color: var(--dark);
+        }
+
+        .tool-title .material-icons {
+            color: var(--secondary);
+            font-size: 20px;
+        }
+
+        .quick-note-input {
+            width: 100%;
+            min-height: 96px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 12px;
+            resize: vertical;
+            font-family: inherit;
+            font-size: 0.9rem;
+            color: var(--dark);
+            background: #fcfcff;
+        }
+
+        .quick-note-input:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.14);
+            background: #fff;
+        }
+
+        .tool-actions-row {
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .tool-btn {
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 9px 12px;
+            background: white;
+            color: var(--dark);
+            font-size: 0.82rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .tool-btn:hover {
+            transform: translateY(-2px);
+            border-color: var(--secondary);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .tool-btn.primary {
+            background: linear-gradient(135deg, var(--secondary), #6366f1);
+            color: white;
+            border: none;
+        }
+
+        .tool-btn.success {
+            background: linear-gradient(135deg, var(--success), #059669);
+            color: white;
+            border: none;
+        }
+
+        .save-state {
+            font-size: 0.76rem;
+            color: var(--gray);
+            font-weight: 600;
+        }
+
+        .chip-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .feature-chip {
+            border: 1px solid rgba(139, 92, 246, 0.25);
+            background: rgba(139, 92, 246, 0.08);
+            color: #6d28d9;
+            border-radius: 999px;
+            padding: 6px 10px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        body.focus-mode .dashboard-card[data-optional="true"] {
+            display: none;
+        }
+
+        body.focus-mode .tool-btn[data-toggle-focus] {
+            background: linear-gradient(135deg, #dc2626, #ef4444);
+            color: #fff;
+            border: none;
+        }
+
         /* Main grid */
         .dashboard-grid {
             display: grid;
@@ -830,8 +990,87 @@
             color: var(--dark);
         }
 
+        .chart-shell {
+            background:
+                radial-gradient(circle at 8% 12%, rgba(13, 148, 136, 0.14), transparent 34%),
+                radial-gradient(circle at 92% 6%, rgba(37, 99, 235, 0.1), transparent 32%),
+                #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 12px;
+        }
+
+        .chart-legend {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 8px;
+        }
+
+        .legend-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border-radius: 999px;
+            border: 1px solid #dbeafe;
+            background: #eff6ff;
+            color: #1d4ed8;
+            padding: 4px 10px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .legend-pill .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #0d9488, #2563eb);
+        }
+
         #phaseChart {
-            max-height: 160px;
+            width: 100%;
+            max-height: 210px;
+        }
+
+        .chart-meta-row {
+            margin-top: 10px;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 8px;
+        }
+
+        .chart-stat {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 8px 10px;
+        }
+
+        .chart-stat-label {
+            margin: 0;
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            font-weight: 700;
+            color: #64748b;
+        }
+
+        .chart-stat-value {
+            margin: 3px 0 0;
+            font-family: 'Sora', sans-serif;
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: #0f172a;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        @media (max-width: 620px) {
+            .chart-meta-row {
+                grid-template-columns: 1fr;
+            }
         }
 
         .card-link {
@@ -1052,6 +1291,20 @@
             font-size: 14px;
         }
 
+        .milestone-reminder-note {
+            margin-top: 6px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.74rem;
+            font-weight: 700;
+            color: #b91c1c;
+            background: #fee2e2;
+            border: 1px solid #fecaca;
+            border-radius: 999px;
+            padding: 4px 10px;
+        }
+
         /* Document items */
         .document-item {
             display: flex;
@@ -1266,6 +1519,65 @@
             background: var(--border);
         }
 
+        .confirm-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.58);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1400;
+            padding: 16px;
+        }
+
+        .confirm-overlay.open {
+            display: flex;
+        }
+
+        .confirm-card {
+            width: min(430px, 100%);
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-xl);
+            padding: 18px;
+            animation: scaleIn 0.25s ease;
+        }
+
+        .confirm-head {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--danger);
+            margin-bottom: 10px;
+        }
+
+        .confirm-head .material-icons {
+            font-size: 24px;
+        }
+
+        .confirm-head h4 {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .confirm-text {
+            margin: 0;
+            color: var(--gray);
+            font-size: 0.92rem;
+            line-height: 1.55;
+        }
+
+        .confirm-actions {
+            margin-top: 14px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
@@ -1297,6 +1609,10 @@
             }
             
             .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .bonus-tools-grid {
                 grid-template-columns: 1fr;
             }
         }
@@ -1361,7 +1677,7 @@
             <div class="sidebar-header">
                 <div class="sidebar-brand" onclick="window.location.href='./dashboard.html'">
                     <div class="brand-icon">
-                        <span class="material-icons">apartment</span>
+                        <img src="/logo.png" alt="TDE Group">
                     </div>
                     <div class="brand-text">
                         <h2>TDE Group</h2>
@@ -1378,6 +1694,10 @@
                 <a href="./timeline.html" class="nav-item nav-link">
                     <span class="material-icons">timeline</span>
                     <span>Timeline</span>
+                </a>
+                <a href="./calendar.html" class="nav-item nav-link flex items-center gap-3 px-4 py-3 rounded-lg transition-colors">
+                    <span class="material-icons">calendar_month</span>
+                    <span>Calendrier</span>
                 </a>
                 <a href="./documents.html" class="nav-item nav-link">
                     <span class="material-icons">folder</span>
@@ -1415,6 +1735,7 @@
                     <button id="mobileMenuBtn" class="mobile-menu-btn" type="button" aria-label="Ouvrir le menu">
                         <span class="material-icons">menu</span>
                     </button>
+                    <img src="/logo.png" alt="TDE Group" style="width: 34px; height: 34px; object-fit: contain;">
                     <div class="page-info">
                         <p>TABLEAU DE BORD</p>
                         <h1>Mon projet</h1>
@@ -1434,6 +1755,7 @@
                         <span class="material-icons">search</span>
                         <span>Rechercher</span>
                     </button>
+                    <div id="headerActions" class="header-actions"></div>
                 </div>
             </header>
 
@@ -1571,6 +1893,57 @@
                     </a>
                 </section>
 
+                <section class="bonus-tools-grid">
+                    <article class="tool-card">
+                        <div class="tool-head">
+                            <div class="tool-title">
+                                <span class="material-icons">sticky_note_2</span>
+                                <span>Notes rapides</span>
+                            </div>
+                            <span id="quickNoteState" class="save-state">Auto-save actif</span>
+                        </div>
+                        <textarea id="quickNoteInput" class="quick-note-input" placeholder="Écris ici tes points à suivre, décisions et questions..."></textarea>
+                        <div class="tool-actions-row">
+                            <button id="clearQuickNoteBtn" class="tool-btn" type="button">
+                                <span class="material-icons">delete_sweep</span>
+                                <span>Vider</span>
+                            </button>
+                            <button id="copySummaryBtn" class="tool-btn primary" type="button">
+                                <span class="material-icons">content_copy</span>
+                                <span>Copier résumé projet</span>
+                            </button>
+                        </div>
+                    </article>
+
+                    <article class="tool-card">
+                        <div class="tool-head">
+                            <div class="tool-title">
+                                <span class="material-icons">rocket_launch</span>
+                                <span>Booster Dashboard</span>
+                            </div>
+                        </div>
+                        <div class="chip-list">
+                            <span class="feature-chip">Mode vibrant</span>
+                            <span class="feature-chip">Mode focus</span>
+                            <span class="feature-chip">Refresh rapide</span>
+                        </div>
+                        <div class="tool-actions-row">
+                            <button id="toggleVibrantBtn" class="tool-btn success" type="button">
+                                <span class="material-icons">palette</span>
+                                <span>Couleurs +</span>
+                            </button>
+                            <button id="toggleFocusBtn" class="tool-btn" type="button" data-toggle-focus>
+                                <span class="material-icons">center_focus_strong</span>
+                                <span>Mode focus</span>
+                            </button>
+                            <button id="refreshDashboardBtn" class="tool-btn" type="button">
+                                <span class="material-icons">refresh</span>
+                                <span>Actualiser</span>
+                            </button>
+                        </div>
+                    </article>
+                </section>
+
                 <!-- Main Grid -->
                 <div class="dashboard-grid">
                     <!-- Left Column -->
@@ -1587,7 +1960,27 @@
                                     <span class="material-icons">arrow_forward</span>
                                 </a>
                             </div>
-                            <canvas id="phaseChart" height="145"></canvas>
+                            <div class="chart-shell">
+                                <div class="chart-legend">
+                                    <span class="legend-pill"><span class="dot"></span>Progression (%) par phase</span>
+                                    <span class="legend-pill">Objectif global: 100%</span>
+                                </div>
+                                <canvas id="phaseChart" height="168"></canvas>
+                                <div class="chart-meta-row">
+                                    <div class="chart-stat">
+                                        <p class="chart-stat-label">Moyenne</p>
+                                        <p id="chartAvgProgress" class="chart-stat-value">-</p>
+                                    </div>
+                                    <div class="chart-stat">
+                                        <p class="chart-stat-label">Phase la plus avancée</p>
+                                        <p id="chartTopPhase" class="chart-stat-value">-</p>
+                                    </div>
+                                    <div class="chart-stat">
+                                        <p class="chart-stat-label">Meilleur score</p>
+                                        <p id="chartTopValue" class="chart-stat-value">-</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Phases Preview -->
@@ -1606,7 +1999,7 @@
                         </div>
 
                         <!-- Recent Activity -->
-                        <div class="dashboard-card">
+                        <div class="dashboard-card" data-optional="true">
                             <div class="card-header">
                                 <div class="card-title">
                                     <span class="material-icons">history</span>
@@ -1620,13 +2013,13 @@
                     <!-- Right Column -->
                     <div class="right-column">
                         <!-- Upcoming Milestones -->
-                        <div class="dashboard-card">
+                        <div class="dashboard-card" data-optional="true">
                             <div class="card-header">
                                 <div class="card-title">
                                     <span class="material-icons">event</span>
                                     <h3>Échéances à venir</h3>
                                 </div>
-                                <a href="./timeline.html" class="card-link">
+                                <a href="./calendar.html" class="card-link">
                                     <span>Calendrier</span>
                                     <span class="material-icons">arrow_forward</span>
                                 </a>
@@ -1724,12 +2117,27 @@
         </div>
     </div>
 
+    <div id="logoutConfirmModal" class="confirm-overlay" onclick="if (event.target === this) closeLogoutConfirmModal()">
+        <div class="confirm-card">
+            <div class="confirm-head">
+                <span class="material-icons">logout</span>
+                <h4>Confirmer la déconnexion</h4>
+            </div>
+            <p class="confirm-text">Êtes-vous sûr de vouloir vous déconnecter ?</p>
+            <div class="confirm-actions">
+                <button type="button" class="modal-btn close" onclick="closeLogoutConfirmModal()">Annuler</button>
+                <button type="button" class="modal-btn download" onclick="confirmLogout()">Oui, déconnecter</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="../src/client-auth-service.js"></script>
     <script src="../src/client-data-service.js"></script>
     <script src="../src/client-profile-shortcut.js"></script>
     <script src="../src/client-ui-helpers.js"></script>
+    <script src="../src/ux-productivity-suite.js"></script>
     
     <script>
         // Vérifier l'authentification
@@ -1739,25 +2147,75 @@
 
         // Variables globales
         let phaseChart = null;
+        let lastDeadlineReminderKey = '';
         let currentModalImage = null;
+        let uxSuite = null;
+        const DASHBOARD_NOTE_KEY = 'client_dashboard_quick_note_v1';
+        const DASHBOARD_VIBRANT_KEY = 'client_dashboard_vibrant_mode_v1';
+        const DASHBOARD_FOCUS_KEY = 'client_dashboard_focus_mode_v1';
 
         // Initialisation
         document.addEventListener('DOMContentLoaded', async () => {
-            await loadDashboardData();
-            setupEventListeners();
+            try {
+                initBonusFeatures();
+                setupEventListeners();
+                uxSuite = window.UXProductivitySuite?.init({
+                    scope: 'client-dashboard',
+                    headerRightSelector: '#headerActions',
+                    searchInputSelector: '#globalSearch',
+                    searchButtonSelector: '#searchBtn',
+                    onSearch: (query) => navigateFromQuery(query),
+                    commands: [
+                        { label: 'Voir la timeline', help: 'Ouvrir les phases du projet', keywords: ['timeline', 'phases'], action: () => { window.location.href = './timeline.html'; } },
+                        { label: 'Ouvrir les documents', help: 'Consulter les fichiers projet', keywords: ['documents', 'files'], action: () => { window.location.href = './documents.html'; } },
+                        { label: 'Messages non lus', help: 'Aller sur la messagerie filtrée', keywords: ['chat', 'messages', 'unread'], action: () => { window.location.href = './chat.html?unread=1'; } },
+                        { label: 'Tickets ouverts', help: 'Voir le support', keywords: ['tickets', 'support', 'open'], action: () => { window.location.href = './tickets.html?status=open'; } },
+                        { label: 'Calendrier', help: 'Voir les deadlines', keywords: ['calendar', 'deadlines'], action: () => { window.location.href = './calendar.html'; } }
+                    ]
+                });
+                await loadDashboardData();
+                applyDashboardUrlFilters();
+            } catch (error) {
+                console.error('Dashboard init error:', error);
+                showNotification('Erreur lors de l’initialisation du dashboard', 'error');
+            }
         });
+
+        function initBonusFeatures() {
+            const noteInput = document.getElementById('quickNoteInput');
+            const noteState = document.getElementById('quickNoteState');
+            const savedNote = localStorage.getItem(DASHBOARD_NOTE_KEY) || '';
+            if (noteInput) noteInput.value = savedNote;
+
+            const vibrant = localStorage.getItem(DASHBOARD_VIBRANT_KEY) === '1';
+            const focus = localStorage.getItem(DASHBOARD_FOCUS_KEY) === '1';
+            document.body.classList.toggle('vibrant-mode', vibrant);
+            document.body.classList.toggle('focus-mode', focus);
+
+            if (noteState) {
+                noteState.textContent = savedNote ? 'Note sauvegardée localement' : 'Auto-save actif';
+            }
+        }
 
         // Chargement des données
         async function loadDashboardData() {
             try {
-                const [project, phases, activity, documents, messages, tickets] = await Promise.all([
+                const [projectRaw, phasesRaw, activityRaw, documentsRaw, messagesRaw, ticketsRaw, adminEventsRaw] = await Promise.all([
                     clientDataService.getProject(),
                     clientDataService.getPhases(),
                     clientDataService.getRecentActivity(),
                     clientDataService.getDocuments(),
                     clientDataService.getMessages(),
-                    clientDataService.getTickets()
+                    clientDataService.getTickets(),
+                    clientDataService.getAdminEvents()
                 ]);
+                const project = projectRaw || {};
+                const phases = Array.isArray(phasesRaw) ? phasesRaw : [];
+                const activity = Array.isArray(activityRaw) ? activityRaw : [];
+                const documents = Array.isArray(documentsRaw) ? documentsRaw : [];
+                const messages = Array.isArray(messagesRaw) ? messagesRaw : [];
+                const tickets = Array.isArray(ticketsRaw) ? ticketsRaw : [];
+                const adminEvents = Array.isArray(adminEventsRaw) ? adminEventsRaw : [];
 
                 // Projet
                 updateProjectInfo(project);
@@ -1779,43 +2237,92 @@
                 updateTickets(tickets);
                 
                 // Échéances
-                updateMilestones(phases);
-
+                updateMilestones(phases, adminEvents);
             } catch (error) {
                 console.error('Erreur chargement:', error);
                 showNotification('Erreur lors du chargement des données', 'error');
             }
         }
 
+        function applyDashboardUrlFilters() {
+            const params = new URLSearchParams(window.location.search);
+            const query = (params.get('q') || '').trim();
+            const deadline = (params.get('deadline') || '').trim().toLowerCase();
+            const unread = (params.get('unread') || '').trim();
+            const section = (params.get('section') || '').trim().toLowerCase();
+
+            const input = document.getElementById('globalSearch');
+            if (query && input) input.value = query;
+
+            if (deadline === 'soon') {
+                document.getElementById('upcomingMilestones')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+            if (unread === '1') {
+                document.getElementById('unreadMessagesCount')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+            if (section === 'inbox') {
+                document.getElementById('unreadMessagesCount')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        function navigateFromQuery(rawQuery) {
+            const query = String(rawQuery || '').trim();
+            if (!query) return;
+            const q = query.toLowerCase();
+
+            if (q.includes('ticket') || q.includes('support')) {
+                window.location.href = `./tickets.html?status=open&q=${encodeURIComponent(query)}`;
+                return;
+            }
+            if (q.includes('message') || q.includes('chat')) {
+                window.location.href = `./chat.html?unread=1&q=${encodeURIComponent(query)}`;
+                return;
+            }
+            if (q.includes('document')) {
+                window.location.href = `./documents.html?q=${encodeURIComponent(query)}`;
+                return;
+            }
+            if (q.includes('timeline') || q.includes('phase')) {
+                window.location.href = `./timeline.html?q=${encodeURIComponent(query)}`;
+                return;
+            }
+            if (q.includes('calendar') || q.includes('deadline')) {
+                window.location.href = './calendar.html?deadline=soon';
+                return;
+            }
+            showNotification(`Recherche "${query}" en préparation`, 'info');
+        }
+
         // Mise à jour des infos projet
         function updateProjectInfo(project) {
-            document.getElementById('projectName').textContent = project.name || 'Mon projet';
-            document.getElementById('projectDescription').textContent = project.description || 'Suivi en temps réel de votre projet.';
+            const safeProject = project || {};
+            document.getElementById('projectName').textContent = safeProject.name || 'Mon projet';
+            document.getElementById('projectDescription').textContent = safeProject.description || 'Suivi en temps réel de votre projet.';
             document.getElementById('adminProjectDescription').textContent =
-                project.adminDescription || project.description || 'Aucune description disponible.';
+                safeProject.adminDescription || safeProject.description || 'Aucune description disponible.';
             document.getElementById('projectId').innerHTML = `
                 <span class="material-icons">fingerprint</span>
-                <span>ID: ${project.id || '---'}</span>
+                <span>ID: ${safeProject.id || clientAuthService.getProjectId() || '---'}</span>
             `;
             
-            const progress = project.progress || 0;
+            const progress = safeProject.progress || 0;
             document.getElementById('projectProgress').textContent = `${progress}%`;
             document.getElementById('progressBar').style.width = `${progress}%`;
             document.getElementById('progressLabel').textContent = `${progress}%`;
             
-            document.getElementById('projectManager').textContent = project.manager || '-';
-            document.getElementById('daysRemaining').textContent = project.daysRemaining ? `${project.daysRemaining} j` : '-';
-            document.getElementById('projectBudget').textContent = formatBudget(project.budget, project.currency);
+            document.getElementById('projectManager').textContent = safeProject.manager || '-';
+            document.getElementById('daysRemaining').textContent = safeProject.daysRemaining ? `${safeProject.daysRemaining} j` : '-';
+            document.getElementById('projectBudget').textContent = formatBudget(safeProject.budget, safeProject.currency);
             document.getElementById('projectType').textContent =
-                formatProjectType(project.project_type || project.type);
+                formatProjectType(safeProject.project_type || safeProject.type);
             
-            document.getElementById('startDate').textContent = formatDate(project.startDate);
-            document.getElementById('endDate').textContent = formatDate(project.endDate);
-            document.getElementById('deliveryDate').textContent = formatDate(project.endDate);
+            document.getElementById('startDate').textContent = formatDate(safeProject.startDate);
+            document.getElementById('endDate').textContent = formatDate(safeProject.endDate);
+            document.getElementById('deliveryDate').textContent = formatDate(safeProject.endDate);
 
             // Statut
             const statusPill = document.getElementById('projectStatusPill');
-            const status = project.status || 'active';
+            const status = safeProject.status || 'active';
             const statusConfig = getStatusConfig(status);
             
             statusPill.className = `status-tag ${statusConfig.class}`;
@@ -1867,6 +2374,9 @@
         // Mise à jour du graphique
         function updatePhaseChart(phases) {
             const ctx = document.getElementById('phaseChart').getContext('2d');
+            const avgEl = document.getElementById('chartAvgProgress');
+            const topPhaseEl = document.getElementById('chartTopPhase');
+            const topValueEl = document.getElementById('chartTopValue');
             
             if (phaseChart) {
                 phaseChart.destroy();
@@ -1874,43 +2384,91 @@
 
             if (!phases || phases.length === 0) {
                 ctx.canvas.style.display = 'none';
+                if (avgEl) avgEl.textContent = '-';
+                if (topPhaseEl) topPhaseEl.textContent = '-';
+                if (topValueEl) topValueEl.textContent = '-';
                 return;
             }
 
             ctx.canvas.style.display = 'block';
+            const normalized = phases.map((phase) => ({
+                name: phase.name || 'Phase',
+                progress: Math.max(0, Math.min(100, Number(phase.progress) || 0))
+            }));
+            const total = normalized.reduce((sum, item) => sum + item.progress, 0);
+            const avg = Math.round(total / normalized.length);
+            const top = normalized.reduce((best, item) => (item.progress > best.progress ? item : best), normalized[0]);
+            if (avgEl) avgEl.textContent = `${avg}%`;
+            if (topPhaseEl) topPhaseEl.textContent = top?.name || '-';
+            if (topValueEl) topValueEl.textContent = top ? `${top.progress}%` : '-';
+
+            const gradient = ctx.createLinearGradient(0, 0, 0, 220);
+            gradient.addColorStop(0, 'rgba(13, 148, 136, 0.95)');
+            gradient.addColorStop(1, 'rgba(37, 99, 235, 0.72)');
 
             phaseChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: phases.map(p => p.name),
+                    labels: normalized.map((p) => p.name),
                     datasets: [{
                         label: 'Progression (%)',
-                        data: phases.map(p => p.progress || 0),
-                        backgroundColor: 'rgba(13, 148, 136, 0.8)',
-                        borderRadius: 6,
-                        borderSkipped: false
+                        data: normalized.map((p) => p.progress),
+                        backgroundColor: gradient,
+                        borderColor: 'rgba(15, 118, 110, 0.7)',
+                        borderWidth: 1,
+                        borderRadius: 10,
+                        borderSkipped: false,
+                        barPercentage: 0.68,
+                        categoryPercentage: 0.72,
+                        hoverBackgroundColor: 'rgba(13, 148, 136, 0.88)'
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    animation: {
+                        duration: 850,
+                        easing: 'easeOutCubic'
+                    },
                     plugins: {
                         legend: { display: false },
                         tooltip: {
+                            backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                            titleColor: '#ffffff',
+                            bodyColor: '#e2e8f0',
+                            borderColor: 'rgba(37, 99, 235, 0.35)',
+                            borderWidth: 1,
+                            padding: 10,
+                            displayColors: false,
                             callbacks: {
-                                label: (context) => `${context.raw}%`
+                                title: (items) => `Phase: ${items?.[0]?.label || '-'}`,
+                                label: (context) => `Progression: ${context.raw}%`
                             }
                         }
+                    },
+                    layout: {
+                        padding: { top: 6, right: 4, left: 2, bottom: 0 }
                     },
                     scales: {
                         y: {
                             beginAtZero: true,
                             max: 100,
-                            grid: { color: 'rgba(0,0,0,0.05)' },
-                            ticks: { stepSize: 20 }
+                            grid: { color: 'rgba(148, 163, 184, 0.22)', drawBorder: false },
+                            ticks: {
+                                stepSize: 20,
+                                color: '#64748b',
+                                font: { size: 11, weight: '600' },
+                                callback: (value) => `${value}%`
+                            }
                         },
                         x: {
-                            grid: { display: false }
+                            grid: { display: false, drawBorder: false },
+                            ticks: {
+                                color: '#475569',
+                                font: { size: 11, weight: '600' },
+                                maxRotation: 0,
+                                autoSkip: true
+                            }
                         }
                     }
                 }
@@ -1993,6 +2551,18 @@
                     `${lastMessage.sender || 'Message'}: ${lastMessage.text || ''}`;
                 document.getElementById('lastMessageTime').textContent = formatDateTime(lastMessage.timestamp);
             }
+
+            if (uxSuite && unreadMessages.length > 0) {
+                uxSuite.notify({
+                    id: `client-dashboard-unread-${unreadMessages.length}`,
+                    title: 'Messages non lus',
+                    message: `Vous avez ${unreadMessages.length} message(s) non lu(s).`,
+                    type: 'message',
+                    priority: unreadMessages.length >= 3 ? 'high' : 'medium',
+                    tags: ['message'],
+                    url: './chat.html?unread=1'
+                });
+            }
         }
 
         // Mise à jour des tickets
@@ -2023,31 +2593,83 @@
         }
 
         // Mise à jour des échéances
-        function updateMilestones(phases) {
+        function updateMilestones(phases, adminEvents = []) {
             const container = document.getElementById('upcomingMilestones');
+            const today = new Date();
+            const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+            const daysUntil = (dateValue) => {
+                const d = new Date(dateValue);
+                const start = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+                return Math.floor((start - startOfToday) / (24 * 60 * 60 * 1000));
+            };
+            const reminderText = (daysLeft) => {
+                if (daysLeft < 0) return `Délai dépassé (${Math.abs(daysLeft)}j)`;
+                if (daysLeft === 0) return 'Deadline aujourd\'hui';
+                if (daysLeft <= 3) return `Rappel auto J-${daysLeft}`;
+                return '';
+            };
             
-            if (!phases || phases.length === 0) {
+            if ((!phases || phases.length === 0) && (!adminEvents || adminEvents.length === 0)) {
                 container.innerHTML = '<p class="empty-state">Aucune échéance</p>';
                 return;
             }
 
-            const milestones = phases
-                .filter(p => p.endDate)
-                .sort((a, b) => new Date(a.endDate) - new Date(b.endDate))
-                .slice(0, 4);
+            const phaseMilestones = (phases || [])
+                .filter((p) => p.endDate)
+                .map((p) => ({
+                    kind: 'phase',
+                    title: p.name || 'Phase',
+                    date: p.endDate,
+                    status: p.status,
+                    reminder: reminderText(daysUntil(p.endDate))
+                }));
 
-            container.innerHTML = milestones.map(phase => {
-                const status = getStatusConfig(phase.status);
+            const eventMilestones = (adminEvents || [])
+                .filter((event) => event.date && String(event.type || '').toLowerCase() === 'deadline')
+                .map((event) => ({
+                    kind: 'event',
+                    title: event.title || 'Deadline',
+                    date: event.date,
+                    status: 'warning',
+                    reminder: reminderText(daysUntil(event.date))
+                }));
+
+            const milestones = [...phaseMilestones, ...eventMilestones]
+                .sort((a, b) => new Date(a.date) - new Date(b.date))
+                .slice(0, 4);
+            const reminders = milestones.filter((item) => item.reminder);
+            const reminderKey = reminders.map((item) => `${item.kind}:${item.title}:${item.date}:${item.reminder}`).join('|');
+
+            if (reminders.length > 0 && reminderKey !== lastDeadlineReminderKey) {
+                lastDeadlineReminderKey = reminderKey;
+                showNotification(`${reminders.length} rappel(s) délai actif(s) (J-3).`, 'warning');
+                if (uxSuite) {
+                    uxSuite.notify({
+                        id: `client-deadline-reminder-${reminderKey}`,
+                        title: 'Rappel échéance',
+                        message: `${reminders.length} deadline(s) proche(s) ou dépassée(s).`,
+                        type: 'deadline',
+                        priority: 'deadline',
+                        tags: ['deadline'],
+                        url: './calendar.html?deadline=soon'
+                    });
+                }
+            }
+
+            container.innerHTML = milestones.map((item) => {
+                const status = getStatusConfig(item.status);
+                const statusLabel = item.kind === 'event' ? 'Deadline admin' : status.label;
                 return `
                     <div class="milestone-item">
                         <div class="milestone-info">
-                            <h4>${phase.name}</h4>
+                            <h4>${item.title}</h4>
                             <p>
                                 <span class="material-icons">event</span>
-                                ${formatDate(phase.endDate)}
+                                ${formatDate(item.date)}
                             </p>
+                            ${item.reminder ? `<p class="milestone-reminder-note"><span class="material-icons" style="font-size:14px;">notifications_active</span>${item.reminder}</p>` : ''}
                         </div>
-                        <span class="phase-status ${status.class}">${status.label}</span>
+                        <span class="phase-status ${status.class}">${statusLabel}</span>
                     </div>
                 `;
             }).join('');
@@ -2147,6 +2769,79 @@
 
         // Gestionnaires d'événements
         function setupEventListeners() {
+            const noteInput = document.getElementById('quickNoteInput');
+            const noteState = document.getElementById('quickNoteState');
+            const clearQuickNoteBtn = document.getElementById('clearQuickNoteBtn');
+            const copySummaryBtn = document.getElementById('copySummaryBtn');
+            const toggleVibrantBtn = document.getElementById('toggleVibrantBtn');
+            const toggleFocusBtn = document.getElementById('toggleFocusBtn');
+            const refreshDashboardBtn = document.getElementById('refreshDashboardBtn');
+
+            if (noteInput) {
+                noteInput.addEventListener('input', () => {
+                    localStorage.setItem(DASHBOARD_NOTE_KEY, noteInput.value || '');
+                    if (noteState) noteState.textContent = 'Sauvegardé';
+                });
+                noteInput.addEventListener('blur', () => {
+                    if (noteState) noteState.textContent = 'Note sauvegardée localement';
+                });
+            }
+
+            if (clearQuickNoteBtn) {
+                clearQuickNoteBtn.addEventListener('click', () => {
+                    if (noteInput) noteInput.value = '';
+                    localStorage.removeItem(DASHBOARD_NOTE_KEY);
+                    if (noteState) noteState.textContent = 'Note effacée';
+                    showNotification('Note rapide supprimée.', 'info');
+                });
+            }
+
+            if (copySummaryBtn) {
+                copySummaryBtn.addEventListener('click', async () => {
+                    const summary = [
+                        `Projet: ${document.getElementById('projectName')?.textContent?.trim() || '-'}`,
+                        `Statut: ${document.getElementById('projectStatusPill')?.textContent?.trim().replace(/\s+/g, ' ') || '-'}`,
+                        `Progression: ${document.getElementById('projectProgress')?.textContent?.trim() || '-'}`,
+                        `Responsable: ${document.getElementById('projectManager')?.textContent?.trim() || '-'}`,
+                        `Fin prévue: ${document.getElementById('endDate')?.textContent?.trim() || '-'}`,
+                        `Messages non lus: ${document.getElementById('unreadMessagesCount')?.textContent?.trim() || '0'}`,
+                        `Tickets ouverts: ${document.getElementById('openTicketsCount')?.textContent?.trim() || '0'}`
+                    ].join('\n');
+
+                    try {
+                        await navigator.clipboard.writeText(summary);
+                        showNotification('Résumé projet copié dans le presse-papiers.', 'success');
+                    } catch {
+                        showNotification('Copie impossible sur ce navigateur.', 'warning');
+                    }
+                });
+            }
+
+            if (toggleVibrantBtn) {
+                toggleVibrantBtn.addEventListener('click', () => {
+                    const active = !document.body.classList.contains('vibrant-mode');
+                    document.body.classList.toggle('vibrant-mode', active);
+                    localStorage.setItem(DASHBOARD_VIBRANT_KEY, active ? '1' : '0');
+                    showNotification(active ? 'Mode vibrant activé.' : 'Mode vibrant désactivé.', 'info');
+                });
+            }
+
+            if (toggleFocusBtn) {
+                toggleFocusBtn.addEventListener('click', () => {
+                    const active = !document.body.classList.contains('focus-mode');
+                    document.body.classList.toggle('focus-mode', active);
+                    localStorage.setItem(DASHBOARD_FOCUS_KEY, active ? '1' : '0');
+                    showNotification(active ? 'Mode focus activé.' : 'Mode focus désactivé.', 'info');
+                });
+            }
+
+            if (refreshDashboardBtn) {
+                refreshDashboardBtn.addEventListener('click', async () => {
+                    await loadDashboardData();
+                    showNotification('Dashboard actualisé.', 'success');
+                });
+            }
+
             // Menu mobile
             const mobileMenuBtn = document.getElementById('mobileMenuBtn');
             const sidebar = document.getElementById('sidebar');
@@ -2163,9 +2858,7 @@
             
             const handleSearch = () => {
                 const query = searchInput.value.trim();
-                if (query) {
-                    showNotification(`Recherche "${query}" en préparation`, 'info');
-                }
+                navigateFromQuery(query);
             };
 
             if (searchBtn) {
@@ -2183,23 +2876,7 @@
             // Déconnexion
             const logoutBtn = document.getElementById('logoutBtn');
             if (logoutBtn) {
-                logoutBtn.addEventListener('click', () => {
-                    if (window.ClientUIHelpers?.showConfirmDialog) {
-                        window.ClientUIHelpers.showConfirmDialog(
-                            'Confirmer la déconnexion',
-                            'Voulez-vous vraiment vous déconnecter ?',
-                            () => {
-                                clientAuthService.logout();
-                                window.location.href = './login.html';
-                            }
-                        );
-                        return;
-                    }
-                    if (confirm('Voulez-vous vraiment vous déconnecter ?')) {
-                        clientAuthService.logout();
-                        window.location.href = './login.html';
-                    }
-                });
+                logoutBtn.addEventListener('click', handleLogoutClick);
             }
 
             // Fermeture du clic en dehors du modal
@@ -2208,6 +2885,23 @@
                     closeImageModal();
                 }
             });
+        }
+
+        function handleLogoutClick() {
+            openLogoutConfirmModal();
+        }
+
+        function openLogoutConfirmModal() {
+            document.getElementById('logoutConfirmModal')?.classList.add('open');
+        }
+
+        function closeLogoutConfirmModal() {
+            document.getElementById('logoutConfirmModal')?.classList.remove('open');
+        }
+
+        function confirmLogout() {
+            clientAuthService.logout();
+            window.location.href = './login.html';
         }
 
         // Fonctions du modal image
@@ -2256,6 +2950,15 @@
                 performDownload();
             }
         };
+
+        window.closeLogoutConfirmModal = closeLogoutConfirmModal;
+        window.confirmLogout = confirmLogout;
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                closeLogoutConfirmModal();
+            }
+        });
     </script>
 </body>
 </html>

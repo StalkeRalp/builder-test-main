@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Créer Admin - TDE Group</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --bg-deco-a: #e0f2fe;
+      --bg-deco-b: #dcfce7;
+      --surface: #ffffff;
+      --surface-soft: #f8fafc;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --accent: #0d9488;
+      --danger: #dc2626;
+      --success: #16a34a;
+      --warning: #f59e0b;
+      --radius: 16px;
+      --shadow: 0 14px 32px rgba(15, 23, 42, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+    body.auth-pending { visibility: hidden; }
+    body {
+      margin: 0;
+      font-family: 'Outfit', system-ui, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(900px 500px at -10% -10%, var(--bg-deco-a), transparent 55%),
+        radial-gradient(700px 400px at 110% -10%, var(--bg-deco-b), transparent 50%),
+        var(--bg);
+      min-height: 100vh;
+    }
+
+    .app {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      min-height: 100vh;
+    }
+
+    .side {
+      background: linear-gradient(165deg, #0f172a 0%, #1e293b 45%, #0d9488 100%);
+      color: #fff;
+      padding: 22px 16px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+    .brand img { width: 34px; height: 34px; object-fit: contain; }
+    .brand strong { font-family: 'Space Grotesk', sans-serif; letter-spacing: 0.4px; }
+
+    .scope-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid rgba(255,255,255,0.24);
+      background: rgba(255,255,255,0.12);
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      margin-bottom: 16px;
+    }
+
+    .nav { display: grid; gap: 8px; }
+
+    .nav a, .nav button {
+      all: unset;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      color: rgba(255,255,255,0.92);
+      font-size: 14px;
+      border: 1px solid transparent;
+    }
+
+    .nav a:hover, .nav button:hover, .nav .active {
+      background: rgba(255,255,255,0.12);
+      border-color: rgba(255,255,255,0.2);
+    }
+
+    .main {
+      padding: 20px;
+      display: grid;
+      gap: 14px;
+      align-content: start;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .topbar {
+      background: rgba(255,255,255,0.82);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      backdrop-filter: blur(8px);
+    }
+
+    .topbar h1 {
+      margin: 0;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.22rem;
+      letter-spacing: 0.2px;
+    }
+
+    .muted { color: var(--muted); }
+
+    .btn {
+      border: 1px solid var(--border);
+      background: #fff;
+      border-radius: 11px;
+      padding: 8px 11px;
+      font-weight: 700;
+      color: #334155;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn.primary {
+      border: none;
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent), #0f766e);
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 12px;
+    }
+
+    .panel { padding: 16px; }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      gap: 10px;
+    }
+
+    .panel-head h2, .panel-head h3 {
+      margin: 0;
+      font-size: 1.02rem;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .field-grid {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .field { display: grid; gap: 6px; }
+
+    .field.full { grid-column: 1 / -1; }
+
+    .field label {
+      font-size: 13px;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px;
+      font-size: 14px;
+      font-family: inherit;
+      background: #fff;
+    }
+
+    .input-with-action {
+      position: relative;
+    }
+
+    .input-with-action input {
+      padding-right: 42px;
+    }
+
+    .toggle-visibility {
+      position: absolute;
+      top: 50%;
+      right: 6px;
+      transform: translateY(-50%);
+      width: 30px;
+      height: 30px;
+      border: 0;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--muted);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .toggle-visibility:hover {
+      color: var(--accent);
+      background: #f0fdfa;
+    }
+
+    .toggle-visibility:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 1px;
+    }
+
+    .toggle-visibility .material-icons {
+      font-size: 18px;
+      pointer-events: none;
+    }
+
+    .result {
+      margin-top: 10px;
+      border-radius: 11px;
+      border: 1px solid;
+      padding: 11px;
+      font-size: 13px;
+      display: none;
+    }
+
+    .result.success { background: #ecfdf5; border-color: #bbf7d0; color: #166534; }
+    .result.warning { background: #fffbeb; border-color: #fde68a; color: #92400e; }
+    .result.error { background: #fef2f2; border-color: #fecaca; color: #991b1b; }
+
+    .tips {
+      display: grid;
+      gap: 8px;
+    }
+
+    .tip {
+      border: 1px solid var(--border);
+      background: var(--surface-soft);
+      border-radius: 10px;
+      padding: 10px;
+      font-size: 13px;
+      color: #334155;
+    }
+
+    .tip strong { display: block; margin-bottom: 4px; }
+
+    .toast {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      background: #0f172a;
+      color: #fff;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 13px;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: all .25s ease;
+      z-index: 200;
+      pointer-events: none;
+    }
+
+    .toast.show { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 980px) {
+      .app { grid-template-columns: 1fr; }
+      .side { position: relative; height: auto; }
+      .layout { grid-template-columns: 1fr; }
+      .field-grid { grid-template-columns: 1fr; }
+      .topbar { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body class="auth-pending">
+  <div class="app">
+    <aside class="side">
+      <div class="brand">
+        <img src="/logo.png" alt="TDE Group">
+        <strong>TDE GROUP</strong>
+      </div>
+      <div class="scope-pill">
+        <span class="material-icons" style="font-size:14px;">shield</span>
+        <span>Zone Super Admin</span>
+      </div>
+
+      <nav class="nav">
+        <a href="dashboard.html"><span class="material-icons">dashboard</span><span>Control Room</span></a>
+        <a href="create-admin.html" class="active"><span class="material-icons">person_add</span><span>Créer Admin</span></a>
+        <a href="/admin/index.html"><span class="material-icons">domain</span><span>Pôle Admin</span></a>
+        <a href="/admin/clients.html"><span class="material-icons">groups</span><span>Clients CRM</span></a>
+        <button type="button" id="logoutBtn"><span class="material-icons">logout</span><span>Déconnexion</span></button>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <section class="topbar card">
+        <div>
+          <h1>Création d'admin</h1>
+          <div class="muted">Création sécurisée avec contrôle anti-spam et gestion des comptes existants.</div>
+        </div>
+        <div>
+          <button type="button" class="btn" id="goDashboardBtn"><span class="material-icons" style="font-size:17px;">arrow_back</span>Retour dashboard</button>
+        </div>
+      </section>
+
+      <section class="layout">
+        <article class="card panel">
+          <div class="panel-head">
+            <h2>Nouveau compte admin</h2>
+          </div>
+
+          <form id="createAdminForm" novalidate>
+            <div class="field-grid">
+              <div class="field full">
+                <label for="name">Nom complet</label>
+                <input type="text" id="name" value="Administrator" required>
+              </div>
+
+              <div class="field">
+                <label for="email">Email</label>
+                <input type="email" id="email" value="admin@tde-construction.com" required>
+              </div>
+
+              <div class="field">
+                <label for="role">Rôle</label>
+                <select id="role" required>
+                  <option value="admin">Admin</option>
+                  <option value="superadmin">Super Admin</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="password">Mot de passe</label>
+                <div class="input-with-action">
+                  <input type="password" id="password" value="Admin@2026!" minlength="8" required>
+                  <button
+                    type="button"
+                    class="toggle-visibility"
+                    data-toggle-target="password"
+                    aria-label="Afficher le mot de passe"
+                    aria-pressed="false"
+                  >
+                    <span class="material-icons">visibility</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="confirmPassword">Confirmer le mot de passe</label>
+                <div class="input-with-action">
+                  <input type="password" id="confirmPassword" value="Admin@2026!" minlength="8" required>
+                  <button
+                    type="button"
+                    class="toggle-visibility"
+                    data-toggle-target="confirmPassword"
+                    aria-label="Afficher la confirmation du mot de passe"
+                    aria-pressed="false"
+                  >
+                    <span class="material-icons">visibility</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div style="margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap;">
+              <button type="submit" id="createBtn" class="btn primary"><span class="material-icons" style="font-size:17px;">person_add</span>Créer le compte</button>
+              <button type="button" id="resetBtn" class="btn"><span class="material-icons" style="font-size:17px;">restart_alt</span>Réinitialiser</button>
+            </div>
+          </form>
+
+          <div id="result" class="result"></div>
+        </article>
+
+        <article class="card panel">
+          <div class="panel-head">
+            <h3>Bonnes pratiques</h3>
+          </div>
+          <div class="tips">
+            <div class="tip">
+              <strong>Éviter le rate limit</strong>
+              Ne cliquez qu'une seule fois sur créer. Le bouton est bloqué pendant l'envoi.
+            </div>
+            <div class="tip">
+              <strong>Compte déjà existant</strong>
+              Si l'email s'est déjà authentifié, la page le promeut en admin et récupère son nom automatiquement.
+            </div>
+            <div class="tip">
+              <strong>Sécurité session</strong>
+              Si Supabase bascule la session sur le compte créé, une reconnexion superadmin est demandée.
+            </div>
+          </div>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script type="module">
+    import AuthService from '../src/auth-service.js';
+    import SuperAdminService from '../src/superadmin-service.js';
+    import superadminStealth from '../src/superadmin-stealth.js';
+
+    const form = document.getElementById('createAdminForm');
+    const nameInput = document.getElementById('name');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('confirmPassword');
+    const roleInput = document.getElementById('role');
+    const resultBox = document.getElementById('result');
+    const createBtn = document.getElementById('createBtn');
+    const visibilityToggles = Array.from(document.querySelectorAll('[data-toggle-target]'));
+
+    function setResult(type, message) {
+      resultBox.className = `result ${type}`;
+      resultBox.textContent = message;
+      resultBox.style.display = 'block';
+    }
+
+    function clearResult() {
+      resultBox.className = 'result';
+      resultBox.textContent = '';
+      resultBox.style.display = 'none';
+    }
+
+    function toast(message) {
+      const el = document.getElementById('toast');
+      if (!el) return;
+      el.textContent = message;
+      el.classList.add('show');
+      window.clearTimeout(window.__saCreateToastTimer);
+      window.__saCreateToastTimer = window.setTimeout(() => el.classList.remove('show'), 2200);
+    }
+
+    function setSubmitting(active) {
+      createBtn.disabled = active;
+      createBtn.innerHTML = active
+        ? '<span class="material-icons" style="font-size:17px;">hourglass_top</span>Création...'
+        : '<span class="material-icons" style="font-size:17px;">person_add</span>Créer le compte';
+    }
+
+    function notifyAdminCreated(admin) {
+      try {
+        localStorage.setItem('superadmin_admin_created_event_v1', JSON.stringify({
+          timestamp: new Date().toISOString(),
+          admin: {
+            id: admin?.id || '',
+            email: admin?.email || '',
+            full_name: admin?.full_name || '',
+            role: admin?.role || 'admin',
+            created_at: new Date().toISOString()
+          }
+        }));
+      } catch {
+        // ignore storage errors
+      }
+    }
+
+    visibilityToggles.forEach((toggleBtn) => {
+      const targetId = toggleBtn.getAttribute('data-toggle-target');
+      const targetInput = document.getElementById(targetId);
+      if (!targetInput) return;
+
+      toggleBtn.addEventListener('click', () => {
+        const hidden = targetInput.type === 'password';
+        targetInput.type = hidden ? 'text' : 'password';
+        toggleBtn.setAttribute('aria-pressed', hidden ? 'true' : 'false');
+
+        const label = targetId === 'confirmPassword'
+          ? 'la confirmation du mot de passe'
+          : 'le mot de passe';
+        toggleBtn.setAttribute('aria-label', hidden ? `Masquer ${label}` : `Afficher ${label}`);
+        toggleBtn.querySelector('.material-icons').textContent = hidden ? 'visibility_off' : 'visibility';
+      });
+    });
+
+    async function initialize() {
+      try {
+        if (!superadminStealth.ensureStealthOrRedirect({ redirectTo: '/client/login.html' })) {
+          return;
+        }
+        await AuthService.authReady;
+        if (!AuthService.isSuperAdmin || !AuthService.isSuperAdmin()) {
+          window.location.href = 'login.html';
+          return;
+        }
+        document.body.classList.remove('auth-pending');
+        if (typeof navigator !== 'undefined' && navigator.onLine === false) {
+          setResult('warning', 'Connexion Internet indisponible. La création admin est temporairement bloquée.');
+        }
+      } catch {
+        window.location.href = 'login.html';
+      }
+    }
+
+    window.addEventListener('offline', () => {
+      setResult('warning', 'Connexion perdue. Reconnectez Internet avant de créer un compte.');
+    });
+
+    window.addEventListener('online', () => {
+      clearResult();
+      toast('Connexion rétablie.');
+    });
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      clearResult();
+
+      const fullName = String(nameInput.value || '').trim();
+      const email = String(emailInput.value || '').trim();
+      const password = String(passwordInput.value || '');
+      const confirmPassword = String(confirmPasswordInput.value || '');
+      const role = String(roleInput.value || 'admin');
+
+      if (!fullName || !email || !password || !confirmPassword) {
+        setResult('error', 'Veuillez remplir tous les champs.');
+        return;
+      }
+      if (password.length < 8) {
+        setResult('error', 'Le mot de passe doit contenir au moins 8 caractères.');
+        return;
+      }
+      if (password !== confirmPassword) {
+        setResult('error', 'Le mot de passe et sa confirmation ne correspondent pas.');
+        return;
+      }
+      if (typeof navigator !== 'undefined' && navigator.onLine === false) {
+        setResult('error', 'Aucune connexion Internet. Réessayez après rétablissement du réseau.');
+        return;
+      }
+
+      try {
+        setSubmitting(true);
+        const result = await SuperAdminService.createAdmin({ fullName, email, password, role });
+        const status = String(result?.status || 'created');
+
+        if (status === 'already_exists') {
+          setResult('warning', `Compte déjà existant et valide: ${result.email}.`);
+          toast('Aucune recréation nécessaire.');
+        } else if (status === 'promoted_existing_auth_user') {
+          setResult('success', `Compte authentifié promu en ${result.role}: ${result.email} (${result.full_name || 'Nom récupéré'}).`);
+          toast('Promotion depuis authentification réussie.');
+        } else if (status === 'recovered_after_rate_limit') {
+          setResult('success', `Compte validé malgré la limite email: ${result.email}.`);
+          toast('Récupération réussie.');
+        } else if (status === 'updated_existing_admin') {
+          setResult('success', `Compte admin existant mis à jour: ${result.email}.`);
+          toast('Profil admin mis à jour.');
+        } else if (status === 'promoted_existing_profile') {
+          setResult('success', `Profil existant promu en ${result.role}: ${result.email}.`);
+          toast('Promotion réussie.');
+        } else {
+          setResult('success', `Admin créé avec succès. ID: ${result.id}`);
+          toast('Compte admin créé.');
+        }
+
+        notifyAdminCreated({
+          id: result?.id,
+          email: result?.email || email,
+          full_name: result?.full_name || fullName,
+          role: result?.role || role
+        });
+
+        if (status === 'created') {
+          nameInput.value = '';
+          emailInput.value = '';
+          passwordInput.value = '';
+          confirmPasswordInput.value = '';
+          roleInput.value = 'admin';
+        }
+      } catch (error) {
+        const message = error?.message || 'Création admin impossible.';
+        setResult('error', message);
+        toast('Erreur de création.');
+      } finally {
+        setSubmitting(false);
+      }
+    });
+
+    document.getElementById('resetBtn')?.addEventListener('click', () => {
+      nameInput.value = 'Administrator';
+      emailInput.value = 'admin@tde-construction.com';
+      passwordInput.value = 'Admin@2026!';
+      confirmPasswordInput.value = 'Admin@2026!';
+      roleInput.value = 'admin';
+      clearResult();
+    });
+
+    document.getElementById('goDashboardBtn')?.addEventListener('click', () => {
+      window.location.href = 'dashboard.html';
+    });
+
+    document.getElementById('logoutBtn')?.addEventListener('click', async () => {
+      superadminStealth.clearStealthRecord();
+      await AuthService.logout();
+    });
+
+    window.addEventListener('load', initialize);
+  </script>
+</body>
+</html>

@@ -34,6 +34,14 @@
             box-sizing: border-box;
         }
 
+        body.auth-pending {
+            visibility: hidden;
+        }
+
+        body.auth-ready {
+            visibility: visible;
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
             background: #f1f5f9;
@@ -239,6 +247,10 @@
             border: 1px solid transparent;
         }
 
+        .kpi-card.clickable {
+            cursor: pointer;
+        }
+
         .kpi-card:hover {
             transform: translateY(-4px);
             box-shadow: var(--shadow-lg);
@@ -330,6 +342,13 @@
 
         .panel-link:hover {
             text-decoration: underline;
+        }
+
+        .panel-link-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
         }
 
         .inbox-widget {
@@ -574,6 +593,12 @@
         .timeline-dot { width: 10px; height: 10px; border-radius: 999px; background: var(--primary); margin-top: 6px; box-shadow: 0 0 0 4px rgba(13,148,136,0.12); }
         .timeline-meta { font-size: 12px; color: var(--gray); margin-top: 4px; }
 
+        .clickable-row {
+            text-decoration: none;
+            color: inherit;
+            cursor: pointer;
+        }
+
         .item-title {
             font-weight: 600;
             font-size: 14px;
@@ -585,6 +610,25 @@
             font-size: 12px;
             color: var(--gray);
             margin-top: 4px;
+        }
+
+        .deadline-reminder-row {
+            border-color: #fecaca;
+            background: #fff7f7;
+        }
+
+        .deadline-reminder-note {
+            margin-top: 6px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #b91c1c;
+            background: #fee2e2;
+            border: 1px solid #fecaca;
+            border-radius: 999px;
+            padding: 4px 10px;
         }
 
         /* Animations */
@@ -624,7 +668,7 @@
         }
     </style>
 </head>
-<body>
+<body class="auth-pending">
     <div class="sidebar">
         <div class="sidebar-logo"><img src="../logo.png" alt="TDE Group"><div class="logo-text"><span>TDE GROUP</span><small>TOGETHER WE MAKE IT!</small></div></div>
         <nav class="sidebar-menu">
@@ -733,7 +777,7 @@
                                 <span>Créer en 1 minute</span>
                             </div>
                         </a>
-                        <a class="action-tile" href="messages.html">
+                        <a class="action-tile" href="messages.html?unread=1">
                             <div class="action-icon" style="background:var(--secondary);">
                                 <span class="material-icons">mail</span>
                                 <span class="action-badge" id="badgeMessages">0</span>
@@ -743,7 +787,7 @@
                                 <span>Répondre vite</span>
                             </div>
                         </a>
-                        <a class="action-tile" href="tickets.html">
+                        <a class="action-tile" href="tickets.html?status=open">
                             <div class="action-icon" style="background:var(--warning);">
                                 <span class="material-icons">support_agent</span>
                                 <span class="action-badge" id="badgeTickets">0</span>
@@ -791,7 +835,7 @@
 
             <!-- KPI Cards -->
             <div class="kpi-grid">
-                <div class="kpi-card">
+                <div class="kpi-card clickable" onclick="openProjectStatus('')" title="Voir tous les projets">
                     <div>
                         <div class="kpi-label">Total projets</div>
                         <div class="kpi-value" id="kpiTotal">0</div>
@@ -799,7 +843,7 @@
                     </div>
                     <div class="kpi-icon" style="background:var(--secondary);"><span class="material-icons">folder</span></div>
                 </div>
-                <div class="kpi-card">
+                <div class="kpi-card clickable" onclick="openProjectStatus('in_progress')" title="Filtrer les projets en cours">
                     <div>
                         <div class="kpi-label">En cours</div>
                         <div class="kpi-value" id="kpiInProgress">0</div>
@@ -807,7 +851,7 @@
                     </div>
                     <div class="kpi-icon" style="background:var(--success);"><span class="material-icons">play_arrow</span></div>
                 </div>
-                <div class="kpi-card">
+                <div class="kpi-card clickable" onclick="openProjectStatus('paused')" title="Filtrer les projets en pause">
                     <div>
                         <div class="kpi-label">En pause</div>
                         <div class="kpi-value" id="kpiPaused">0</div>
@@ -815,7 +859,7 @@
                     </div>
                     <div class="kpi-icon" style="background:var(--warning);"><span class="material-icons">pause</span></div>
                 </div>
-                <div class="kpi-card">
+                <div class="kpi-card clickable" onclick="focusAlerts()" title="Voir les projets en retard">
                     <div>
                         <div class="kpi-label">En retard</div>
                         <div class="kpi-value" id="kpiOverdue">0</div>
@@ -823,7 +867,7 @@
                     </div>
                     <div class="kpi-icon" style="background:var(--danger);"><span class="material-icons">warning</span></div>
                 </div>
-                <div class="kpi-card">
+                <div class="kpi-card clickable" onclick="window.location.href='reports.html'" title="Ouvrir les rapports">
                     <div>
                         <div class="kpi-label">Budget total</div>
                         <div class="kpi-value" id="kpiBudget">FCFA 0</div>
@@ -831,7 +875,7 @@
                     </div>
                     <div class="kpi-icon" style="background:var(--primary-dark);"><span class="material-icons">payments</span></div>
                 </div>
-                <div class="kpi-card">
+                <div class="kpi-card clickable" onclick="window.location.href='reports.html'" title="Ouvrir les indicateurs de performance">
                     <div>
                         <div class="kpi-label">Progression moyenne</div>
                         <div class="kpi-value" id="kpiAvgProgress">0%</div>
@@ -852,6 +896,7 @@
                                 <div class="panel-subtitle">Par statut d'avancement</div>
                             </div>
                             <div class="panel-actions">
+                                <button type="button" class="panel-link panel-link-btn" onclick="scrollToProjectsPanel()">Voir la liste</button>
                                 <select id="chartPeriod" class="filter-group" style="padding: 6px;">
                                     <option value="month">Ce mois</option>
                                     <option value="quarter">Ce trimestre</option>
@@ -865,7 +910,7 @@
                     </div>
 
                     <!-- Projects Panel -->
-                    <div class="panel">
+                    <div class="panel" id="projectsPanel">
                         <div class="panel-header">
                             <div>
                                 <div class="panel-title">Projets récents</div>
@@ -944,6 +989,7 @@
                                 <div class="panel-title">Alertes & priorités</div>
                                 <div class="panel-subtitle">Échéances critiques</div>
                             </div>
+                            <a href="#alertsList" class="panel-link">Focus</a>
                             <span class="project-status in_progress" id="alertCount">0</span>
                         </div>
                         <div id="alertsList" class="alert-list"></div>
@@ -956,7 +1002,7 @@
                                 <div class="panel-title">Messages récents</div>
                                 <div class="panel-subtitle">Derniers échanges clients</div>
                             </div>
-                            <a href="messages.html" class="panel-link">Voir tout</a>
+                            <a href="messages.html?unread=1" class="panel-link">Voir tout</a>
                         </div>
                         <div id="messagesList" class="messages-list"></div>
                     </div>
@@ -968,7 +1014,7 @@
                                 <div class="panel-title">Tickets urgents</div>
                                 <div class="panel-subtitle">Priorité élevée ou ouverte</div>
                             </div>
-                            <a href="tickets.html" class="panel-link">Voir tout</a>
+                            <a href="tickets.html?status=open" class="panel-link">Voir tout</a>
                         </div>
                         <div id="ticketsList" class="tickets-list"></div>
                     </div>
@@ -980,6 +1026,7 @@
                                 <div class="panel-title">Prochaines dates</div>
                                 <div class="panel-subtitle">À surveiller ce mois</div>
                             </div>
+                            <a href="calendar.html" class="panel-link">Calendrier</a>
                         </div>
                         <div id="deadlinesList" class="deadline-list"></div>
                     </div>
@@ -990,6 +1037,7 @@
                                 <div class="panel-title">Timeline projets</div>
                                 <div class="panel-subtitle">Débuts et fins à venir</div>
                             </div>
+                            <a href="calendar.html" class="panel-link">Planning</a>
                         </div>
                         <div id="timelineList" class="timeline-list"></div>
                     </div>
@@ -1001,6 +1049,7 @@
                                 <div class="panel-title">Performance</div>
                                 <div class="panel-subtitle">Indicateurs clés</div>
                             </div>
+                            <a href="reports.html" class="panel-link">Rapports</a>
                         </div>
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
                             <div>
@@ -1020,30 +1069,54 @@
         </div>
     </div>
 
+    <script src="../src/ux-productivity-suite.js"></script>
     <script type="module">
         import AuthService from '../src/auth-service.js';
         import ProjectStore from '../src/data-store.js';
         import TicketService from '../src/ticket-service.js';
         import ChatService from '../src/chat-service.js';
         import { initAdminAvatar } from '../src/admin-avatar.js';
+        import adminEventsService from '../src/admin-events-service.js';
 
         let allProjects = [];
         let filteredProjects = [];
         let statusChart = null;
         let currentPage = 1;
+        let unsubscribeAdminEvents = null;
+        let lastDeadlineReminderKey = '';
+        let hasAppliedUrlFilters = false;
+        let uxSuite = null;
         const itemsPerPage = 5;
 
         async function initialize() {
             try {
                 await AuthService.authReady;
-                if (!AuthService.currentUser) {
+                if (!AuthService.isAdmin || !AuthService.isAdmin()) {
                     window.location.href = 'login.html';
                     return;
                 }
+                document.body.classList.remove('auth-pending');
+                document.body.classList.add('auth-ready');
+                uxSuite = window.UXProductivitySuite?.init({
+                    scope: 'admin-dashboard',
+                    headerRightSelector: '.header-right',
+                    searchInputSelector: '#searchInput',
+                    onSearch: (query) => navigateFromQuery(query),
+                    commands: [
+                        { label: 'Nouveau projet', help: 'Créer un nouveau projet', keywords: ['create', 'project'], action: () => { window.location.href = 'create-project.html'; } },
+                        { label: 'Tickets ouverts', help: 'Voir les tickets ouverts', keywords: ['tickets', 'support', 'open'], action: () => { window.location.href = 'tickets.html?status=open'; } },
+                        { label: 'Messages non lus', help: 'Ouvrir la messagerie filtrée', keywords: ['messages', 'chat', 'unread'], action: () => { window.location.href = 'messages.html?unread=1'; } },
+                        { label: 'Calendrier', help: 'Voir le planning', keywords: ['calendar', 'planning'], action: () => { window.location.href = 'calendar.html'; } },
+                        { label: 'Clients', help: 'Ouvrir le CRM client', keywords: ['clients', 'crm'], action: () => { window.location.href = 'clients.html'; } }
+                    ]
+                });
 
                 await initAdminAvatar();
                 updateHeroDate();
                 await loadProjects();
+                unsubscribeAdminEvents = adminEventsService.subscribe(async () => {
+                    await renderDeadlines(allProjects);
+                });
                 
                 // Auto-refresh toutes les 30 secondes
                 setInterval(async () => {
@@ -1063,15 +1136,46 @@
                 updateOverview(allProjects);
                 renderStatusChart(allProjects);
                 populateClientFilter(allProjects);
+                if (!hasAppliedUrlFilters) {
+                    applyDashboardUrlFilters();
+                    hasAppliedUrlFilters = true;
+                }
                 applyFilters();
                 renderAlerts(allProjects);
-                renderDeadlines(allProjects);
+                await renderDeadlines(allProjects);
                 renderTimeline(allProjects);
                 await loadMessages();
                 await loadTickets();
                 updateProjectsCount();
             } catch (error) {
                 console.error('Error loading projects:', error);
+            }
+        }
+
+        function applyDashboardUrlFilters() {
+            const params = new URLSearchParams(window.location.search);
+            const status = (params.get('status') || '').trim();
+            const type = (params.get('type') || '').trim();
+            const client = (params.get('client') || '').trim();
+            const query = (params.get('q') || '').trim();
+            const deadline = (params.get('deadline') || '').trim().toLowerCase();
+            const unread = (params.get('unread') || '').trim();
+
+            const statusFilter = document.getElementById('statusFilter');
+            const typeFilter = document.getElementById('typeFilter');
+            const clientFilter = document.getElementById('clientFilter');
+            const search = document.getElementById('projectSearch');
+
+            if (status && statusFilter && Array.from(statusFilter.options).some((o) => o.value === status)) statusFilter.value = status;
+            if (type && typeFilter && Array.from(typeFilter.options).some((o) => o.value === type)) typeFilter.value = type;
+            if (client && clientFilter && Array.from(clientFilter.options).some((o) => o.value === client)) clientFilter.value = client;
+            if (query && search) search.value = query;
+
+            if (deadline === 'soon') {
+                document.getElementById('deadlinesList')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+            if (unread === '1') {
+                document.getElementById('messagesList')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         }
 
@@ -1096,7 +1200,7 @@
             }
 
             container.innerHTML = paginatedProjects.map(project => `
-                <div class="project-row">
+                <div class="project-row clickable-row" onclick="editProject('${project.id}')" role="link" tabindex="0" onkeydown="if(event.key==='Enter'){editProject('${project.id}')}">
                     <div>
                         <div class="project-name">${project.name || 'Projet sans nom'}</div>
                         <div class="project-meta">
@@ -1116,10 +1220,10 @@
                         </span>
                     </div>
                     <div class="project-row-actions">
-                        <button class="action-btn edit" onclick="editProject('${project.id}')" title="Éditer">
+                        <button class="action-btn edit" onclick="event.stopPropagation(); editProject('${project.id}')" title="Éditer">
                             <span class="material-icons">edit</span>
                         </button>
-                        <button class="action-btn delete" onclick="deleteProject('${project.id}')" title="Supprimer">
+                        <button class="action-btn delete" onclick="event.stopPropagation(); deleteProject('${project.id}')" title="Supprimer">
                             <span class="material-icons">delete</span>
                         </button>
                     </div>
@@ -1198,7 +1302,14 @@
                             }
                         }
                     },
-                    maintainAspectRatio: false
+                    maintainAspectRatio: false,
+                    onClick: (_, elements) => {
+                        if (!elements || !elements.length) return;
+                        const index = elements[0].index;
+                        const keyByIndex = ['active', 'in_progress', 'planning', 'paused', 'completed', 'cancelled'];
+                        const status = keyByIndex[index];
+                        if (status) openProjectStatus(status);
+                    }
                 }
             });
         }
@@ -1274,6 +1385,58 @@
         window.editProject = function(id) {
             window.location.href = `project-details.html?id=${id}`;
         };
+
+        window.scrollToProjectsPanel = function() {
+            const panel = document.getElementById('projectsPanel');
+            if (panel) panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        };
+
+        window.openProjectStatus = function(status) {
+            const statusFilter = document.getElementById('statusFilter');
+            if (!statusFilter) return;
+            statusFilter.value = status || '';
+            applyFilters();
+            scrollToProjectsPanel();
+        };
+
+        window.focusAlerts = function() {
+            const alerts = document.getElementById('alertsList');
+            if (alerts) alerts.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        };
+
+        function navigateFromQuery(rawQuery) {
+            const query = String(rawQuery || '').trim();
+            if (!query) return;
+            const q = query.toLowerCase();
+
+            if (q.includes('ticket') || q.includes('support')) {
+                window.location.href = `tickets.html?status=open&q=${encodeURIComponent(query)}`;
+                return;
+            }
+            if (q.includes('message') || q.includes('chat')) {
+                window.location.href = `messages.html?unread=1&q=${encodeURIComponent(query)}`;
+                return;
+            }
+            if (q.includes('client') || q.includes('crm')) {
+                window.location.href = `clients.html?q=${encodeURIComponent(query)}`;
+                return;
+            }
+            if (q.includes('calendrier') || q.includes('calendar')) {
+                window.location.href = 'calendar.html';
+                return;
+            }
+            if (q.includes('rapport') || q.includes('report')) {
+                window.location.href = 'reports.html';
+                return;
+            }
+
+            const projectSearch = document.getElementById('projectSearch');
+            if (projectSearch) {
+                projectSearch.value = query;
+                applyFilters();
+                scrollToProjectsPanel();
+            }
+        }
 
         window.deleteProject = async function(id) {
             const ok = await confirmAction('Supprimer ce projet ? Cette action est définitive.');
@@ -1440,7 +1603,7 @@
                         unreadListEl.innerHTML = '<div style="color: var(--gray); font-size: 12px;">Aucun message non lu</div>';
                     } else {
                         unreadListEl.innerHTML = unreadConversations.slice(0, 4).map(conv => `
-                            <a class="inbox-item" href="messages.html">
+                            <a class="inbox-item" href="messages.html?project=${encodeURIComponent(conv.projectId)}&unread=1">
                                 <strong>${conv.projectName || 'Projet'}</strong>
                                 <span>${conv.clientName || 'Client'} • ${conv.unreadCount} non lu(s)</span>
                             </a>
@@ -1449,7 +1612,7 @@
                 }
 
                 container.innerHTML = conversations.slice(0, 5).map(conv => `
-                    <div class="message-item">
+                    <a class="message-item clickable-row" href="messages.html?project=${encodeURIComponent(conv.projectId)}">
                         <div class="message-icon"><span class="material-icons">mail</span></div>
                         <div style="flex: 1;">
                             <p class="item-title">${conv.projectName || 'Projet'}</p>
@@ -1460,7 +1623,7 @@
                                 ${formatDateTime(conv.lastMessage?.created_at)}
                             </p>
                         </div>
-                    </div>
+                    </a>
                 `).join('');
             } catch (error) {
                 console.error('Messages load error:', error);
@@ -1533,14 +1696,57 @@
             }
         }
 
-        function renderDeadlines(projects) {
+        async function renderDeadlines(projects) {
             const container = document.getElementById('deadlinesList');
             const today = new Date();
             const limit = new Date(today.getTime() + 30 * 24 * 60 * 60 * 1000);
-            const upcoming = projects
-                .filter(p => p.end_date && new Date(p.end_date) >= today && new Date(p.end_date) <= limit)
-                .sort((a, b) => new Date(a.end_date) - new Date(b.end_date))
-                .slice(0, 5);
+            const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+            const daysUntil = (dateValue) => {
+                const d = new Date(dateValue);
+                const start = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+                return Math.floor((start - startOfToday) / (24 * 60 * 60 * 1000));
+            };
+            const reminderText = (daysLeft) => {
+                if (daysLeft < 0) return `Délai dépassé (${Math.abs(daysLeft)}j)`;
+                if (daysLeft === 0) return 'Deadline aujourd\'hui';
+                if (daysLeft <= 3) return `Rappel auto J-${daysLeft}`;
+                return '';
+            };
+
+            const projectDeadlines = (projects || [])
+                .filter((p) => p.end_date && new Date(p.end_date) >= today && new Date(p.end_date) <= limit)
+                .map((p) => ({
+                    id: `project-${p.id}`,
+                    kind: 'project',
+                    projectId: p.id,
+                    title: p.name || 'Projet sans nom',
+                    date: new Date(p.end_date),
+                    subtitle: `Échéance: ${formatDate(p.end_date)}`,
+                    reminder: reminderText(daysUntil(p.end_date))
+                }));
+
+            const customEvents = (await adminEventsService
+                .getUpcoming(20, today))
+                .map((event) => {
+                    const eventDate = new Date(`${event.date}T${event.time || '00:00'}:00`);
+                    const shouldRemind = String(event.type || '').toLowerCase() === 'deadline';
+                    return {
+                        id: `event-${event.id}`,
+                        kind: 'event',
+                        projectId: event.projectId || null,
+                        title: event.title || 'Événement',
+                        date: eventDate,
+                        subtitle: `${event.time || '--:--'} • Priorité ${(event.priority || 'medium').toUpperCase()}`,
+                        reminder: shouldRemind ? reminderText(daysUntil(eventDate)) : ''
+                    };
+                })
+                .filter((item) => item.date >= today && item.date <= limit);
+
+            const upcoming = [...projectDeadlines, ...customEvents]
+                .sort((a, b) => a.date - b.date)
+                .slice(0, 6);
+            const reminders = upcoming.filter((item) => item.reminder);
+            const reminderKey = reminders.map((item) => `${item.id}:${item.reminder}`).join('|');
 
             if (upcoming.length === 0) {
                 container.innerHTML = `
@@ -1552,17 +1758,23 @@
                 return;
             }
 
-            container.innerHTML = upcoming.map(project => `
-                <div class="deadline-item">
+            if (reminders.length > 0 && reminderKey && reminderKey !== lastDeadlineReminderKey) {
+                lastDeadlineReminderKey = reminderKey;
+                showToast('warning', `${reminders.length} rappel(s) d'échéance actif(s) (J-3).`);
+            }
+
+            container.innerHTML = upcoming.map((item) => `
+                <a class="deadline-item clickable-row ${item.reminder ? 'deadline-reminder-row' : ''}" href="${item.kind === 'event' ? `calendar.html?date=${encodeURIComponent(item.date.toISOString().slice(0, 10))}` : `project-details.html?id=${item.projectId}`}">
                     <div class="deadline-icon"><span class="material-icons">event</span></div>
                     <div style="flex: 1;">
-                        <p class="item-title">${project.name || 'Projet sans nom'}</p>
+                        <p class="item-title">${item.title}</p>
                         <p class="item-meta">
                             <span class="material-icons" style="font-size: 12px;">event</span>
-                            Échéance: ${formatDate(project.end_date)}
+                            ${item.subtitle}
                         </p>
+                        ${item.reminder ? `<p class="deadline-reminder-note"><span class="material-icons" style="font-size:14px;">notifications_active</span>${item.reminder}</p>` : ''}
                     </div>
-                </div>
+                </a>
             `).join('');
         }
 
@@ -1573,6 +1785,7 @@
             const items = projects
                 .filter(p => (p.start_date || p.end_date))
                 .map(p => ({
+                    id: p.id,
                     name: p.name || 'Projet',
                     client: p.client_name || 'Client',
                     start: p.start_date ? new Date(p.start_date) : null,
@@ -1597,7 +1810,7 @@
             }
 
             container.innerHTML = items.map(item => `
-                <div class="timeline-item">
+                <a class="timeline-item clickable-row" href="project-details.html?id=${item.id}">
                     <div class="timeline-dot"></div>
                     <div style="flex: 1;">
                         <p class="item-title">${item.name}</p>
@@ -1606,7 +1819,7 @@
                             ${item.start ? `Début: ${formatDate(item.start)}` : ''}${item.start && item.end ? ' • ' : ''}${item.end ? `Fin: ${formatDate(item.end)}` : ''}
                         </p>
                     </div>
-                </div>
+                </a>
             `).join('');
         }
 
@@ -1665,6 +1878,14 @@
             await AuthService.logout();
             window.location.href = 'login.html';
         };
+
+        window.addEventListener('beforeunload', () => {
+            try {
+                unsubscribeAdminEvents?.();
+            } catch (error) {
+                console.error('dashboard unsubscribe error:', error);
+            }
+        });
 
         window.addEventListener('load', initialize);
     </script>

@@ -391,7 +391,7 @@
         async function initialize() {
             try {
                 await AuthService.authReady;
-                if (!AuthService.currentUser) {
+                if (!AuthService.isAdmin || !AuthService.isAdmin()) {
                     window.location.href = 'login.html';
                     return;
                 }

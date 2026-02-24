@@ -142,6 +142,27 @@ class ClientDataService {
     }
   }
 
+  async getAdminEvents() {
+    try {
+      const backend = await this._getBackend();
+      const events = await backend.getAdminEvents();
+      if (!Array.isArray(events)) return [];
+      return events.map((event) => ({
+        ...event,
+        title: event.title || 'Événement',
+        date: event.event_date || event.date || null,
+        time: event.event_time ? String(event.event_time).slice(0, 5) : (event.time || ''),
+        type: event.event_type || event.type || 'general',
+        priority: event.priority || 'medium',
+        projectId: event.project_id || event.projectId || null,
+        notes: event.notes || ''
+      })).filter((event) => Boolean(event.date));
+    } catch (error) {
+      console.error('getAdminEvents error:', error);
+      return [];
+    }
+  }
+
   async getMessages() {
     try {
       const backend = await this._getBackend();

@@ -257,6 +257,41 @@
             gap: 8px;
         }
 
+        .quick-tools {
+            border-top: 1px solid var(--soft);
+            padding: 10px 12px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+            background: #f8fafc;
+        }
+
+        .quick-tools .tool-label {
+            color: #64748b;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+
+        .quick-tools select,
+        .quick-tools button {
+            border: 1px solid #dbe3ee;
+            border-radius: 10px;
+            padding: 7px 9px;
+            background: #fff;
+            color: #0f172a;
+            font-size: 0.8rem;
+        }
+
+        .quick-tools button.primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #fff;
+            border: none;
+            font-weight: 700;
+        }
+
         .composer input {
             border: 1px solid var(--soft);
             border-radius: 999px;
@@ -309,7 +344,7 @@
             <a href="calendar.html" class="sidebar-item"><span class="material-icons">calendar_today</span><span>Calendrier</span></a>
             <a href="reports.html" class="sidebar-item"><span class="material-icons">assessment</span><span>Rapports</span></a>
             <a href="profile.html" class="sidebar-item"><span class="material-icons">account_circle</span><span>Profil</span></a>
-            <a href="../my-project.html" class="sidebar-item" target="_blank" rel="noopener"><span class="material-icons">visibility</span><span>My Project (Client)</span></a>
+            <a href="../client/login.html" class="sidebar-item" target="_blank" rel="noopener"><span class="material-icons">visibility</span><span>My Project (Client)</span></a>
             <div class="sidebar-logout">
                 <button class="sidebar-item" onclick="logout()"><span class="material-icons">logout</span><span>Déconnexion</span></button>
             </div>
@@ -391,6 +426,25 @@
                         <h3><span class="material-icons">chat</span><span id="activeConversationName">Sélectionnez une conversation</span></h3>
                     </div>
                     <div class="messages-list" id="messagesList"></div>
+                    <div class="quick-tools">
+                        <span class="tool-label">Templates</span>
+                        <select id="messageTemplateSelect">
+                            <option value="">Réponse rapide...</option>
+                            <option value="ack">Accusé de réception</option>
+                            <option value="doc">Demande de document</option>
+                            <option value="validation">Validation livrable</option>
+                            <option value="delay">Retard et nouvelle date</option>
+                        </select>
+                        <button type="button" id="applyTemplateBtn">Insérer</button>
+                        <span class="tool-label">Événement</span>
+                        <select id="eventSnippetSelect">
+                            <option value="">Snippet planning...</option>
+                            <option value="followup">Relance client</option>
+                            <option value="delivery">Livraison prévue</option>
+                            <option value="deadline">Deadline de validation</option>
+                        </select>
+                        <button type="button" id="insertEventSnippetBtn">Insérer + calendrier</button>
+                    </div>
                     <form class="composer" id="messageForm">
                         <input type="text" id="messageInput" placeholder="Écrire un message..." required>
                         <button class="send-btn" type="submit"><span class="material-icons">send</span><span>Envoyer</span></button>
@@ -400,6 +454,7 @@
         </div>
     </div>
 
+    <script src="../src/ux-productivity-suite.js"></script>
     <script type="module">
         import AuthService from '../src/auth-service.js';
         import ChatService from '../src/chat-service.js';
@@ -416,23 +471,87 @@
         let pendingReadDeadline = null;
         let pendingReadProjectId = null;
         let lastSyncAt = null;
+        let initialProjectId = null;
+        let initialUnreadOnly = false;
+        let initialSearch = '';
+        let uxSuite = null;
+        const QUICK_TEMPLATE_STORAGE_KEY = 'admin_messages_last_template_v1';
+        const QUICK_EVENT_STORAGE_KEY = 'admin_messages_last_event_snippet_v1';
+
+        const MESSAGE_TEMPLATES = {
+            ack: 'Bonjour, message bien reçu. Notre équipe analyse votre demande et vous répond rapidement avec la prochaine action.',
+            doc: 'Pour avancer, pouvez-vous nous transmettre le document manquant aujourd’hui ? Dès réception, nous reprenons immédiatement le traitement.',
+            validation: 'Le livrable est prêt de notre côté. Merci de confirmer la validation ou de nous partager vos retours.',
+            delay: 'Point planning: un léger décalage est identifié. Nous proposons une nouvelle date cible et restons disponibles pour ajuster.'
+        };
+
+        const EVENT_SNIPPETS = {
+            followup: {
+                text: 'Je planifie une relance client dans le calendrier pour assurer le suivi.',
+                title: 'Relance client',
+                type: 'task'
+            },
+            delivery: {
+                text: 'Je crée un événement de livraison prévue dans le calendrier pour suivi.',
+                title: 'Livraison prévue',
+                type: 'delivery'
+            },
+            deadline: {
+                text: 'Je programme la deadline de validation dans le calendrier pour sécuriser le planning.',
+                title: 'Deadline validation',
+                type: 'deadline'
+            }
+        };
 
         async function initialize() {
             try {
                 await AuthService.authReady;
-                if (!AuthService.currentUser) {
+                if (!AuthService.isAdmin || !AuthService.isAdmin()) {
                     window.location.href = 'login.html';
                     return;
                 }
 
                 await initAdminAvatar();
+                uxSuite = window.UXProductivitySuite?.init({
+                    scope: 'admin-support',
+                    headerRightSelector: '.header-right',
+                    searchInputSelector: '#searchInput',
+                    commands: [
+                        { label: 'Dashboard', help: 'Retour au tableau de bord', keywords: ['dashboard'], action: () => { window.location.href = 'dashboard.html'; } },
+                        { label: 'Tickets ouverts', help: 'Voir le support urgent', keywords: ['tickets', 'open'], action: () => { window.location.href = 'tickets.html?status=open'; } },
+                        { label: 'Calendrier', help: 'Ajouter un événement', keywords: ['calendar', 'planning'], action: () => { window.location.href = 'calendar.html'; } },
+                        { label: 'Clients', help: 'Ouvrir la liste client', keywords: ['clients', 'crm'], action: () => { window.location.href = 'clients.html'; } }
+                    ]
+                });
 
-                await loadConversations();
                 bindListeners();
+                applyUrlFilters();
+                restoreQuickSelections();
+                await loadConversations();
                 startAutoRefresh();
             } catch (error) {
                 console.error('Error:', error);
                 window.location.href = 'login.html';
+            }
+        }
+
+        function applyUrlFilters() {
+            const params = new URLSearchParams(window.location.search);
+            initialProjectId = (params.get('project') || '').trim() || null;
+            initialUnreadOnly = ['1', 'true', 'yes'].includes((params.get('unread') || '').toLowerCase());
+            initialSearch = (params.get('q') || '').trim().toLowerCase();
+
+            if (initialSearch) {
+                const input = document.getElementById('searchInput');
+                if (input) input.value = initialSearch;
+                conversationSearch = initialSearch;
+            }
+
+            if (initialUnreadOnly) {
+                unreadOnlyMode = true;
+                document.getElementById('toggleUnreadBtn').classList.add('primary');
+                const label = document.querySelector('#toggleUnreadBtn span:last-child');
+                if (label) label.textContent = 'Voir tout';
             }
         }
 
@@ -458,6 +577,69 @@
             document.getElementById('markReadNowBtn').addEventListener('click', async () => {
                 await markCurrentConversationAsReadNow();
             });
+
+            document.getElementById('applyTemplateBtn').addEventListener('click', () => {
+                applyQuickTemplate();
+            });
+
+            document.getElementById('insertEventSnippetBtn').addEventListener('click', () => {
+                insertEventSnippet();
+            });
+        }
+
+        function restoreQuickSelections() {
+            const templateSelect = document.getElementById('messageTemplateSelect');
+            const eventSelect = document.getElementById('eventSnippetSelect');
+            const savedTemplate = localStorage.getItem(QUICK_TEMPLATE_STORAGE_KEY) || '';
+            const savedEvent = localStorage.getItem(QUICK_EVENT_STORAGE_KEY) || '';
+            if (templateSelect && savedTemplate && MESSAGE_TEMPLATES[savedTemplate]) {
+                templateSelect.value = savedTemplate;
+            }
+            if (eventSelect && savedEvent && EVENT_SNIPPETS[savedEvent]) {
+                eventSelect.value = savedEvent;
+            }
+        }
+
+        function appendToComposer(text) {
+            const input = document.getElementById('messageInput');
+            if (!input) return;
+            const current = input.value.trim();
+            input.value = current ? `${current}\n${text}` : text;
+            input.focus();
+        }
+
+        function applyQuickTemplate() {
+            const templateKey = document.getElementById('messageTemplateSelect')?.value || '';
+            if (!templateKey || !MESSAGE_TEMPLATES[templateKey]) {
+                showToast('warning', 'Sélectionnez un template de réponse');
+                return;
+            }
+            localStorage.setItem(QUICK_TEMPLATE_STORAGE_KEY, templateKey);
+            appendToComposer(MESSAGE_TEMPLATES[templateKey]);
+            showToast('success', 'Template inséré');
+        }
+
+        function insertEventSnippet() {
+            const snippetKey = document.getElementById('eventSnippetSelect')?.value || '';
+            if (!snippetKey || !EVENT_SNIPPETS[snippetKey]) {
+                showToast('warning', 'Sélectionnez un snippet planning');
+                return;
+            }
+
+            const snippet = EVENT_SNIPPETS[snippetKey];
+            localStorage.setItem(QUICK_EVENT_STORAGE_KEY, snippetKey);
+            appendToComposer(snippet.text);
+
+            const activeConversation = allConversations.find((c) => c.projectId === currentProjectId);
+            const projectId = activeConversation?.projectId || '';
+            const projectLabel = activeConversation?.projectName || 'Projet';
+            const params = new URLSearchParams({
+                draft: snippet.title,
+                type: snippet.type,
+                project: projectId,
+                project_label: projectLabel
+            });
+            window.location.href = `calendar.html?${params.toString()}`;
         }
 
         function startAutoRefresh() {
@@ -497,6 +679,18 @@
                 document.getElementById('messagesList').innerHTML = '<div class="empty-box">Aucun message à afficher.</div>';
                 updateSessionRecap();
                 return;
+            }
+
+            if (initialProjectId) {
+                const wanted = allConversations.find((c) => String(c.projectId) === String(initialProjectId));
+                if (wanted) {
+                    currentProjectId = wanted.projectId;
+                    renderConversations();
+                    await loadMessages(currentProjectId, true);
+                    initialProjectId = null;
+                    return;
+                }
+                initialProjectId = null;
             }
 
             const stillExists = allConversations.some((c) => c.projectId === currentProjectId);

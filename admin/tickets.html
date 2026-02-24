@@ -6,6 +6,107 @@
     <title>Support - TDE Group Admin</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="./styles/admin-layout.css">
+    <style>
+        .sla-summary {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .sla-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            background: #fff;
+            padding: 10px 12px;
+        }
+
+        .sla-card p {
+            margin: 0;
+        }
+
+        .sla-label {
+            font-size: 0.72rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            font-weight: 700;
+        }
+
+        .sla-value {
+            margin-top: 4px;
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .sla-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            border-radius: 999px;
+            padding: 4px 10px;
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+
+        .sla-badge .material-icons {
+            font-size: 14px;
+        }
+
+        .sla-badge.ok {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .sla-badge.soon {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .sla-badge.late {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .sla-badge.waiting {
+            background: #e0e7ff;
+            color: #3730a3;
+        }
+
+        .urgent-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            display: inline-block;
+            margin-right: 6px;
+            background: #94a3b8;
+        }
+
+        .urgent-dot.hot {
+            background: #ef4444;
+            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.12);
+        }
+
+        .template-btn {
+            background: #f8fafc;
+            color: #0f172a;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 8px 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        @media (max-width: 980px) {
+            .sla-summary {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="sidebar">
@@ -19,7 +120,7 @@
             <a href="calendar.html" class="sidebar-item"><span class="material-icons">calendar_today</span><span>Calendrier</span></a>
             <a href="reports.html" class="sidebar-item"><span class="material-icons">assessment</span><span>Rapports</span></a>
             <a href="profile.html" class="sidebar-item"><span class="material-icons">account_circle</span><span>Profil</span></a>
-            <a href="../my-project.html" class="sidebar-item" target="_blank" rel="noopener"><span class="material-icons">visibility</span><span>My Project (Client)</span></a>
+            <a href="../client/login.html" class="sidebar-item" target="_blank" rel="noopener"><span class="material-icons">visibility</span><span>My Project (Client)</span></a>
             <div class="sidebar-logout">
                 <button class="sidebar-item" onclick="logout()"><span class="material-icons">logout</span><span>Déconnexion</span></button>
             </div>
@@ -38,44 +139,106 @@
         <div class="content">
             <div class="page-header">
                 <h1>Tickets</h1>
-                <button class="btn-primary" onclick="createTicket()"><span class="material-icons">add</span><span>Nouveau</span></button>
+                <div style="display: flex; gap: 8px;">
+                    <button class="template-btn" onclick="createTicketFromTemplate()"><span class="material-icons">auto_awesome</span><span>Template rapide</span></button>
+                    <button class="btn-primary" onclick="createTicket()"><span class="material-icons">add</span><span>Nouveau</span></button>
+                </div>
             </div>
 
+            <section class="sla-summary">
+                <article class="sla-card">
+                    <p class="sla-label">Tickets ouverts</p>
+                    <p class="sla-value" id="slaOpenCount">0</p>
+                </article>
+                <article class="sla-card">
+                    <p class="sla-label">Retards SLA</p>
+                    <p class="sla-value" id="slaLateCount">0</p>
+                </article>
+                <article class="sla-card">
+                    <p class="sla-label">Réponse &lt; 1h</p>
+                    <p class="sla-value" id="slaFastCount">0</p>
+                </article>
+                <article class="sla-card">
+                    <p class="sla-label">SLA respecté</p>
+                    <p class="sla-value" id="slaMetRate">0%</p>
+                </article>
+            </section>
+
             <div class="filters">
-                <div class="filter-group"><label>Statut:</label><select id="statusFilter" onchange="applyFilters()"><option value="">Tous</option><option value="open">Ouvert</option><option value="in_progress">En cours</option><option value="resolved">Résolu</option></select></div>
-                <div class="filter-group"><label>Priorité:</label><select id="priorityFilter" onchange="applyFilters()"><option value="">Tous</option><option value="high">Haute</option><option value="medium">Moyenne</option><option value="low">Basse</option></select></div>
+                <div class="filter-group"><label for="statusFilter">Statut:</label><select id="statusFilter" onchange="applyFilters()"><option value="">Tous</option><option value="open">Ouvert</option><option value="in_progress">En cours</option><option value="resolved">Résolu</option></select></div>
+                <div class="filter-group"><label for="priorityFilter">Priorité:</label><select id="priorityFilter" onchange="applyFilters()"><option value="">Tous</option><option value="high">Haute</option><option value="medium">Moyenne</option><option value="low">Basse</option></select></div>
+                <div class="filter-group"><label for="slaFilter">SLA:</label><select id="slaFilter" onchange="applyFilters()"><option value="">Tous</option><option value="late">En retard</option><option value="soon">Urgent (&lt; 1h)</option><option value="met">Respecté</option><option value="waiting">En attente réponse</option></select></div>
+                <div class="filter-group"><label><input type="checkbox" id="sortUrgency" onchange="applyFilters()" checked> Tri urgence auto</label></div>
                 <button class="btn-primary" onclick="clearFilters()" style="background: #f3f4f6; color: #4b5563; margin-left: auto;"><span class="material-icons">clear_all</span><span>Réinitialiser</span></button>
             </div>
 
             <div class="table-container">
                 <table>
                     <thead>
-                        <tr><th>ID</th><th>Client</th><th>Sujet</th><th>Priorité</th><th>Statut</th><th>Créé</th><th>Actions</th></tr>
+                        <tr><th>ID</th><th>Client</th><th>Sujet</th><th>Priorité</th><th>Statut</th><th>SLA 1ère réponse</th><th>Créé</th><th>Actions</th></tr>
                     </thead>
                     <tbody id="ticketsTableBody">
-                        <tr><td colspan="7" style="text-align: center; padding: 40px;"><div class="empty-state" style="margin: 0;"><div class="material-icons">inbox</div><h3>Aucun ticket</h3></div></td></tr>
+                        <tr><td colspan="8" style="text-align: center; padding: 40px;"><div class="empty-state" style="margin: 0;"><div class="material-icons">inbox</div><h3>Aucun ticket</h3></div></td></tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 
+    <script src="../src/ux-productivity-suite.js"></script>
     <script type="module">
         import AuthService from '../src/auth-service.js';
         import TicketService from '../src/ticket-service.js';
         import { initAdminAvatar } from '../src/admin-avatar.js';
 
+        const TICKET_RESPONSE_TRACKING_KEY = 'admin_ticket_first_response_v1';
+        const TICKET_TEMPLATE_INDEX_KEY = 'admin_ticket_template_last_idx_v1';
+        const SLA_HOURS = { high: 2, medium: 8, low: 24 };
+        const TICKET_TEMPLATES = [
+            {
+                title: 'Relance client - document manquant',
+                description: 'Bonjour, il nous manque encore un document pour poursuivre le projet. Merci de nous l’envoyer dans les meilleurs délais.',
+                priority: 'high'
+            },
+            {
+                title: 'Validation livrable demandée',
+                description: 'Le livrable est prêt. Merci de confirmer la validation ou de partager vos retours.',
+                priority: 'medium'
+            },
+            {
+                title: 'Clarification planning',
+                description: 'Nous avons besoin de confirmer la date cible de cette étape pour éviter un décalage.',
+                priority: 'medium'
+            }
+        ];
+
         let allTickets = [];
+        let responseTracking = loadResponseTracking();
+        let uxSuite = null;
+        let lastSlaAlertKey = '';
 
         async function initialize() {
             try {
                 await AuthService.authReady;
-                if (!AuthService.currentUser) {
+                if (!AuthService.isAdmin || !AuthService.isAdmin()) {
                     window.location.href = 'login.html';
                     return;
                 }
 
                 await initAdminAvatar();
+                uxSuite = window.UXProductivitySuite?.init({
+                    scope: 'admin-support',
+                    headerRightSelector: '.header-right',
+                    searchInputSelector: '#searchInput',
+                    commands: [
+                        { label: 'Dashboard', help: 'Retour au tableau de bord', keywords: ['dashboard'], action: () => { window.location.href = 'dashboard.html'; } },
+                        { label: 'Messages non lus', help: 'Ouvrir les conversations client', keywords: ['messages', 'chat'], action: () => { window.location.href = 'messages.html?unread=1'; } },
+                        { label: 'Calendrier équipe', help: 'Planifier un événement', keywords: ['calendar', 'event'], action: () => { window.location.href = 'calendar.html'; } },
+                        { label: 'Nouveau ticket', help: 'Créer rapidement un ticket', keywords: ['ticket', 'create'], action: () => { createTicket(); } }
+                    ]
+                });
+                applyUrlFilters();
+                bindSearchInput();
 
                 await loadTickets();
             } catch (error) {
@@ -84,9 +247,64 @@
             }
         }
 
+        function applyUrlFilters() {
+            const params = new URLSearchParams(window.location.search);
+            const status = (params.get('status') || '').trim();
+            const priority = (params.get('priority') || '').trim();
+            const sla = (params.get('sla') || '').trim();
+            const query = (params.get('q') || '').trim();
+            const sortUrgency = (params.get('sort') || '').trim().toLowerCase();
+
+            const statusFilter = document.getElementById('statusFilter');
+            const priorityFilter = document.getElementById('priorityFilter');
+            const slaFilter = document.getElementById('slaFilter');
+            const searchInput = document.getElementById('searchInput');
+            const sortUrgencyInput = document.getElementById('sortUrgency');
+
+            if (status && statusFilter && Array.from(statusFilter.options).some((o) => o.value === status)) {
+                statusFilter.value = status;
+            }
+
+            if (priority && priorityFilter && Array.from(priorityFilter.options).some((o) => o.value === priority)) {
+                priorityFilter.value = priority;
+            }
+
+            if (sla && slaFilter && Array.from(slaFilter.options).some((o) => o.value === sla)) {
+                slaFilter.value = sla;
+            }
+
+            if (query && searchInput) {
+                searchInput.value = query;
+            }
+
+            if (sortUrgencyInput && sortUrgency) {
+                sortUrgencyInput.checked = !['0', 'false', 'no'].includes(sortUrgency);
+            }
+        }
+
+        function bindSearchInput() {
+            const searchInput = document.getElementById('searchInput');
+            if (!searchInput) return;
+            searchInput.addEventListener('input', () => applyFilters());
+        }
+
         async function loadTickets() {
             allTickets = await TicketService.getAll();
             console.log('Admin tickets loaded:', allTickets.length, allTickets);
+            const lateOpen = allTickets.filter((t) => {
+                const state = getTicketSla(t).state;
+                return state === 'late' && ['open', 'in_progress'].includes(String(t.status || '').toLowerCase());
+            });
+            const alertKey = lateOpen.map((t) => t.id).sort().join('|');
+            if (lateOpen.length && alertKey !== lastSlaAlertKey) {
+                uxSuite?.notify({
+                    type: 'urgent',
+                    title: `${lateOpen.length} ticket(s) en retard SLA`,
+                    message: 'Traitement prioritaire recommandé',
+                    href: 'tickets.html?sla=late'
+                });
+                lastSlaAlertKey = alertKey;
+            }
             applyFilters();
         }
 
@@ -94,7 +312,7 @@
             const tbody = document.getElementById('ticketsTableBody');
 
             if (tickets.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px;"><div style="margin: 0;"><span class="material-icons" style="font-size: 48px; margin-bottom: 10px; display: block; color: #9ca3af;">inbox</span><p style="color: #9ca3af;">Aucun ticket</p></div></td></tr>';
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 40px;"><div style="margin: 0;"><span class="material-icons" style="font-size: 48px; margin-bottom: 10px; display: block; color: #9ca3af;">inbox</span><p style="color: #9ca3af;">Aucun ticket</p></div></td></tr>';
                 return;
             }
 
@@ -103,14 +321,19 @@
                 const priorityIcon = ticket.priority === 'high' ? 'error' : ticket.priority === 'medium' ? 'warning' : 'info';
                 const statusBg = ticket.status === 'open' ? '#fee2e2' : ticket.status === 'in_progress' ? '#fef3c7' : '#d1fae5';
                 const statusColor = ticket.status === 'open' ? '#991b1b' : ticket.status === 'in_progress' ? '#92400e' : '#065f46';
+                const sla = getTicketSla(ticket);
+                const urgencyClass = sla.state === 'late' ? 'hot' : '';
+                const slaLabel = renderSlaBadge(sla);
+                const priorityLabel = `${ticket.priority || 'medium'}`.toUpperCase();
 
                 return `
                     <tr>
                         <td>${ticket.id.substring(0, 8)}</td>
                         <td>${ticket.created_by_display || ticket.created_by_email || ticket.created_by || 'Client'}</td>
                         <td><strong>${ticket.title || ticket.subject || 'Ticket'}</strong></td>
-                        <td><span class="material-icons" style="color: ${ticket.priority === 'high' ? '#ef4444' : ticket.priority === 'medium' ? '#f59e0b' : '#10b981'}; font-size: 16px;">${priorityIcon}</span> ${ticket.priority}</td>
+                        <td><span class="urgent-dot ${urgencyClass}"></span><span class="material-icons" style="color: ${ticket.priority === 'high' ? '#ef4444' : ticket.priority === 'medium' ? '#f59e0b' : '#10b981'}; font-size: 16px;">${priorityIcon}</span> ${priorityLabel}</td>
                         <td><span style="background: ${statusBg}; color: ${statusColor}; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">${ticket.status}</span></td>
+                        <td>${slaLabel}</td>
                         <td>${new Date(ticket.created_at).toLocaleDateString('fr-FR')}</td>
                         <td>
                             <select id="status-${ticket.id}" data-current="${ticket.status}" onchange="updateTicketStatus('${ticket.id}', true)" style="padding: 4px 8px; border: 1px solid #e5e7eb; border-radius: 8px; margin-right: 8px;">
@@ -127,22 +350,163 @@
             }).join('');
         }
 
+        function renderSlaBadge(sla) {
+            if (sla.state === 'late') {
+                return `<span class="sla-badge late"><span class="material-icons">priority_high</span>Retard ${sla.lateText}</span>`;
+            }
+            if (sla.state === 'soon') {
+                return `<span class="sla-badge soon"><span class="material-icons">schedule</span>${sla.remainingText}</span>`;
+            }
+            if (sla.state === 'met') {
+                return `<span class="sla-badge ok"><span class="material-icons">check_circle</span>Respecté ${sla.responseText}</span>`;
+            }
+            if (sla.state === 'waiting') {
+                return `<span class="sla-badge waiting"><span class="material-icons">hourglass_top</span>En attente</span>`;
+            }
+            return `<span class="sla-badge waiting"><span class="material-icons">help</span>-</span>`;
+        }
+
+        function loadResponseTracking() {
+            try {
+                const parsed = JSON.parse(localStorage.getItem(TICKET_RESPONSE_TRACKING_KEY) || '{}');
+                return parsed && typeof parsed === 'object' ? parsed : {};
+            } catch (_) {
+                return {};
+            }
+        }
+
+        function saveResponseTracking() {
+            localStorage.setItem(TICKET_RESPONSE_TRACKING_KEY, JSON.stringify(responseTracking));
+        }
+
+        function getFirstResponseTimestamp(ticket) {
+            return (
+                ticket.first_response_at ||
+                ticket.first_reply_at ||
+                ticket.responded_at ||
+                responseTracking[ticket.id] ||
+                (ticket.status !== 'open' ? ticket.updated_at : null)
+            );
+        }
+
+        function getTicketSla(ticket) {
+            const createdAt = new Date(ticket.created_at).getTime();
+            if (!Number.isFinite(createdAt)) {
+                return { state: 'unknown', score: 0 };
+            }
+            const hours = SLA_HOURS[ticket.priority] || SLA_HOURS.medium;
+            const slaMs = hours * 60 * 60 * 1000;
+            const dueAt = createdAt + slaMs;
+            const now = Date.now();
+            const firstResponseRaw = getFirstResponseTimestamp(ticket);
+            const firstResponseAt = firstResponseRaw ? new Date(firstResponseRaw).getTime() : null;
+            const hasResponse = Number.isFinite(firstResponseAt);
+
+            if (hasResponse) {
+                const delta = firstResponseAt - createdAt;
+                const isMet = firstResponseAt <= dueAt;
+                const responseMinutes = Math.max(1, Math.round(delta / 60000));
+                return {
+                    state: isMet ? 'met' : 'late',
+                    responseText: formatMinutes(responseMinutes),
+                    lateText: isMet ? '' : formatMinutes(Math.round((firstResponseAt - dueAt) / 60000)),
+                    score: isMet ? 15 : 95 + Math.min(200, Math.round((firstResponseAt - dueAt) / 60000))
+                };
+            }
+
+            const remainingMs = dueAt - now;
+            if (remainingMs < 0) {
+                return {
+                    state: 'late',
+                    lateText: formatMinutes(Math.round(Math.abs(remainingMs) / 60000)),
+                    score: 100 + Math.min(300, Math.round(Math.abs(remainingMs) / 60000))
+                };
+            }
+
+            if (remainingMs <= 60 * 60 * 1000) {
+                return {
+                    state: 'soon',
+                    remainingText: `J-${formatMinutes(Math.round(remainingMs / 60000))}`,
+                    score: 70 + Math.max(0, 60 - Math.round(remainingMs / 60000))
+                };
+            }
+
+            return {
+                state: 'waiting',
+                score: 30
+            };
+        }
+
+        function formatMinutes(minutesRaw) {
+            const minutes = Math.max(0, Number(minutesRaw) || 0);
+            if (minutes >= 60 * 24) return `${Math.round(minutes / (60 * 24))}j`;
+            if (minutes >= 60) return `${Math.round(minutes / 60)}h`;
+            return `${minutes}min`;
+        }
+
+        function urgencyScore(ticket) {
+            const priorityScore = ticket.priority === 'high' ? 40 : ticket.priority === 'medium' ? 25 : 10;
+            const statusScore = ticket.status === 'open' ? 35 : ticket.status === 'in_progress' ? 20 : 0;
+            const slaScore = getTicketSla(ticket).score || 0;
+            return priorityScore + statusScore + slaScore;
+        }
+
+        function renderSlaSummary(tickets) {
+            const openTickets = tickets.filter((t) => t.status === 'open' || t.status === 'in_progress');
+            const slas = tickets.map((t) => getTicketSla(t));
+            const lateCount = slas.filter((s) => s.state === 'late').length;
+            const fastCount = tickets.filter((t) => {
+                const first = getFirstResponseTimestamp(t);
+                if (!first) return false;
+                const deltaMin = Math.round((new Date(first).getTime() - new Date(t.created_at).getTime()) / 60000);
+                return Number.isFinite(deltaMin) && deltaMin <= 60;
+            }).length;
+            const totalAnswered = slas.filter((s) => s.state === 'met' || s.state === 'late').length;
+            const totalMet = slas.filter((s) => s.state === 'met').length;
+            const metRate = totalAnswered > 0 ? Math.round((totalMet / totalAnswered) * 100) : 0;
+
+            document.getElementById('slaOpenCount').textContent = String(openTickets.length);
+            document.getElementById('slaLateCount').textContent = String(lateCount);
+            document.getElementById('slaFastCount').textContent = String(fastCount);
+            document.getElementById('slaMetRate').textContent = `${metRate}%`;
+        }
+
         window.applyFilters = function() {
             const status = document.getElementById('statusFilter').value;
             const priority = document.getElementById('priorityFilter').value;
+            const slaFilter = document.getElementById('slaFilter').value;
+            const query = (document.getElementById('searchInput').value || '').trim().toLowerCase();
+            const sortUrgency = document.getElementById('sortUrgency').checked;
 
             let filtered = allTickets;
 
             if (status) filtered = filtered.filter(t => t.status === status);
             if (priority) filtered = filtered.filter(t => t.priority === priority);
+            if (slaFilter) {
+                filtered = filtered.filter((ticket) => getTicketSla(ticket).state === slaFilter);
+            }
+            if (query) {
+                filtered = filtered.filter((t) => {
+                    const haystack = `${t.title || t.subject || ''} ${t.created_by_display || ''} ${t.created_by_email || ''} ${t.description || t.message || ''}`.toLowerCase();
+                    return haystack.includes(query);
+                });
+            }
 
+            if (sortUrgency) {
+                filtered = [...filtered].sort((a, b) => urgencyScore(b) - urgencyScore(a));
+            }
+
+            renderSlaSummary(allTickets);
             renderTickets(filtered);
         };
 
         window.clearFilters = function() {
             document.getElementById('statusFilter').value = '';
             document.getElementById('priorityFilter').value = '';
-            renderTickets(allTickets);
+            document.getElementById('slaFilter').value = '';
+            document.getElementById('sortUrgency').checked = true;
+            document.getElementById('searchInput').value = '';
+            applyFilters();
         };
 
         window.createTicket = function() {
@@ -169,10 +533,48 @@
             });
         };
 
+        window.createTicketFromTemplate = function() {
+            const previousChoice = Number(localStorage.getItem(TICKET_TEMPLATE_INDEX_KEY) || 1);
+            const choices = TICKET_TEMPLATES
+                .map((tpl, index) => `${index + 1}. ${tpl.title} [${tpl.priority}]`)
+                .join('\n');
+            const choiceRaw = prompt(`Choisir un template:\n${choices}`, String(previousChoice));
+            if (!choiceRaw) return;
+            const idx = Number(choiceRaw) - 1;
+            const template = TICKET_TEMPLATES[idx];
+            if (!template) {
+                showToast('warning', 'Template invalide');
+                return;
+            }
+            localStorage.setItem(TICKET_TEMPLATE_INDEX_KEY, String(idx + 1));
+
+            const title = prompt('Titre du ticket:', template.title) || template.title;
+            const description = prompt('Description:', template.description) || template.description;
+            const priority = prompt('Priorité (high/medium/low):', template.priority) || template.priority;
+
+            TicketService.create({
+                title,
+                description,
+                priority,
+                status: 'open'
+            }).then(result => {
+                if (result.success) {
+                    showToast('success', 'Ticket template créé');
+                    loadTickets();
+                } else {
+                    showToast('error', result.error || 'Erreur de création');
+                }
+            });
+        };
+
         window.viewTicket = async function(id) {
             const select = document.getElementById(`status-${id}`);
             if (select && select.value === 'open') {
                 select.value = 'in_progress';
+                if (!responseTracking[id]) {
+                    responseTracking[id] = new Date().toISOString();
+                    saveResponseTracking();
+                }
                 await updateTicketStatus(id, true, false);
             }
             showToast('info', `Ticket ${id} ouvert`);
@@ -187,6 +589,10 @@
 
             const result = await TicketService.update(id, { status: nextStatus });
             if (result.success) {
+                if (nextStatus !== 'open' && !responseTracking[id]) {
+                    responseTracking[id] = new Date().toISOString();
+                    saveResponseTracking();
+                }
                 select.dataset.current = nextStatus;
                 if (showSuccessToast) {
                     showToast('success', isAuto

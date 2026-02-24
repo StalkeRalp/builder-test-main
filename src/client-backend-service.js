@@ -162,9 +162,19 @@ class ClientBackendService {
             return await this._attachProjectImagesToPhases(projectId, phases);
         } catch (error) {
             if (!this._isMissingRpc(error)) {
-                console.error('Error fetching timeline via RPC:', error);
-                return [];
+                console.warn('RPC get_client_timeline failed, using fallback query:', error.message);
             }
+        }
+
+        // Secondary fallback: some DB versions expose phases via project details RPC.
+        try {
+            const project = await this.getProject(projectId, pin);
+            const embeddedPhases = Array.isArray(project?.phases) ? project.phases : [];
+            if (embeddedPhases.length > 0) {
+                return await this._attachProjectImagesToPhases(projectId, embeddedPhases);
+            }
+        } catch (error) {
+            console.warn('Embedded phases fallback failed:', error.message);
         }
 
         // Fallback for environments without RPC
@@ -218,6 +228,24 @@ class ClientBackendService {
             return data || [];
         } catch (error) {
             console.warn('Fallback get project images failed:', error.message);
+            return [];
+        }
+    }
+
+    async getAdminEvents(projectId = this.getProjectId()) {
+        const pin = this.getClientPin();
+        if (!projectId || !pin) return [];
+
+        try {
+            const data = await this._rpc('get_client_admin_events', {
+                p_id: projectId,
+                p_pin: pin
+            });
+            return Array.isArray(data) ? data : [];
+        } catch (error) {
+            if (!this._isMissingRpc(error)) {
+                console.warn('RPC get_client_admin_events failed:', error.message);
+            }
             return [];
         }
     }
