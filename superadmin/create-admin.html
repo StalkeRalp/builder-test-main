@@ -318,8 +318,9 @@
       <nav class="nav">
         <a href="dashboard.html"><span class="material-icons">dashboard</span><span>Control Room</span></a>
         <a href="create-admin.html" class="active"><span class="material-icons">person_add</span><span>Créer Admin</span></a>
-        <a href="/admin/index.html"><span class="material-icons">domain</span><span>Pôle Admin</span></a>
-        <a href="/admin/clients.html"><span class="material-icons">groups</span><span>Clients CRM</span></a>
+        <a href="admin-directory.html"><span class="material-icons">manage_accounts</span><span>Répertoire Admin</span></a>
+        <a href="admin-actions.html"><span class="material-icons">history</span><span>Actions Admin</span></a>
+        <a href="users-directory.html"><span class="material-icons">badge</span><span>Répertoire Users</span></a>
         <button type="button" id="logoutBtn"><span class="material-icons">logout</span><span>Déconnexion</span></button>
       </nav>
     </aside>
@@ -351,6 +352,11 @@
               <div class="field">
                 <label for="email">Email</label>
                 <input type="email" id="email" value="admin@tde-construction.com" required>
+              </div>
+
+              <div class="field">
+                <label for="phone">Téléphone</label>
+                <input type="tel" id="phone" placeholder="+225 07 00 00 00 00">
               </div>
 
               <div class="field">
@@ -436,6 +442,7 @@
     const form = document.getElementById('createAdminForm');
     const nameInput = document.getElementById('name');
     const emailInput = document.getElementById('email');
+    const phoneInput = document.getElementById('phone');
     const passwordInput = document.getElementById('password');
     const confirmPasswordInput = document.getElementById('confirmPassword');
     const roleInput = document.getElementById('role');
@@ -508,7 +515,7 @@
 
     async function initialize() {
       try {
-        if (!superadminStealth.ensureStealthOrRedirect({ redirectTo: '/client/login.html' })) {
+        if (!superadminStealth.ensureStealthOrRedirect({ redirectTo: '/superadmin/login.html' })) {
           return;
         }
         await AuthService.authReady;
@@ -543,6 +550,7 @@
       const password = String(passwordInput.value || '');
       const confirmPassword = String(confirmPasswordInput.value || '');
       const role = String(roleInput.value || 'admin');
+      const phone = String(phoneInput.value || '').trim();
 
       if (!fullName || !email || !password || !confirmPassword) {
         setResult('error', 'Veuillez remplir tous les champs.');
@@ -563,7 +571,7 @@
 
       try {
         setSubmitting(true);
-        const result = await SuperAdminService.createAdmin({ fullName, email, password, role });
+        const result = await SuperAdminService.createAdmin({ fullName, email, password, role, phone });
         const status = String(result?.status || 'created');
 
         if (status === 'already_exists') {
@@ -599,6 +607,7 @@
           passwordInput.value = '';
           confirmPasswordInput.value = '';
           roleInput.value = 'admin';
+          phoneInput.value = '';
         }
       } catch (error) {
         const message = error?.message || 'Création admin impossible.';
@@ -612,6 +621,7 @@
     document.getElementById('resetBtn')?.addEventListener('click', () => {
       nameInput.value = 'Administrator';
       emailInput.value = 'admin@tde-construction.com';
+      phoneInput.value = '';
       passwordInput.value = 'Admin@2026!';
       confirmPasswordInput.value = 'Admin@2026!';
       roleInput.value = 'admin';

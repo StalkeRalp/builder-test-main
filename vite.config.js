@@ -31,7 +31,7 @@ export default defineConfig({
         admin_chat: resolve(__dirname, 'admin/chat.html'),
         admin_messages: resolve(__dirname, 'admin/messages.html'),
         // Client Pages
-        client_dashboard: resolve(__dirname, 'client/index.html'),
+        client_dashboard: resolve(__dirname, 'client/login.html'),
         client_login: resolve(__dirname, 'client/login.html'),
         client_tickets: resolve(__dirname, 'client/tickets.html'),
         client_documents: resolve(__dirname, 'client/documents.html'),

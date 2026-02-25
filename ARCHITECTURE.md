@@ -293,7 +293,7 @@ async loginClient(projectId, pin) {
 
 ### 2.2 Tableau de Bord Client
 
-**URL**: `client/index.html` (Après login)
+**URL**: `client/login.html` (Après login)
 
 **Affichages (LECTURE SEULE)**:
 
@@ -636,7 +636,7 @@ Admin
 ```
 Client
 │
-├─→ Accéder client/index.html
+├─→ Accéder client/login.html
 │   └─→ Se connecter (Project ID + PIN)
 │
 ├─→ Dashboard s'affiche

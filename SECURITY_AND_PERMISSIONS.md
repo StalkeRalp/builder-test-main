@@ -60,7 +60,7 @@ Tous les accès importants sont loggés.
 
 ```javascript
 // Steps
-1. Client accède client/index.html
+1. Client accède client/login.html
 2. Entre Project ID + PIN
 3. RPC function 'login_client' appelée
 4. Supabase valide:
@@ -391,7 +391,7 @@ CLIENT B
 **Attaque**:
 ```javascript
 // Hacker essaie de modifier l'URL
-// client/index.html?project=PROJET-B
+// client/login.html?project=PROJET-B
 // Ou modifier sessionStorage
 sessionStorage.setItem('client_project_id', 'PROJET-B');
 ```

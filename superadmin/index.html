@@ -10,7 +10,7 @@
     import authService from '../src/auth-service.js';
     import superadminStealth from '../src/superadmin-stealth.js';
 
-    if (!superadminStealth.ensureStealthOrRedirect({ redirectTo: '/client/login.html' })) {
+    if (!superadminStealth.ensureStealthOrRedirect({ redirectTo: '/superadmin/login.html' })) {
       // redirected
     }
     await authService.authReady;

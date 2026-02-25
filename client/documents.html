@@ -366,6 +366,7 @@
         .doc-type-report .doc-icon { background: linear-gradient(135deg, #f59e0b, #d97706); }
         .doc-type-invoice .doc-icon { background: linear-gradient(135deg, #be123c, #9f1239); }
         .doc-type-other .doc-icon { background: linear-gradient(135deg, #475569, #334155); }
+        .doc-type-image .doc-icon { background: linear-gradient(135deg, #0ea5e9, #0284c7); }
 
         .doc-name {
             margin: 0;
@@ -418,6 +419,141 @@
             color: var(--primary);
         }
 
+        .doc-preview {
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            background: #f8fafc;
+            overflow: hidden;
+            margin: 6px 0 10px;
+            aspect-ratio: 16 / 9;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .doc-preview img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
+        }
+
+        .doc-preview::after {
+            content: 'zoom_in';
+            font-family: 'Material Icons';
+            position: absolute;
+            right: 8px;
+            bottom: 8px;
+            width: 28px;
+            height: 28px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(15, 23, 42, 0.65);
+            color: #fff;
+            font-size: 18px;
+            opacity: 0;
+            transform: scale(0.9);
+            transition: var(--transition);
+        }
+
+        .doc-preview:hover::after {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .doc-image-info {
+            margin: -2px 0 10px;
+            font-size: 0.74rem;
+            color: var(--muted);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 999px;
+            padding: 5px 9px;
+            max-width: 100%;
+        }
+
+        .doc-image-info .material-icons {
+            font-size: 14px;
+            color: var(--secondary);
+        }
+
+        .image-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 120;
+            background: rgba(2, 6, 23, 0.84);
+            backdrop-filter: blur(3px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            opacity: 0;
+            pointer-events: none;
+            transition: var(--transition);
+        }
+
+        .image-modal.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .image-frame {
+            width: min(1080px, 96vw);
+            max-height: 92vh;
+            border-radius: 14px;
+            border: 1px solid rgba(226, 232, 240, 0.25);
+            overflow: hidden;
+            box-shadow: 0 34px 55px rgba(2, 6, 23, 0.45);
+            background: #0f172a;
+        }
+
+        .image-frame img {
+            width: 100%;
+            max-height: calc(92vh - 68px);
+            object-fit: contain;
+            background: #020617;
+        }
+
+        .image-meta {
+            min-height: 68px;
+            padding: 10px 12px;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .image-meta p {
+            margin: 0;
+            color: var(--ink);
+            font-weight: 700;
+            font-size: 0.86rem;
+            line-height: 1.35;
+        }
+
+        .image-close {
+            border: 1px solid #e2e8f0;
+            background: #fff;
+            border-radius: 10px;
+            color: var(--ink);
+            font-weight: 700;
+            font-size: 0.8rem;
+            padding: 8px 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .image-close .material-icons {
+            font-size: 16px;
+        }
+
         .doc-actions {
             display: flex;
             gap: 8px;
@@ -452,6 +588,101 @@
             transform: translateY(-1px);
         }
 
+        .admin-images-card {
+            background: #ffffff;
+            border: 1px solid var(--soft);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            padding: 14px;
+            margin-bottom: 12px;
+        }
+
+        .admin-images-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .admin-image-item {
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #f8fafc;
+        }
+
+        .admin-image-thumb {
+            aspect-ratio: 16 / 10;
+            background: #e2e8f0;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .admin-image-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .admin-image-thumb::after {
+            content: 'zoom_in';
+            font-family: 'Material Icons';
+            position: absolute;
+            right: 8px;
+            bottom: 8px;
+            width: 28px;
+            height: 28px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(15, 23, 42, 0.7);
+            color: #fff;
+            font-size: 18px;
+            opacity: 0;
+            transform: scale(0.92);
+            transition: var(--transition);
+        }
+
+        .admin-image-thumb:hover::after {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .admin-image-body {
+            padding: 9px;
+        }
+
+        .admin-image-name {
+            margin: 0;
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--ink);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .admin-image-phase {
+            margin: 4px 0 8px;
+            font-size: 0.73rem;
+            color: var(--muted);
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .admin-image-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        .admin-image-actions .doc-btn {
+            padding: 7px 8px;
+            font-size: 0.74rem;
+        }
+
         .empty-state {
             grid-column: 1 / -1;
             text-align: center;
@@ -476,6 +707,10 @@
 
             .documents-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .admin-images-grid {
+                grid-template-columns: 1fr 1fr;
             }
 
             .tools-bar {
@@ -504,6 +739,10 @@
             .tool-select,
             .quick-btn.ghost {
                 flex: 1;
+            }
+
+            .admin-images-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -615,6 +854,10 @@
                                 <p class="stat-label">Session restante</p>
                                 <p class="stat-value" id="sessionTime">-</p>
                             </div>
+                            <div class="stat-box">
+                                <p class="stat-label">Images admin visibles</p>
+                                <p class="stat-value" id="imageCount">0</p>
+                            </div>
                         </div>
                     </article>
                 </section>
@@ -642,6 +885,16 @@
                     </button>
                 </section>
 
+                <section class="admin-images-card" aria-label="Images publiées par l'admin">
+                    <h2 class="bonus-title" style="margin-bottom:12px;">
+                        <span class="material-icons">photo_library</span>
+                        Images publiées par l'admin (lecture seule)
+                    </h2>
+                    <div id="adminImagesGrid" class="admin-images-grid">
+                        <div class="empty-state">Aucune image publiée pour le moment.</div>
+                    </div>
+                </section>
+
                 <section class="tools-bar">
                     <div class="search-wrap">
                         <span class="material-icons">search</span>
@@ -651,6 +904,7 @@
                     <div class="tool-actions">
                         <select id="typeFilter" class="tool-select">
                             <option value="all">Tous les types</option>
+                            <option value="image">Images</option>
                             <option value="quote">Devis</option>
                             <option value="plans">Plans</option>
                             <option value="contract">Contrat</option>
@@ -672,6 +926,18 @@
         </main>
     </div>
 
+    <div id="imageModal" class="image-modal" onclick="if(event.target===this){closeImageModal();}">
+        <div class="image-frame">
+            <img id="modalImage" src="" alt="Image document">
+            <div class="image-meta">
+                <p id="modalCaption">Image</p>
+                <button class="image-close" type="button" onclick="closeImageModal()">
+                    <span class="material-icons">close</span>
+                    <span>Fermer</span>
+                </button>
+            </div>
+        </div>
+    </div>
     <script src="../src/client-auth-service.js"></script>
     <script src="../src/client-data-service.js"></script>
     <script src="../src/client-profile-shortcut.js"></script>
@@ -684,10 +950,12 @@
         const documentsState = {
             all: [],
             visible: [],
+            adminImages: [],
             project: null,
             filterType: 'all',
             search: ''
         };
+        const resolvedUrlCache = new Map();
 
         document.addEventListener('DOMContentLoaded', async () => {
             setupListeners();
@@ -736,18 +1004,28 @@
 
         async function loadPageData(isManualRefresh = false) {
             try {
-                const [project, documents, messages, tickets] = await Promise.all([
+                const [project, documents, phases, projectImages, messages, tickets] = await Promise.all([
                     clientDataService.getProject(),
                     clientDataService.getDocuments(),
+                    clientDataService.getPhases(),
+                    clientDataService.getProjectImages(),
                     clientDataService.getMessages(),
                     clientDataService.getTickets()
                 ]);
 
                 documentsState.project = project || null;
-                documentsState.all = Array.isArray(documents) ? documents : [];
+                const rawDocuments = Array.isArray(documents) ? documents : [];
+                const adminImages = mergeAdminImages(
+                    extractAdminImagesFromPhases(phases),
+                    extractAdminImagesFromProjectImages(projectImages)
+                );
+                documentsState.adminImages = adminImages;
+                documentsState.all = [...rawDocuments]
+                    .sort((a, b) => new Date(b.uploadDate || 0) - new Date(a.uploadDate || 0));
 
                 updateProjectBonus(project);
                 updateBadges(messages, tickets);
+                renderAdminImagesGallery(adminImages);
                 renderVisibleDocuments();
                 updateSessionTime();
 
@@ -766,7 +1044,7 @@
 
             const visible = documentsState.all.filter((doc) => {
                 const matchesType = type === 'all' || String(doc.type || '').toLowerCase() === type;
-                const searchable = `${doc.name || ''} ${doc.type || ''}`.toLowerCase();
+                const searchable = `${doc.name || ''} ${doc.type || ''} ${doc.caption || ''} ${doc.phaseName || ''}`.toLowerCase();
                 const matchesQuery = !query || searchable.includes(query);
                 return matchesType && matchesQuery;
             });
@@ -783,6 +1061,21 @@
             documentsList.innerHTML = visible.map((doc, index) => {
                 const delay = Math.min(index * 40, 320);
                 const typeClass = `doc-type-${normalizeType(doc.type)}`;
+                const imagePreview = isImageDocument(doc)
+                    ? `
+                        <div class="doc-preview" onclick="openImageModalFromDoc('${escapeAttr(doc.url || '')}', '${escapeAttr(doc.name || 'Image')}')">
+                            <img data-doc-url="${escapeAttr(doc.url || '')}" alt="${escapeAttr(doc.name || 'Image')}" loading="lazy">
+                        </div>
+                    `
+                    : '';
+                const imageContext = isImageDocument(doc)
+                    ? `
+                        <p class="doc-image-info" title="${escapeAttr(`${doc.caption || ''} ${doc.phaseName || ''}`.trim())}">
+                            <span class="material-icons">photo_camera</span>
+                            <span>${escapeHtml(doc.caption || doc.phaseName || 'Image ajoutée par l’admin')}</span>
+                        </p>
+                    `
+                    : '';
                 return `
                     <article class="document-card ${typeClass}" style="animation-delay:${delay}ms">
                         <div class="doc-head">
@@ -803,8 +1096,11 @@
                             <span><span class="material-icons">inventory_2</span>${(doc.type || 'other').toUpperCase()}</span>
                         </div>
 
+                        ${imagePreview}
+                        ${imageContext}
+
                         <div class="doc-actions">
-                            <button class="doc-btn" type="button" onclick="previewDocument('${escapeAttr(doc.url)}', '${escapeAttr(doc.name || 'document')}')">
+                            <button class="doc-btn" type="button" onclick="previewDocument('${escapeAttr(doc.url)}', '${escapeAttr(doc.name || 'document')}', '${escapeAttr(doc.type || 'other')}')">
                                 <span class="material-icons">visibility</span>
                                 Prévisualiser
                             </button>
@@ -817,7 +1113,98 @@
                 `;
             }).join('');
 
+            hydrateImagePreviews();
             updateDocMetrics(visible);
+        }
+
+        function extractAdminImagesFromPhases(phases) {
+            if (!Array.isArray(phases)) return [];
+            const items = [];
+            phases.forEach((phase) => {
+                const photos = Array.isArray(phase?.photos) ? phase.photos : [];
+                photos.forEach((photo, index) => {
+                    const url = photo?.url || photo?.thumbnail_url || null;
+                    if (!url) return;
+                    items.push({
+                        id: photo.id || `${phase?.id || phase?.name || 'phase'}-${index}`,
+                        name: photo.caption || `Image admin - ${phase?.name || 'Phase'}`,
+                        caption: photo.caption || '',
+                        phaseName: phase?.name || '',
+                        type: 'image',
+                        size: 0,
+                        uploadDate: photo.uploadDate || photo.uploaded_at || photo.created_at || phase?.endDate || phase?.startDate || null,
+                        url,
+                        thumbnailUrl: photo.thumbnail_url || photo.url || null
+                    });
+                });
+            });
+            return items;
+        }
+
+        function extractAdminImagesFromProjectImages(images) {
+            if (!Array.isArray(images)) return [];
+            return images.map((img, index) => ({
+                id: img.id || `project-image-${index}`,
+                name: img.caption || `Image admin ${index + 1}`,
+                caption: img.caption || '',
+                phaseName: img.phase_name || '',
+                type: 'image',
+                size: 0,
+                uploadDate: img.uploaded_at || img.created_at || null,
+                url: img.url || img.thumbnail_url || null,
+                thumbnailUrl: img.thumbnail_url || img.url || null
+            })).filter((img) => Boolean(img.url));
+        }
+
+        function mergeAdminImages(fromPhases, fromProjectImages) {
+            const merged = [];
+            const seen = new Set();
+            [...(fromPhases || []), ...(fromProjectImages || [])].forEach((img) => {
+                const key = `${img.id || ''}::${img.url || ''}`;
+                if (seen.has(key)) return;
+                seen.add(key);
+                merged.push(img);
+            });
+            return merged.sort((a, b) => new Date(b.uploadDate || 0) - new Date(a.uploadDate || 0));
+        }
+
+        function renderAdminImagesGallery(images) {
+            const grid = document.getElementById('adminImagesGrid');
+            if (!grid) return;
+
+            const safeImages = Array.isArray(images) ? images : [];
+            if (!safeImages.length) {
+                grid.innerHTML = '<div class="empty-state">Aucune image publiée pour le moment.</div>';
+                return;
+            }
+
+            const limited = safeImages.slice(0, 18);
+            grid.innerHTML = limited.map((img) => `
+                <article class="admin-image-item">
+                    <div class="admin-image-thumb" onclick="openImageModalFromDoc('${escapeAttr(img.url || '')}', '${escapeAttr(img.name || 'Image admin')}')">
+                        <img data-doc-url="${escapeAttr(img.thumbnailUrl || img.url || '')}" alt="${escapeAttr(img.name || 'Image admin')}" loading="lazy">
+                    </div>
+                    <div class="admin-image-body">
+                        <p class="admin-image-name" title="${escapeAttr(img.name || '')}">${escapeHtml(img.name || 'Image admin')}</p>
+                        <p class="admin-image-phase">
+                            <span class="material-icons" style="font-size:14px;">category</span>
+                            <span>${escapeHtml(img.phaseName || 'Projet')}</span>
+                        </p>
+                        <div class="admin-image-actions">
+                            <button class="doc-btn" type="button" onclick="previewDocument('${escapeAttr(img.url || '')}', '${escapeAttr(img.name || 'image')}', 'image')">
+                                <span class="material-icons">visibility</span>
+                                Voir
+                            </button>
+                            <button class="doc-btn primary" type="button" onclick="confirmDownload('${escapeAttr(img.url || '')}', '${escapeAttr(img.name || 'image')}')">
+                                <span class="material-icons">download</span>
+                                Télécharger
+                            </button>
+                        </div>
+                    </div>
+                </article>
+            `).join('');
+
+            hydrateAdminImagePreviews();
         }
 
         function updateProjectBonus(project) {
@@ -837,6 +1224,7 @@
         function updateDocMetrics(visibleDocs) {
             const docs = Array.isArray(visibleDocs) ? visibleDocs : [];
             document.getElementById('docCount').textContent = String(docs.length);
+            document.getElementById('imageCount').textContent = String((documentsState.adminImages || []).length);
 
             const totalMB = docs.reduce((sum, doc) => sum + (Number(doc.size) || 0), 0);
             document.getElementById('docTotalSize').textContent = `${totalMB.toFixed(1)} MB`;
@@ -887,13 +1275,19 @@
 
         async function resolveDocumentUrl(url) {
             if (!url) return null;
+            const normalizedUrl = normalizeStorageUrl(url);
+            if (resolvedUrlCache.has(normalizedUrl)) {
+                return resolvedUrlCache.get(normalizedUrl);
+            }
             try {
                 const { default: clientBackendService } = await import('../src/client-backend-service.js');
-                const signed = await clientBackendService.getSignedDocumentUrl(url, 300);
+                const signed = await clientBackendService.getSignedDocumentUrl(normalizedUrl, 300);
                 if (signed?.success && signed.url) {
+                    resolvedUrlCache.set(normalizedUrl, signed.url);
                     return signed.url;
                 }
                 if (signed?.publicUrl) {
+                    resolvedUrlCache.set(normalizedUrl, signed.publicUrl);
                     return signed.publicUrl;
                 }
                 if (signed?.error && String(signed.error).toLowerCase().includes('bucket not found')) {
@@ -903,7 +1297,45 @@
             } catch (error) {
                 console.warn('Signed URL unavailable, fallback to raw URL:', error);
             }
-            return url;
+            resolvedUrlCache.set(normalizedUrl, normalizedUrl);
+            return normalizedUrl;
+        }
+
+        function normalizeStorageUrl(rawUrl) {
+            try {
+                const parsed = new URL(rawUrl, window.location.origin);
+                const signedMarker = '/storage/v1/object/sign/';
+                const markerIndex = parsed.pathname.indexOf(signedMarker);
+                if (markerIndex === -1) return rawUrl;
+
+                const remainder = parsed.pathname.slice(markerIndex + signedMarker.length);
+                if (!remainder) return rawUrl;
+                return `${parsed.origin}/storage/v1/object/public/${remainder}`;
+            } catch {
+                return rawUrl;
+            }
+        }
+
+        async function hydrateImagePreviews() {
+            const previews = Array.from(document.querySelectorAll('.doc-preview img[data-doc-url]'));
+            await Promise.all(previews.map(async (img) => {
+                const rawUrl = img.dataset.docUrl;
+                if (!rawUrl) return;
+                const safeUrl = await resolveDocumentUrl(rawUrl);
+                if (!safeUrl) return;
+                img.src = safeUrl;
+            }));
+        }
+
+        async function hydrateAdminImagePreviews() {
+            const previews = Array.from(document.querySelectorAll('.admin-image-thumb img[data-doc-url]'));
+            await Promise.all(previews.map(async (img) => {
+                const rawUrl = img.dataset.docUrl;
+                if (!rawUrl) return;
+                const safeUrl = await resolveDocumentUrl(rawUrl);
+                if (!safeUrl) return;
+                img.src = safeUrl;
+            }));
         }
 
         function confirmDownload(url, name) {
@@ -916,14 +1348,18 @@
                         ClientUIHelpers.showNotification('Téléchargement indisponible', 'warning');
                         return;
                     }
-                    ClientUIHelpers.downloadFile(safeUrl, name);
+                    await triggerBrowserDownload(safeUrl, name);
                 }
             );
         }
 
-        async function previewDocument(url) {
+        async function previewDocument(url, name = 'document', type = 'other') {
             if (!url) {
                 ClientUIHelpers.showNotification('Aperçu indisponible', 'warning');
+                return;
+            }
+            if (isImageDocument({ type, url })) {
+                await openImageModalFromDoc(url, name);
                 return;
             }
             const safeUrl = await resolveDocumentUrl(url);
@@ -932,6 +1368,33 @@
                 return;
             }
             window.open(safeUrl, '_blank', 'noopener,noreferrer');
+        }
+
+        async function openImageModalFromDoc(url, title = 'Image') {
+            if (!url) return;
+            const safeUrl = await resolveDocumentUrl(url);
+            if (!safeUrl) {
+                ClientUIHelpers.showNotification('Aperçu image indisponible', 'warning');
+                return;
+            }
+            const modal = document.getElementById('imageModal');
+            const image = document.getElementById('modalImage');
+            const caption = document.getElementById('modalCaption');
+            if (!modal || !image || !caption) return;
+            image.src = safeUrl;
+            image.alt = title || 'Image';
+            caption.textContent = title || 'Image';
+            modal.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeImageModal() {
+            const modal = document.getElementById('imageModal');
+            const image = document.getElementById('modalImage');
+            if (!modal || !image) return;
+            modal.classList.remove('open');
+            image.src = '';
+            document.body.style.overflow = '';
         }
 
         function downloadVisibleDocuments() {
@@ -948,7 +1411,7 @@
                         setTimeout(async () => {
                             const safeUrl = await resolveDocumentUrl(doc.url);
                             if (safeUrl) {
-                                ClientUIHelpers.downloadFile(safeUrl, doc.name);
+                                await triggerBrowserDownload(safeUrl, doc.name);
                             }
                         }, index * 220);
                     });
@@ -957,14 +1420,53 @@
             );
         }
 
+        async function triggerBrowserDownload(url, filename = 'document') {
+            const safeName = String(filename || 'document').trim() || 'document';
+
+            try {
+                const response = await fetch(url, { credentials: 'omit' });
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+                const blob = await response.blob();
+                const blobUrl = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = blobUrl;
+                link.download = safeName;
+                link.rel = 'noopener noreferrer';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
+                return true;
+            } catch (error) {
+                console.warn('Blob download failed, fallback to direct link:', error);
+                try {
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = safeName;
+                    link.rel = 'noopener noreferrer';
+                    link.target = '_self';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    return true;
+                } catch (anchorError) {
+                    console.error('Direct download failed:', anchorError);
+                    ClientUIHelpers.showNotification('Le téléchargement a échoué', 'error');
+                    return false;
+                }
+            }
+        }
+
         function normalizeType(type) {
             const value = String(type || 'other').toLowerCase();
-            const allowed = ['quote', 'plans', 'contract', 'invoice', 'report', 'other'];
+            const allowed = ['image', 'quote', 'plans', 'contract', 'invoice', 'report', 'other'];
             return allowed.includes(value) ? value : 'other';
         }
 
         function getTypeLabel(type) {
             const map = {
+                image: 'Image',
                 quote: 'Devis',
                 plans: 'Plans',
                 contract: 'Contrat',
@@ -977,6 +1479,7 @@
 
         function getDocMaterialIcon(type) {
             const map = {
+                image: 'image',
                 quote: 'request_quote',
                 plans: 'architecture',
                 contract: 'description',
@@ -985,6 +1488,14 @@
                 other: 'insert_drive_file'
             };
             return map[normalizeType(type)] || 'insert_drive_file';
+        }
+
+        function isImageDocument(doc) {
+            if (!doc) return false;
+            const type = String(doc.type || '').toLowerCase();
+            if (type === 'image') return true;
+            const url = String(doc.url || '').toLowerCase();
+            return /\.(png|jpe?g|webp|gif|bmp|svg)(\?.*)?$/.test(url);
         }
 
         function formatBudget(amount, currency = 'EUR') {
@@ -1037,9 +1548,18 @@
             return escapeHtml(value).replace(/`/g, '&#96;');
         }
 
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                closeImageModal();
+            }
+        });
+
         window.confirmDownload = confirmDownload;
         window.previewDocument = previewDocument;
+        window.openImageModalFromDoc = openImageModalFromDoc;
+        window.closeImageModal = closeImageModal;
     </script>
+  <script src="/js/refresh-feedback.js" defer></script>
 </body>
 
 </html>

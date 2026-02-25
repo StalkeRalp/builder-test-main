@@ -592,6 +592,48 @@
         .timeline-item { display: flex; gap: 12px; align-items: flex-start; padding: 12px; border-radius: 12px; border: 1px solid var(--border); background: white; }
         .timeline-dot { width: 10px; height: 10px; border-radius: 999px; background: var(--primary); margin-top: 6px; box-shadow: 0 0 0 4px rgba(13,148,136,0.12); }
         .timeline-meta { font-size: 12px; color: var(--gray); margin-top: 4px; }
+        .admin-session-list { display: flex; flex-direction: column; gap: 10px; }
+        .admin-session-item {
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 12px;
+            background: #fff;
+            transition: all .25s ease;
+        }
+        .admin-session-item:hover {
+            transform: translateX(4px);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-sm);
+        }
+        .admin-session-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+        .role-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 10px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+            border: 1px solid transparent;
+        }
+        .role-badge.superadmin {
+            background: #dcfce7;
+            color: #166534;
+            border-color: #bbf7d0;
+        }
+        .role-badge.admin {
+            background: #dbeafe;
+            color: #1d4ed8;
+            border-color: #bfdbfe;
+        }
 
         .clickable-row {
             text-decoration: none;
@@ -1042,6 +1084,17 @@
                         <div id="timelineList" class="timeline-list"></div>
                     </div>
 
+                    <div class="panel">
+                        <div class="panel-header">
+                            <div>
+                                <div class="panel-title">Session Admin</div>
+                                <div class="panel-subtitle">Comptes role=admin (requête profils)</div>
+                            </div>
+                            <span class="project-status active" id="adminSessionCount">0</span>
+                        </div>
+                        <div id="adminSessionList" class="admin-session-list"></div>
+                    </div>
+
                     <!-- Quick Stats Mini -->
                     <div class="panel">
                         <div class="panel-header">
@@ -1075,6 +1128,7 @@
         import ProjectStore from '../src/data-store.js';
         import TicketService from '../src/ticket-service.js';
         import ChatService from '../src/chat-service.js';
+        import { supabase } from '../src/supabase-client.js';
         import { initAdminAvatar } from '../src/admin-avatar.js';
         import adminEventsService from '../src/admin-events-service.js';
 
@@ -1144,6 +1198,7 @@
                 renderAlerts(allProjects);
                 await renderDeadlines(allProjects);
                 renderTimeline(allProjects);
+                await loadAdminSessionUsers();
                 await loadMessages();
                 await loadTickets();
                 updateProjectsCount();
@@ -1823,6 +1878,70 @@
             `).join('');
         }
 
+        async function loadAdminSessionUsers() {
+            const container = document.getElementById('adminSessionList');
+            const countEl = document.getElementById('adminSessionCount');
+            if (!container) return;
+            try {
+                let admins = [];
+
+                const rpcResult = await supabase
+                    .rpc('get_admin_profiles_for_dashboard', { p_role: 'admin' });
+
+                if (!rpcResult.error) {
+                    admins = Array.isArray(rpcResult.data) ? rpcResult.data : [];
+                } else {
+                    const { data, error } = await supabase
+                        .from('profiles')
+                        .select('id, full_name, email, role, created_at')
+                        .order('created_at', { ascending: false });
+                    if (error) throw error;
+                    admins = (data || []).filter((row) => {
+                        const role = String(row?.role || '').toLowerCase();
+                        return role === 'admin';
+                    }).sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+                }
+
+                if (countEl) countEl.textContent = String(admins.length);
+
+                if (!admins.length) {
+                    container.innerHTML = `
+                        <div style="text-align:center; padding: 16px; color: var(--gray);">
+                            <span class="material-icons" style="font-size: 28px;">manage_accounts</span>
+                            <p style="margin-top: 6px;">Aucun admin visible pour votre session</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = admins.slice(0, 8).map((admin) => {
+                    const role = String(admin.role || 'admin').toLowerCase();
+                    return `
+                        <div class="admin-session-item">
+                            <div class="admin-session-top">
+                                <strong class="item-title">${admin.full_name || 'Admin'}</strong>
+                                <span class="role-badge ${role}">
+                                    <span class="material-icons" style="font-size:12px;">verified_user</span>
+                                    ${role}
+                                </span>
+                            </div>
+                            <div class="item-meta">${admin.email || '—'}</div>
+                            <div class="item-meta">Créé le ${formatDate(admin.created_at)}</div>
+                        </div>
+                    `;
+                }).join('');
+            } catch (error) {
+                console.error('loadAdminSessionUsers error:', error);
+                if (countEl) countEl.textContent = '0';
+                container.innerHTML = `
+                    <div style="text-align:center; padding: 16px; color: var(--gray);">
+                        <span class="material-icons" style="font-size: 28px;">error</span>
+                        <p style="margin-top: 6px;">Impossible de charger les admins</p>
+                    </div>
+                `;
+            }
+        }
+
         function isOverdue(project, today = new Date()) {
             if (!project.end_date) return false;
             const end = new Date(project.end_date);
@@ -1904,5 +2023,6 @@
             </div>
         </div>
     </div>
+  <script src="/js/refresh-feedback.js" defer></script>
 </body>
 </html>

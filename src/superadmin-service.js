@@ -392,25 +392,55 @@ class SuperAdminService {
     };
   }
 
+  async _updateAdminPhone({ userId = null, email = '', phone = '' } = {}) {
+    const safePhone = String(phone || '').trim();
+    if (!safePhone) return;
+
+    if (userId) {
+      const byId = await supabase
+        .from('profiles')
+        .update({ phone: safePhone })
+        .eq('id', userId)
+        .select('id')
+        .maybeSingle();
+      if (!byId.error) return;
+    }
+
+    const safeEmail = this._normalizeEmail(email);
+    if (!safeEmail) return;
+    await supabase
+      .from('profiles')
+      .update({ phone: safePhone })
+      .ilike('email', safeEmail);
+  }
+
   async getAdmins() {
     await this._requireSuperAdmin();
     const { data, error } = await supabase
       .from('profiles')
       .select('id, email, full_name, role, created_at, phone, company')
-      .in('role', ['admin', 'superadmin'])
       .order('created_at', { ascending: false });
     if (error) throw error;
-    return data || [];
+    return (data || []).filter((row) => {
+      const role = String(row?.role || '').trim().toLowerCase();
+      return role === 'admin' || role === 'superadmin';
+    });
   }
 
   async getClients() {
     await this._requireSuperAdmin();
-    const { data, error } = await supabase
+    const direct = await supabase
       .from('projects')
       .select('id, name, client_name, client_email, client_phone, status, created_at')
       .order('created_at', { ascending: false });
-    if (error) throw error;
-    return data || [];
+
+    if (!direct.error) {
+      return direct.data || [];
+    }
+
+    const rpc = await supabase.rpc('get_superadmin_clients_for_graphs');
+    if (rpc.error) throw direct.error;
+    return Array.isArray(rpc.data) ? rpc.data : [];
   }
 
   async getOverview() {
@@ -420,14 +450,14 @@ class SuperAdminService {
       supabase.from('projects').select('id, status', { count: 'exact' })
     ]);
     const normalizedAdminRows = (admins || []).map((a) => String(a?.role || '').toLowerCase());
-    const projectsData = projects.data || [];
+    const projectsData = projects?.error ? (clients || []) : (projects.data || []);
     const activeProjects = projectsData.filter((p) => ['active', 'in_progress', 'planning'].includes(String(p.status || '').toLowerCase())).length;
     const pausedProjects = projectsData.filter((p) => String(p.status || '').toLowerCase() === 'paused').length;
     return {
       adminsCount: normalizedAdminRows.filter((role) => role === 'admin').length,
       superAdminsCount: normalizedAdminRows.filter((role) => role === 'superadmin').length,
       clientsCount: new Set(clients.map((c) => c.client_email || `${c.client_name || ''}:${c.client_phone || ''}`)).size,
-      projectsCount: projects.count || projectsData.length,
+      projectsCount: projects?.error ? projectsData.length : (projects.count || projectsData.length),
       activeProjects,
       pausedProjects
     };
@@ -478,12 +508,13 @@ class SuperAdminService {
     return data || null;
   }
 
-  async createAdmin({ email, password, fullName, role = 'admin' }) {
+  async createAdmin({ email, password, fullName, role = 'admin', phone = '' }) {
     this._ensureOnline();
     await this._requireSuperAdmin();
     const normalizedEmail = this._normalizeEmail(email);
     const normalizedName = this._normalizeName(fullName);
     const normalizedRole = String(role || 'admin').toLowerCase();
+    const normalizedPhone = String(phone || '').trim();
 
     if (!normalizedEmail) {
       throw new Error('Email requis.');
@@ -502,29 +533,47 @@ class SuperAdminService {
     }
 
     if (!this._useEdgeAdminCreate()) {
-      return this._createAdminLegacy({
+      const result = await this._createAdminLegacy({
         email: normalizedEmail,
         password: String(password || ''),
         fullName: normalizedName,
         role: normalizedRole
       });
+      await this._updateAdminPhone({
+        userId: result?.id || null,
+        email: result?.email || normalizedEmail,
+        phone: normalizedPhone
+      });
+      return result;
     }
 
     try {
-      return await this._createAdminViaEdge({
+      const result = await this._createAdminViaEdge({
         email: normalizedEmail,
         password: String(password || ''),
         fullName: normalizedName,
         role: normalizedRole
       });
+      await this._updateAdminPhone({
+        userId: result?.id || null,
+        email: result?.email || normalizedEmail,
+        phone: normalizedPhone
+      });
+      return result;
     } catch (edgeError) {
       if (this._allowLegacySignupFallback()) {
-        return this._createAdminLegacy({
+        const result = await this._createAdminLegacy({
           email: normalizedEmail,
           password: String(password || ''),
           fullName: normalizedName,
           role: normalizedRole
         });
+        await this._updateAdminPhone({
+          userId: result?.id || null,
+          email: result?.email || normalizedEmail,
+          phone: normalizedPhone
+        });
+        return result;
       }
       throw edgeError;
     }
@@ -543,6 +592,54 @@ class SuperAdminService {
       .in('role', ['admin', 'superadmin'])
       .select('id, email, full_name, role')
       .single();
+    if (error) throw error;
+    return data;
+  }
+
+  async updateAdminProfile(userId, updates = {}) {
+    await this._requireSuperAdmin();
+    const safeUserId = String(userId || '').trim();
+    if (!safeUserId) throw new Error('Utilisateur requis.');
+
+    const payload = {
+      full_name: String(updates.fullName || '').trim() || null,
+      email: this._normalizeEmail(updates.email || ''),
+      phone: String(updates.phone || '').trim() || null,
+      company: String(updates.company || '').trim() || null,
+      role: String(updates.role || '').trim().toLowerCase()
+    };
+
+    if (!payload.email) throw new Error('Email requis.');
+    if (!['admin', 'superadmin'].includes(payload.role)) {
+      throw new Error('Rôle invalide.');
+    }
+
+    let { data, error } = await supabase
+      .from('profiles')
+      .update(payload)
+      .eq('id', safeUserId)
+      .in('role', ['admin', 'superadmin'])
+      .select('id, full_name, email, role, phone, company, created_at')
+      .single();
+
+    if (error && String(error.message || '').toLowerCase().includes('column') && String(error.message || '').toLowerCase().includes('company')) {
+      const fallbackPayload = {
+        full_name: payload.full_name,
+        email: payload.email,
+        phone: payload.phone,
+        role: payload.role
+      };
+      const retry = await supabase
+        .from('profiles')
+        .update(fallbackPayload)
+        .eq('id', safeUserId)
+        .in('role', ['admin', 'superadmin'])
+        .select('id, full_name, email, role, phone, company, created_at')
+        .single();
+      data = retry.data;
+      error = retry.error;
+    }
+
     if (error) throw error;
     return data;
   }
@@ -582,6 +679,152 @@ class SuperAdminService {
       .eq('client_email', email);
     if (error) throw error;
     return { success: true };
+  }
+
+  async getAdminActions({ limit = 300 } = {}) {
+    await this._requireSuperAdmin();
+    const safeLimit = Math.min(1000, Math.max(1, Number(limit || 300)));
+
+    let eventsRows = [];
+    let eventsError = null;
+    try {
+      const res = await supabase
+        .from('admin_events')
+        .select('id, title, event_type, priority, event_date, event_time, notes, created_by, created_at, updated_at, project_id')
+        .order('created_at', { ascending: false })
+        .limit(safeLimit);
+      eventsRows = Array.isArray(res.data) ? res.data : [];
+      eventsError = res.error || null;
+    } catch (error) {
+      eventsError = error;
+    }
+
+    if (eventsError) {
+      let fallbackRows = null;
+      let fallbackError = null;
+
+      const attemptActivityLogs = await supabase
+        .from('activity_logs')
+        .select('id, action, details, created_at, user_id, project_id, entity_type')
+        .order('created_at', { ascending: false })
+        .limit(safeLimit);
+      if (!attemptActivityLogs.error) {
+        fallbackRows = attemptActivityLogs.data || [];
+      } else {
+        const attemptActivityLog = await supabase
+          .from('activity_log')
+          .select('id, action, details, created_at, user_id, project_id, entity_type')
+          .order('created_at', { ascending: false })
+          .limit(safeLimit);
+        if (!attemptActivityLog.error) {
+          fallbackRows = attemptActivityLog.data || [];
+        } else {
+          fallbackError = attemptActivityLog.error;
+        }
+      }
+
+      if (fallbackError) throw fallbackError;
+
+      return (fallbackRows || []).map((row) => ({
+        id: row.id,
+        type: row.entity_type || 'activity',
+        title: row.action || 'Action',
+        priority: 'medium',
+        date: row.created_at ? String(row.created_at).slice(0, 10) : null,
+        time: row.created_at ? String(new Date(row.created_at).toISOString()).slice(11, 16) : null,
+        notes: row.details || '',
+        admin_id: row.user_id || null,
+        admin_name: null,
+        admin_email: null,
+        project_id: row.project_id || null,
+        project_name: null,
+        created_at: row.created_at || null
+      }));
+    }
+
+    const creatorIds = [...new Set(eventsRows.map((row) => row.created_by).filter(Boolean))];
+    const projectIds = [...new Set(eventsRows.map((row) => row.project_id).filter(Boolean))];
+
+    let profilesById = new Map();
+    if (creatorIds.length) {
+      const { data: profilesRows, error: profilesError } = await supabase
+        .from('profiles')
+        .select('id, full_name, email')
+        .in('id', creatorIds);
+      if (!profilesError) {
+        profilesById = new Map((profilesRows || []).map((row) => [String(row.id), row]));
+      }
+    }
+
+    let projectsById = new Map();
+    if (projectIds.length) {
+      const { data: projectRows, error: projectError } = await supabase
+        .from('projects')
+        .select('id, name')
+        .in('id', projectIds);
+      if (!projectError) {
+        projectsById = new Map((projectRows || []).map((row) => [String(row.id), row]));
+      }
+    }
+
+    return eventsRows.map((row) => {
+      const profile = profilesById.get(String(row.created_by || ''));
+      const project = projectsById.get(String(row.project_id || ''));
+      return {
+        id: row.id,
+        type: row.event_type || 'general',
+        title: row.title || 'Action admin',
+        priority: row.priority || 'medium',
+        date: row.event_date || null,
+        time: row.event_time ? String(row.event_time).slice(0, 5) : null,
+        notes: row.notes || '',
+        admin_id: row.created_by || null,
+        admin_name: profile?.full_name || null,
+        admin_email: profile?.email || null,
+        project_id: row.project_id || null,
+        project_name: project?.name || null,
+        created_at: row.created_at || null,
+        updated_at: row.updated_at || null
+      };
+    });
+  }
+
+  async getUserDirectories() {
+    await this._requireSuperAdmin();
+    const [admins, clients, authUsers] = await Promise.all([
+      this.getAdmins(),
+      this.getClients(),
+      this.getAuthenticatedUsers({ limit: 500 }).catch(() => [])
+    ]);
+
+    const clientsGrouped = new Map();
+    (clients || []).forEach((row) => {
+      const key = row.client_email || `${row.client_name || ''}:${row.client_phone || ''}`;
+      if (!clientsGrouped.has(key)) {
+        clientsGrouped.set(key, {
+          client_name: row.client_name || 'Client',
+          client_email: row.client_email || '',
+          client_phone: row.client_phone || '',
+          projects_count: 0,
+          projects_active: 0,
+          last_project_created_at: row.created_at || null
+        });
+      }
+      const current = clientsGrouped.get(key);
+      current.projects_count += 1;
+      if (['active', 'in_progress', 'planning'].includes(String(row.status || '').toLowerCase())) {
+        current.projects_active += 1;
+      }
+      if (!current.last_project_created_at || new Date(row.created_at) > new Date(current.last_project_created_at)) {
+        current.last_project_created_at = row.created_at;
+      }
+    });
+
+    return {
+      admins: Array.isArray(admins) ? admins : [],
+      clients: [...clientsGrouped.values()],
+      authUsers: Array.isArray(authUsers) ? authUsers : []
+    };
   }
 }
 

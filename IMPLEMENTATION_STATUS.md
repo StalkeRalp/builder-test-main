@@ -134,7 +134,7 @@
 ## ⏳ PHASE 4: PAGES CLIENT (À FAIRE)
 
 ### À créer:
-1. `client/index.html` - Portal SPA
+1. `client/login.html` - Portal SPA
    - [ ] Login form (Project ID + PIN)
    - [ ] Dashboard
      - [ ] Timeline onglet

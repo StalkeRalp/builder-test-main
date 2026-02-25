@@ -131,6 +131,17 @@ class ClientDataService {
     }
   }
 
+  async getProjectImages() {
+    try {
+      const backend = await this._getBackend();
+      const images = await backend.getProjectImages();
+      return Array.isArray(images) ? images : [];
+    } catch (error) {
+      console.error('getProjectImages error:', error);
+      return [];
+    }
+  }
+
   async getDocuments() {
     try {
       const backend = await this._getBackend();

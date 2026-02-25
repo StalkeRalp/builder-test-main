@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Actions Admin - Superadmin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --surface: #fff;
+      --surface-soft: #f8fafc;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --accent: #0d9488;
+      --danger: #dc2626;
+      --radius: 16px;
+      --shadow: 0 14px 32px rgba(15, 23, 42, 0.08);
+    }
+    * { box-sizing: border-box; }
+    body.auth-pending { visibility: hidden; }
+    body { margin: 0; font-family: 'Outfit', sans-serif; color: var(--text); background: var(--bg); }
+    .app { display: grid; grid-template-columns: 260px 1fr; min-height: 100vh; }
+    .side { background: linear-gradient(165deg, #0f172a 0%, #1e293b 45%, #0d9488 100%); color: #fff; padding: 22px 16px; }
+    .brand { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+    .brand-logo { width: 34px; height: 34px; border-radius: 10px; background: rgba(255,255,255,.16); display: grid; place-items: center; font-weight: 800; }
+    .scope-pill { display: inline-flex; align-items: center; gap: 6px; border: 1px solid rgba(255,255,255,.25); border-radius: 999px; padding: 6px 10px; font-size: 12px; margin-bottom: 16px; }
+    .nav { display: grid; gap: 8px; }
+    .nav a, .nav button { all: unset; cursor: pointer; display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 12px; color: rgba(255,255,255,.92); border: 1px solid transparent; }
+    .nav a:hover, .nav .active, .nav button:hover { background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.2); }
+    .main { padding: 20px; display: grid; gap: 12px; align-content: start; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); }
+    .topbar { padding: 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .topbar h1 { margin: 0; font-size: 1.2rem; font-family: 'Space Grotesk', sans-serif; }
+    .top-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .btn { border: 1px solid var(--border); border-radius: 10px; background: #fff; color: #334155; font-weight: 700; padding: 8px 12px; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
+    .btn.primary { border: none; color: #fff; background: linear-gradient(135deg, var(--accent), #0f766e); }
+    .filters { padding: 12px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .filters input, .filters select { border: 1px solid var(--border); border-radius: 10px; padding: 9px 10px; font-family: inherit; }
+    .table-wrap { overflow: auto; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 10px; border-bottom: 1px solid var(--border); text-align: left; font-size: 14px; }
+    th { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+    .pill { display: inline-block; border-radius: 999px; padding: 2px 9px; font-size: 12px; font-weight: 700; background: #e2e8f0; color: #334155; }
+    .pill.high { background: #fee2e2; color: #991b1b; }
+    .pill.medium { background: #fff7ed; color: #9a3412; }
+    .pill.low { background: #dcfce7; color: #166534; }
+    .empty { padding: 14px; color: var(--muted); }
+    .muted { color: var(--muted); }
+    @media (max-width: 980px) { .app { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body class="auth-pending">
+  <div class="app">
+    <aside class="side">
+      <div class="brand"><div class="brand-logo">TDE</div><strong>TDE GROUP</strong></div>
+      <div class="scope-pill"><span class="material-icons">shield</span><span>Super Admin Zone</span></div>
+      <nav class="nav">
+        <a href="dashboard.html"><span class="material-icons">dashboard</span><span>Control Room</span></a>
+        <a href="create-admin.html"><span class="material-icons">person_add</span><span>Créer Admin</span></a>
+        <a href="admin-actions.html" class="active"><span class="material-icons">history</span><span>Actions Admin</span></a>
+        <a href="users-directory.html"><span class="material-icons">badge</span><span>Répertoire Users</span></a>
+        <button type="button" id="logoutBtn"><span class="material-icons">logout</span><span>Déconnexion</span></button>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <section class="topbar card">
+        <div>
+          <h1>Historique des actions admins</h1>
+          <div class="muted" id="lastSync">Dernière synchronisation: —</div>
+        </div>
+        <div class="top-actions">
+          <button class="btn primary" id="refreshBtn"><span class="material-icons">refresh</span>Rafraîchir</button>
+          <button class="btn" id="exportBtn"><span class="material-icons">download</span>Export JSON</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="filters">
+          <input id="searchInput" type="search" placeholder="Rechercher (titre, admin, email, projet)">
+          <select id="priorityFilter">
+            <option value="all">Priorité: toutes</option>
+            <option value="high">Haute</option>
+            <option value="medium">Moyenne</option>
+            <option value="low">Basse</option>
+          </select>
+        </div>
+        <div class="table-wrap" id="tableWrap"></div>
+      </section>
+    </main>
+  </div>
+
+  <script type="module">
+    import AuthService from '../src/auth-service.js';
+    import SuperAdminService from '../src/superadmin-service.js';
+    import superadminStealth from '../src/superadmin-stealth.js';
+
+    const state = { rows: [], lastRefresh: null };
+
+    function formatDateTime(value) {
+      if (!value) return '—';
+      const d = new Date(value);
+      if (Number.isNaN(d.getTime())) return '—';
+      return d.toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+    }
+
+    function esc(value) {
+      return String(value || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
+    function render() {
+      const wrap = document.getElementById('tableWrap');
+      const q = String(document.getElementById('searchInput').value || '').trim().toLowerCase();
+      const pr = String(document.getElementById('priorityFilter').value || 'all').toLowerCase();
+      const rows = (state.rows || []).filter((row) => {
+        if (pr !== 'all' && String(row.priority || '').toLowerCase() !== pr) return false;
+        if (!q) return true;
+        const hay = [row.title, row.type, row.admin_name, row.admin_email, row.project_name, row.notes].join(' ').toLowerCase();
+        return hay.includes(q);
+      });
+
+      if (!rows.length) {
+        wrap.innerHTML = '<div class="empty">Aucune action admin trouvée.</div>';
+        return;
+      }
+
+      wrap.innerHTML = `
+        <table>
+          <thead><tr><th>Date création</th><th>Titre</th><th>Type</th><th>Priorité</th><th>Admin</th><th>Projet</th><th>Notes</th></tr></thead>
+          <tbody>
+            ${rows.map((row) => `
+              <tr>
+                <td>${esc(formatDateTime(row.created_at))}</td>
+                <td>${esc(row.title || 'Action')}</td>
+                <td>${esc(row.type || 'general')}</td>
+                <td><span class="pill ${esc(String(row.priority || 'medium').toLowerCase())}">${esc(row.priority || 'medium')}</span></td>
+                <td>${esc(row.admin_name || '—')}<br><span class="muted">${esc(row.admin_email || '')}</span></td>
+                <td>${esc(row.project_name || '—')}</td>
+                <td>${esc(row.notes || '')}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `;
+    }
+
+    async function loadAll() {
+      const rows = await SuperAdminService.getAdminActions({ limit: 500 });
+      state.rows = Array.isArray(rows) ? rows : [];
+      state.lastRefresh = new Date();
+      document.getElementById('lastSync').textContent = `Dernière synchronisation: ${formatDateTime(state.lastRefresh)}`;
+      render();
+    }
+
+    function exportJson() {
+      const payload = { generated_at: new Date().toISOString(), total: state.rows.length, actions: state.rows };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `superadmin-admin-actions-${Date.now()}.json`;
+      link.click();
+      URL.revokeObjectURL(url);
+    }
+
+    async function initialize() {
+      if (!superadminStealth.ensureStealthOrRedirect({ redirectTo: '/superadmin/login.html' })) return;
+      await AuthService.authReady;
+      if (!AuthService.isSuperAdmin || !AuthService.isSuperAdmin()) {
+        window.location.href = 'login.html';
+        return;
+      }
+      document.body.classList.remove('auth-pending');
+      document.getElementById('logoutBtn').addEventListener('click', async () => {
+        superadminStealth.clearStealthRecord();
+        await AuthService.logout();
+      });
+      document.getElementById('refreshBtn').addEventListener('click', loadAll);
+      document.getElementById('exportBtn').addEventListener('click', exportJson);
+      document.getElementById('searchInput').addEventListener('input', render);
+      document.getElementById('priorityFilter').addEventListener('change', render);
+      await loadAll();
+    }
+
+    window.addEventListener('load', initialize);
+  </script>
+  <script src="/js/refresh-feedback.js" defer></script>
+</body>
+</html>

@@ -244,7 +244,7 @@ Password: (Défini lors du setup Supabase)
 
 ### Accès CLIENT
 
-**URL**: `http://localhost:5173/client/index.html`
+**URL**: `http://localhost:5173/client/login.html`
 
 **Login**:
 ```

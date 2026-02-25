@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Répertoire Utilisateurs - Superadmin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    :root { --bg:#f4f7fb; --surface:#fff; --text:#0f172a; --muted:#64748b; --border:#e2e8f0; --accent:#0d9488; --radius:16px; --shadow:0 14px 32px rgba(15,23,42,.08); }
+    * { box-sizing:border-box; }
+    body.auth-pending { visibility:hidden; }
+    body { margin:0; font-family:'Outfit',sans-serif; background:var(--bg); color:var(--text); }
+    .app { display:grid; grid-template-columns:260px 1fr; min-height:100vh; }
+    .side { background:linear-gradient(165deg,#0f172a 0%,#1e293b 45%,#0d9488 100%); color:#fff; padding:22px 16px; }
+    .brand { display:flex; align-items:center; gap:10px; margin-bottom:12px; }
+    .brand-logo { width:34px; height:34px; border-radius:10px; background:rgba(255,255,255,.16); display:grid; place-items:center; font-weight:800; }
+    .scope-pill { display:inline-flex; align-items:center; gap:6px; border:1px solid rgba(255,255,255,.25); border-radius:999px; padding:6px 10px; font-size:12px; margin-bottom:16px; }
+    .nav { display:grid; gap:8px; }
+    .nav a, .nav button { all:unset; cursor:pointer; display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:12px; color:rgba(255,255,255,.92); border:1px solid transparent; }
+    .nav a:hover, .nav .active, .nav button:hover { background:rgba(255,255,255,.12); border-color:rgba(255,255,255,.2); }
+    .main { padding:20px; display:grid; gap:12px; align-content:start; }
+    .card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow); }
+    .topbar { padding:14px; display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; }
+    .topbar h1 { margin:0; font-size:1.2rem; font-family:'Space Grotesk',sans-serif; }
+    .muted { color:var(--muted); }
+    .btn { border:1px solid var(--border); border-radius:10px; background:#fff; color:#334155; font-weight:700; padding:8px 12px; display:inline-flex; align-items:center; gap:6px; cursor:pointer; }
+    .btn.primary { border:none; color:#fff; background:linear-gradient(135deg,var(--accent),#0f766e); }
+    .notice { padding:12px 14px; border:1px solid #fde68a; background:#fffbeb; border-radius:12px; color:#92400e; font-size:14px; }
+    .split { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .panel-head { padding:12px 14px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+    .panel-head h3 { margin:0; font-size:1rem; font-family:'Space Grotesk',sans-serif; }
+    .table-wrap { overflow:auto; }
+    table { width:100%; border-collapse:collapse; }
+    th, td { padding:10px; border-bottom:1px solid var(--border); text-align:left; font-size:14px; }
+    th { font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:.05em; }
+    .pill { display:inline-block; border-radius:999px; padding:2px 9px; font-size:12px; font-weight:700; background:#e2e8f0; color:#334155; }
+    .pill.admin { background:#dbeafe; color:#1e40af; }
+    .pill.superadmin { background:#dcfce7; color:#166534; }
+    .empty { padding:14px; color:var(--muted); }
+    @media (max-width: 980px){ .app{grid-template-columns:1fr;} .split{grid-template-columns:1fr;} }
+  </style>
+</head>
+<body class="auth-pending">
+  <div class="app">
+    <aside class="side">
+      <div class="brand"><div class="brand-logo">TDE</div><strong>TDE GROUP</strong></div>
+      <div class="scope-pill"><span class="material-icons">shield</span><span>Super Admin Zone</span></div>
+      <nav class="nav">
+        <a href="dashboard.html"><span class="material-icons">dashboard</span><span>Control Room</span></a>
+        <a href="create-admin.html"><span class="material-icons">person_add</span><span>Créer Admin</span></a>
+        <a href="admin-actions.html"><span class="material-icons">history</span><span>Actions Admin</span></a>
+        <a href="users-directory.html" class="active"><span class="material-icons">badge</span><span>Répertoire Users</span></a>
+        <button type="button" id="logoutBtn"><span class="material-icons">logout</span><span>Déconnexion</span></button>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <section class="topbar card">
+        <div>
+          <h1>Répertoire Utilisateurs</h1>
+          <div class="muted" id="lastSync">Dernière synchronisation: —</div>
+        </div>
+        <button id="refreshBtn" class="btn primary"><span class="material-icons">refresh</span>Rafraîchir</button>
+      </section>
+
+      <div class="notice card">
+        <strong>Sécurité:</strong> les mots de passe ne sont jamais lisibles ni exportables (Supabase/Auth). Seuls les métadonnées comptes sont visibles.
+      </div>
+
+      <section class="split">
+        <article class="card">
+          <div class="panel-head"><h3>Comptes Admin / Superadmin</h3></div>
+          <div class="table-wrap" id="adminsWrap"></div>
+        </article>
+        <article class="card">
+          <div class="panel-head"><h3>Comptes Clients</h3></div>
+          <div class="table-wrap" id="clientsWrap"></div>
+        </article>
+      </section>
+
+      <article class="card">
+        <div class="panel-head"><h3>Comptes Auth (global)</h3></div>
+        <div class="table-wrap" id="authWrap"></div>
+      </article>
+    </main>
+  </div>
+
+  <script type="module">
+    import AuthService from '../src/auth-service.js';
+    import SuperAdminService from '../src/superadmin-service.js';
+    import superadminStealth from '../src/superadmin-stealth.js';
+
+    const state = { admins: [], clients: [], authUsers: [], lastRefresh: null };
+
+    function formatDateTime(value) {
+      if (!value) return '—';
+      const d = new Date(value);
+      if (Number.isNaN(d.getTime())) return '—';
+      return d.toLocaleString('fr-FR', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
+    }
+    function esc(value) {
+      return String(value || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;');
+    }
+
+    function renderAdmins() {
+      const wrap = document.getElementById('adminsWrap');
+      const rows = state.admins || [];
+      if (!rows.length) {
+        wrap.innerHTML = '<div class="empty">Aucun compte admin.</div>';
+        return;
+      }
+      wrap.innerHTML = `
+        <table>
+          <thead><tr><th>Nom</th><th>Email</th><th>Rôle</th><th>Téléphone</th><th>Entreprise</th></tr></thead>
+          <tbody>
+            ${rows.map((row) => `
+              <tr>
+                <td>${esc(row.full_name || '—')}</td>
+                <td>${esc(row.email || '—')}</td>
+                <td><span class="pill ${esc(String(row.role || '').toLowerCase())}">${esc(row.role || 'admin')}</span></td>
+                <td>${esc(row.phone || '—')}</td>
+                <td>${esc(row.company || '—')}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `;
+    }
+
+    function renderClients() {
+      const wrap = document.getElementById('clientsWrap');
+      const rows = state.clients || [];
+      if (!rows.length) {
+        wrap.innerHTML = '<div class="empty">Aucun client.</div>';
+        return;
+      }
+      wrap.innerHTML = `
+        <table>
+          <thead><tr><th>Client</th><th>Email</th><th>Téléphone</th><th>Projets</th><th>Actifs</th></tr></thead>
+          <tbody>
+            ${rows.map((row) => `
+              <tr>
+                <td>${esc(row.client_name || 'Client')}</td>
+                <td>${esc(row.client_email || '—')}</td>
+                <td>${esc(row.client_phone || '—')}</td>
+                <td>${esc(row.projects_count || 0)}</td>
+                <td>${esc(row.projects_active || 0)}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `;
+    }
+
+    function renderAuthUsers() {
+      const wrap = document.getElementById('authWrap');
+      const rows = state.authUsers || [];
+      if (!rows.length) {
+        wrap.innerHTML = '<div class="empty">Aucun compte auth récupéré.</div>';
+        return;
+      }
+      wrap.innerHTML = `
+        <table>
+          <thead><tr><th>Nom</th><th>Email</th><th>Rôle profil</th><th>Email confirmé</th><th>Dernière connexion</th><th>Mot de passe</th></tr></thead>
+          <tbody>
+            ${rows.map((row) => `
+              <tr>
+                <td>${esc(row.full_name || 'Utilisateur')}</td>
+                <td>${esc(row.email || '—')}</td>
+                <td>${esc(row.profile_role || '—')}</td>
+                <td>${row.email_confirmed_at ? 'Oui' : 'Non'}</td>
+                <td>${esc(formatDateTime(row.last_sign_in_at))}</td>
+                <td>Non accessible</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `;
+    }
+
+    async function loadAll() {
+      const data = await SuperAdminService.getUserDirectories();
+      state.admins = Array.isArray(data.admins) ? data.admins : [];
+      state.clients = Array.isArray(data.clients) ? data.clients : [];
+      state.authUsers = Array.isArray(data.authUsers) ? data.authUsers : [];
+      state.lastRefresh = new Date();
+      document.getElementById('lastSync').textContent = `Dernière synchronisation: ${formatDateTime(state.lastRefresh)}`;
+      renderAdmins();
+      renderClients();
+      renderAuthUsers();
+    }
+
+    async function initialize() {
+      if (!superadminStealth.ensureStealthOrRedirect({ redirectTo: '/superadmin/login.html' })) return;
+      await AuthService.authReady;
+      if (!AuthService.isSuperAdmin || !AuthService.isSuperAdmin()) {
+        window.location.href = 'login.html';
+        return;
+      }
+      document.body.classList.remove('auth-pending');
+      document.getElementById('logoutBtn').addEventListener('click', async () => {
+        superadminStealth.clearStealthRecord();
+        await AuthService.logout();
+      });
+      document.getElementById('refreshBtn').addEventListener('click', loadAll);
+      await loadAll();
+    }
+
+    window.addEventListener('load', initialize);
+  </script>
+  <script src="/js/refresh-feedback.js" defer></script>
+</body>
+</html>

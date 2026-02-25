@@ -160,7 +160,7 @@ Admin
 ```
 Client
   ↓
-1. Ouvrir lien → client/index.html
+1. Ouvrir lien → client/login.html
   ↓
 2. Entrer:
    ├─ Project ID (P-2026-001)
@@ -397,7 +397,7 @@ Puis: ADMIN_GUIDE.md ou CLIENT_GUIDE.md
 ### 5. Tester
 ```
 Admin: http://localhost:5173/admin/index.html
-Client: http://localhost:5173/client/index.html
+Client: http://localhost:5173/client/login.html
 Public: http://localhost:5173
 ```
 

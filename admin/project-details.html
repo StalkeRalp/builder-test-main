@@ -317,6 +317,10 @@
                             <span class="material-icons">add_a_photo</span>Ajouter des photos
                         </button>
                     </div>
+                    <div class="form-group" style="max-width: 420px; margin-top: 10px;">
+                        <label>Nom de l'image</label>
+                        <input type="text" id="imageCaptionInput" placeholder="Ex: Avancement dalle étage 2">
+                    </div>
                     <div class="form-group" style="max-width: 300px; margin-top: 10px;">
                         <label>Tag de phase</label>
                         <select id="phaseTagSelect">
@@ -890,20 +894,36 @@
             });
         }
 
+        function getDefaultImageCaption(file) {
+            return String(file?.name || 'Photo').replace(/\.[^/.]+$/, '').trim() || 'Photo';
+        }
+
+        function buildImageCaption(file, index, total, customBase) {
+            const defaultCaption = getDefaultImageCaption(file);
+            const cleanedBase = String(customBase || '').trim();
+            if (!cleanedBase) return defaultCaption;
+            if (total <= 1) return cleanedBase;
+            return `${cleanedBase} (${index + 1})`;
+        }
+
         document.getElementById('siteImagesInput')?.addEventListener('change', async (e) => {
             const files = Array.from(e.target.files || []);
             if (files.length === 0) return;
 
             const phaseId = document.getElementById('phaseTagSelect')?.value || '';
             const phaseName = phaseOptions.find(p => p.id === phaseId)?.name || '';
+            const captionBase = document.getElementById('imageCaptionInput')?.value || '';
 
-            for (const file of files) {
+            for (let i = 0; i < files.length; i += 1) {
+                const file = files[i];
+                const caption = buildImageCaption(file, i, files.length, captionBase);
+
                 const fullFile = await resizeImage(file);
                 const thumbFile = await createSquareThumbnail(file, 270);
                 const imageObj = {
                     fullFile,
                     thumbnailFile: thumbFile,
-                    caption: file.name.replace(/\.[^/.]+$/, ''),
+                    caption,
                     src: '',
                     phase_id: phaseId || null,
                     phase_name: phaseName || null
@@ -912,6 +932,8 @@
             }
 
             e.target.value = '';
+            const captionField = document.getElementById('imageCaptionInput');
+            if (captionField && files.length > 0) captionField.value = '';
             await loadImages();
         });
 
@@ -1025,5 +1047,6 @@
             </div>
         </div>
     </div>
+  <script src="/js/refresh-feedback.js" defer></script>
 </body>
 </html>

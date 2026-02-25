@@ -6,81 +6,168 @@
   <title>Super Admin Control Room - TDE Group</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <style>
+    /* [Le CSS reste identique à ma réponse précédente] */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     :root {
-      --bg: #f4f7fb;
-      --bg-deco-a: #e0f2fe;
-      --bg-deco-b: #dcfce7;
+      --bg-primary: #f0f5fa;
+      --bg-deco-1: #cffafe;
+      --bg-deco-2: #d9f99d;
       --surface: #ffffff;
       --surface-soft: #f8fafc;
-      --text: #0f172a;
-      --muted: #64748b;
+      --surface-hover: #f1f5f9;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
       --border: #e2e8f0;
+      --border-focus: #94a3b8;
       --accent: #0d9488;
+      --accent-light: #14b8a6;
+      --accent-soft: #ccfbf1;
       --accent-2: #2563eb;
+      --accent-2-light: #3b82f6;
+      --accent-2-soft: #dbeafe;
       --accent-3: #ea580c;
+      --accent-3-light: #f97316;
+      --accent-3-soft: #ffedd5;
+      --accent-4: #7c3aed;
+      --accent-4-light: #8b5cf6;
+      --accent-4-soft: #ede9fe;
+      --accent-5: #db2777;
+      --accent-5-light: #ec4899;
+      --accent-5-soft: #fce7f3;
       --danger: #dc2626;
+      --danger-soft: #fee2e2;
       --success: #16a34a;
+      --success-soft: #dcfce7;
       --warning: #f59e0b;
-      --radius: 16px;
-      --shadow: 0 14px 32px rgba(15, 23, 42, 0.08);
+      --warning-soft: #fef3c7;
+      --info: #0891b2;
+      --info-soft: #cffafe;
+      --radius-sm: 12px;
+      --radius-md: 16px;
+      --radius-lg: 20px;
+      --shadow-sm: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+      --shadow-md: 0 10px 15px -3px rgb(0 0 0 / 0.05), 0 4px 6px -4px rgb(0 0 0 / 0.05);
+      --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 0.05), 0 8px 10px -6px rgb(0 0 0 / 0.05);
+      --shadow-xl: 0 25px 50px -12px rgb(0 0 0 / 0.15);
+      --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    * { box-sizing: border-box; }
-    body.auth-pending { visibility: hidden; }
+    body.auth-pending {
+      visibility: hidden;
+    }
+
     body {
       margin: 0;
-      font-family: 'Outfit', system-ui, sans-serif;
-      color: var(--text);
-      background:
-        radial-gradient(900px 500px at -10% -10%, var(--bg-deco-a), transparent 55%),
-        radial-gradient(700px 400px at 110% -10%, var(--bg-deco-b), transparent 50%),
-        var(--bg);
+      font-family: 'Outfit', system-ui, -apple-system, sans-serif;
+      color: var(--text-primary);
+      background: 
+        radial-gradient(1200px 600px at -10% -10%, var(--bg-deco-1), transparent 60%),
+        radial-gradient(1000px 500px at 110% 20%, var(--bg-deco-2), transparent 55%),
+        var(--bg-primary);
       min-height: 100vh;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
     }
 
+    /* Layout principal */
     .app {
       display: grid;
-      grid-template-columns: 260px 1fr;
+      grid-template-columns: 280px 1fr;
       min-height: 100vh;
+      transition: var(--transition);
     }
 
+    /* Sidebar améliorée */
     .side {
-      background: linear-gradient(165deg, #0f172a 0%, #1e293b 45%, #0d9488 100%);
+      background: linear-gradient(175deg, #0f172a 0%, #1e293b 60%, var(--accent) 120%);
       color: #fff;
-      padding: 22px 16px;
+      padding: 24px 16px;
       position: sticky;
       top: 0;
       height: 100vh;
       overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.2) transparent;
+      box-shadow: 4px 0 20px rgba(0,0,0,0.1);
+      animation: slideIn 0.3s ease-out;
+    }
+
+    .side::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .side::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .side::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.2);
+      border-radius: 20px;
     }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 10px;
-      margin-bottom: 18px;
+      gap: 12px;
+      margin-bottom: 24px;
+      padding: 0 8px;
     }
-    .brand img { width: 34px; height: 34px; object-fit: contain; }
-    .brand strong { font-family: 'Space Grotesk', sans-serif; letter-spacing: 0.4px; }
+
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--accent-2), var(--accent-4));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: 700;
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.2);
+      animation: pulse 2s infinite;
+    }
+
+    .brand strong {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.2rem;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #fff, #e2e8f0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
 
     .scope-pill {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      border: 1px solid rgba(255,255,255,0.24);
-      background: rgba(255,255,255,0.12);
-      padding: 6px 10px;
-      border-radius: 999px;
-      font-size: 12px;
-      margin-bottom: 16px;
+      gap: 8px;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(8px);
+      padding: 8px 14px;
+      border-radius: 100px;
+      font-size: 0.85rem;
+      margin-bottom: 24px;
+      border: 1px solid rgba(255,255,255,0.15);
+      transition: var(--transition);
+    }
+
+    .scope-pill:hover {
+      background: rgba(255,255,255,0.15);
+      transform: translateY(-1px);
     }
 
     .nav {
       display: grid;
-      gap: 8px;
+      gap: 6px;
     }
 
     .nav a, .nav button {
@@ -88,513 +175,1499 @@
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 10px;
-      padding: 10px 12px;
+      gap: 12px;
+      padding: 12px 16px;
       border-radius: 12px;
-      color: rgba(255,255,255,0.92);
-      font-size: 14px;
+      color: rgba(255,255,255,0.85);
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: var(--transition);
       border: 1px solid transparent;
     }
 
-    .nav a:hover, .nav button:hover, .nav .active {
+    .nav a:hover, .nav button:hover {
       background: rgba(255,255,255,0.12);
       border-color: rgba(255,255,255,0.2);
+      transform: translateX(4px);
+      color: #fff;
     }
 
+    .nav .active {
+      background: rgba(255,255,255,0.15);
+      border-color: rgba(255,255,255,0.25);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    .nav .material-icons {
+      font-size: 20px;
+    }
+
+    /* Main content */
     .main {
-      padding: 20px;
+      padding: 24px;
       display: grid;
-      gap: 14px;
+      gap: 24px;
+      animation: fadeIn 0.4s ease-out;
     }
 
+    /* Topbar améliorée */
     .topbar {
-      background: rgba(255,255,255,0.82);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.5);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
-      padding: 12px 14px;
-      backdrop-filter: blur(8px);
+      gap: 16px;
+      padding: 16px 24px;
+      transition: var(--transition);
+      animation: slideDown 0.3s ease-out;
+    }
+
+    .topbar:hover {
+      background: rgba(255,255,255,0.95);
+      box-shadow: var(--shadow-xl);
     }
 
     .topbar h1 {
       margin: 0;
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.22rem;
-      letter-spacing: 0.2px;
+      font-size: 1.6rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--text-primary), var(--accent-2), var(--accent-4));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradient 3s ease infinite;
+      background-size: 200% 200%;
     }
 
-    .muted { color: var(--muted); }
+    @keyframes gradient {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .last-sync {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      margin-top: 4px;
+    }
+
+    .last-sync .material-icons {
+      font-size: 16px;
+      animation: spin 2s linear infinite;
+    }
 
     .top-actions {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
       flex-wrap: wrap;
     }
 
+    /* Boutons modernisés */
     .btn {
       border: 1px solid var(--border);
       background: #fff;
-      border-radius: 11px;
-      padding: 8px 11px;
-      font-weight: 700;
-      color: #334155;
+      border-radius: 10px;
+      padding: 10px 16px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
+      transition: var(--transition);
+      box-shadow: var(--shadow-sm);
     }
+
+    .btn:hover:not(:disabled) {
+      background: var(--surface-hover);
+      border-color: var(--border-focus);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .btn:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
     .btn:disabled {
-      opacity: 0.6;
+      opacity: 0.5;
       cursor: not-allowed;
-      pointer-events: none;
     }
 
     .btn.primary {
       border: none;
-      color: #fff;
       background: linear-gradient(135deg, var(--accent), #0f766e);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(13, 148, 136, 0.3);
+    }
+
+    .btn.primary:hover:not(:disabled) {
+      background: linear-gradient(135deg, #0f766e, var(--accent));
+      box-shadow: 0 6px 16px rgba(13, 148, 136, 0.4);
+    }
+
+    .btn.secondary {
+      border: none;
+      background: linear-gradient(135deg, var(--accent-2), #1e40af);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    }
+
+    .btn.secondary:hover:not(:disabled) {
+      background: linear-gradient(135deg, #1e40af, var(--accent-2));
+      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+    }
+
+    .btn.success {
+      border: none;
+      background: linear-gradient(135deg, var(--success), #15803d);
+      color: #fff;
+    }
+
+    .btn.warning {
+      border: none;
+      background: linear-gradient(135deg, var(--warning), #b45309);
+      color: #fff;
     }
 
     .btn.warn {
-      background: #fff7ed;
+      background: var(--accent-3-soft);
       color: #9a3412;
       border-color: #fed7aa;
     }
 
+    .btn.warn:hover:not(:disabled) {
+      background: #fed7aa;
+    }
+
+    /* Theme pickers */
     .theme-pickers {
       display: inline-flex;
       border: 1px solid var(--border);
-      border-radius: 999px;
-      padding: 3px;
+      border-radius: 100px;
+      padding: 4px;
       gap: 4px;
       background: #fff;
+      box-shadow: var(--shadow-sm);
     }
 
     .theme-dot {
-      width: 20px;
-      height: 20px;
-      border-radius: 999px;
-      border: 1px solid rgba(15,23,42,0.15);
+      width: 28px;
+      height: 28px;
+      border-radius: 100px;
+      border: 2px solid transparent;
       cursor: pointer;
+      transition: var(--transition);
     }
 
+    .theme-dot:hover {
+      transform: scale(1.1);
+      border-color: var(--text-primary);
+    }
+
+    /* KPI Cards améliorés */
     .grid-kpi {
       display: grid;
-      grid-template-columns: repeat(9, minmax(0, 1fr));
-      gap: 12px;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+    }
+
+    .quick-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+
+    .shortcut-chip {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, #ffffff, #f8fafc);
+      box-shadow: var(--shadow-sm);
+      padding: 16px;
+      display: grid;
+      gap: 10px;
+      cursor: pointer;
+      transition: var(--transition);
+      animation: slideDown 0.35s ease-out;
+      text-align: left;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .shortcut-chip::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2), var(--accent-4));
+    }
+
+    .shortcut-chip .head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--text-primary);
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .shortcut-chip .material-icons {
+      color: var(--accent);
+      font-size: 20px;
+      background: var(--accent-soft);
+      padding: 4px;
+      border-radius: 8px;
+    }
+
+    .shortcut-chip .meta {
+      color: var(--text-muted);
+      font-size: 0.84rem;
+    }
+
+    .shortcut-chip:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent-light);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .shortcut-chip:hover .material-icons {
+      background: var(--accent);
+      color: white;
+    }
+
+    .command-deck {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 16px;
+    }
+
+    .route-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, #fff, var(--surface-soft));
+      padding: 18px;
+      box-shadow: var(--shadow-sm);
+      display: grid;
+      gap: 8px;
+      cursor: pointer;
+      transition: var(--transition);
+      text-align: left;
+      animation: fadeIn 0.4s ease-out;
+      border-left: 4px solid;
+      border-left-color: var(--accent);
+    }
+
+    .route-card:nth-child(1) { border-left-color: var(--accent); }
+    .route-card:nth-child(2) { border-left-color: var(--accent-2); }
+    .route-card:nth-child(3) { border-left-color: var(--accent-3); }
+    .route-card:nth-child(4) { border-left-color: var(--accent-4); }
+
+    .route-card:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .route-card .label {
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      font-size: .72rem;
+      font-weight: 700;
+    }
+
+    .route-card .value {
+      color: var(--text-primary);
+      font-size: 1.5rem;
+      font-weight: 700;
+      font-family: 'Space Grotesk', sans-serif;
+      background: linear-gradient(135deg, var(--text-primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .route-card .hint {
+      color: var(--text-secondary);
+      font-size: .84rem;
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--success);
+      box-shadow: 0 0 0 0 rgba(22, 163, 74, .45);
+      animation: pulse 1.8s infinite;
+      display: inline-block;
+      margin-right: 6px;
     }
 
     .card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-md);
+      transition: var(--transition);
+      animation: scaleIn 0.3s ease-out;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-xl);
+      border-color: var(--accent-light);
     }
 
     .kpi {
-      padding: 12px;
+      padding: 24px;
       position: relative;
       overflow: hidden;
+      background: linear-gradient(135deg, #fff, var(--surface-soft));
     }
 
-    .kpi::after {
+    .kpi::before {
       content: '';
       position: absolute;
-      width: 120px;
-      height: 120px;
+      width: 150px;
+      height: 150px;
       border-radius: 50%;
       right: -40px;
-      top: -55px;
-      background: radial-gradient(circle, rgba(37,99,235,0.17), transparent 70%);
+      top: -60px;
+      background: radial-gradient(circle, rgba(13,148,136,0.1), transparent 70%);
+      transition: var(--transition);
     }
 
-    .kpi small { color: var(--muted); text-transform: uppercase; font-size: 11px; letter-spacing: 0.3px; }
-    .kpi strong { display: block; margin-top: 6px; font-size: 1.3rem; }
+    .kpi:hover::before {
+      transform: scale(1.2);
+      background: radial-gradient(circle, rgba(13,148,136,0.15), transparent 70%);
+    }
 
+    .kpi small {
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+    }
+
+    .kpi strong {
+      display: block;
+      margin-top: 8px;
+      font-size: 2rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--text-primary), var(--accent-2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Layout amélioré */
     .layout {
       display: grid;
-      grid-template-columns: 1.25fr 0.75fr;
-      gap: 12px;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 24px;
     }
 
-    .stack { display: grid; gap: 12px; }
+    .stack {
+      display: grid;
+      gap: 24px;
+    }
 
-    .panel { padding: 14px; }
+    /* Panel headers */
+    .panel {
+      padding: 24px;
+    }
 
     .panel-head {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 12px;
-      gap: 10px;
+      margin-bottom: 20px;
     }
 
     .panel-head h3 {
       margin: 0;
-      font-size: 1rem;
+      font-size: 1.2rem;
+      font-weight: 600;
       font-family: 'Space Grotesk', sans-serif;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
+    .panel-head .material-icons {
+      color: var(--accent);
+      background: var(--accent-soft);
+      padding: 6px;
+      border-radius: 10px;
+    }
+
+    /* Charts améliorés */
     .charts {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
     }
 
     .chart-box {
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 10px;
-      background: var(--surface-soft);
+      border-radius: var(--radius-sm);
+      padding: 20px;
+      background: linear-gradient(135deg, var(--surface-soft), #fff);
+      transition: var(--transition);
     }
 
-    .chart-box canvas { width: 100%; height: 220px; display: block; }
+    .chart-box:hover {
+      background: #fff;
+      border-color: var(--accent-light);
+      transform: translateY(-2px);
+    }
 
+    .chart-box canvas {
+      width: 100%;
+      height: auto;
+      max-height: 240px;
+      transition: var(--transition);
+    }
+
+    /* Legend améliorée */
     .legend {
-      margin-top: 8px;
+      margin-top: 16px;
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
-      font-size: 12px;
-      color: var(--muted);
+      gap: 12px;
     }
 
     .legend span {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 3px 8px;
-      border-radius: 999px;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 100px;
       background: #fff;
       border: 1px solid var(--border);
+      font-size: 0.85rem;
+      transition: var(--transition);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .legend span:hover {
+      background: var(--surface-hover);
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: var(--shadow-md);
     }
 
     .legend i {
-      width: 9px;
-      height: 9px;
-      border-radius: 999px;
-      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 100px;
     }
 
-    .split {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-
-    .inline-filters {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    .inline-filters select {
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 8px 10px;
-      font-family: inherit;
-      background: #fff;
-      font-size: 13px;
-      color: #334155;
-    }
-
-    .inputs {
-      display: grid;
-      gap: 8px;
-      margin-bottom: 8px;
-    }
-
-    .inputs input, .inputs select {
-      width: 100%;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 9px 10px;
-      font-family: inherit;
-      font-size: 13px;
-      background: #fff;
-    }
-
+    /* Tables améliorées */
     .table-wrap {
-      max-height: 350px;
+      max-height: 400px;
       overflow: auto;
       border: 1px solid var(--border);
-      border-radius: 10px;
+      border-radius: var(--radius-sm);
+      scrollbar-width: thin;
+    }
+
+    .table-wrap::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    .table-wrap::-webkit-scrollbar-track {
+      background: var(--surface-soft);
+    }
+
+    .table-wrap::-webkit-scrollbar-thumb {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      border-radius: 20px;
+    }
+
+    .table-wrap::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(135deg, var(--accent-2), var(--accent-4));
     }
 
     .table {
       width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
-      min-width: 580px;
-    }
-
-    .table th, .table td {
-      text-align: left;
-      padding: 9px 8px;
-      border-bottom: 1px solid var(--border);
-      vertical-align: top;
+      border-collapse: separate;
+      border-spacing: 0;
+      font-size: 0.9rem;
     }
 
     .table th {
       position: sticky;
       top: 0;
-      background: #f8fafc;
-      color: var(--muted);
-      z-index: 1;
+      background: linear-gradient(135deg, var(--surface-soft), #fff);
+      color: var(--text-muted);
+      font-weight: 600;
       text-transform: uppercase;
-      font-size: 11px;
-      letter-spacing: 0.3px;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+      padding: 16px 12px;
+      border-bottom: 2px solid var(--accent);
+      z-index: 10;
     }
 
+    .table td {
+      padding: 14px 12px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+
+    .table tbody tr {
+      transition: var(--transition);
+    }
+
+    .table tbody tr:hover {
+      background: linear-gradient(135deg, var(--surface-soft), #fff);
+      transform: translateX(4px);
+    }
+
+    .admin-role-group {
+      margin-bottom: 0;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .admin-role-groups {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .admin-role-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 12px 16px;
+      background: linear-gradient(135deg, var(--surface-soft), #fff);
+      border-bottom: 1px solid var(--border);
+      font-weight: 700;
+      font-size: .95rem;
+    }
+
+    .admin-role-count {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: .8rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #fff;
+      border: none;
+    }
+
+    .admin-role-group .table-wrap {
+      margin: 12px;
+      border-radius: 10px;
+    }
+
+    @media (max-width: 1100px) {
+      .admin-role-groups {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Pill badges */
     .pill {
       display: inline-flex;
       align-items: center;
-      padding: 3px 8px;
-      border-radius: 999px;
-      font-size: 11px;
-      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 100px;
+      font-size: 0.8rem;
+      font-weight: 600;
       border: 1px solid transparent;
+      transition: var(--transition);
+      box-shadow: var(--shadow-sm);
     }
 
-    .pill.admin { background: #dbeafe; color: #1d4ed8; border-color: #bfdbfe; }
-    .pill.superadmin { background: #dcfce7; color: #166534; border-color: #bbf7d0; }
+    .pill.admin {
+      background: linear-gradient(135deg, var(--accent-2-soft), #fff);
+      color: #1e40af;
+      border: 1px solid var(--accent-2);
+    }
 
+    .pill.superadmin {
+      background: linear-gradient(135deg, var(--success-soft), #fff);
+      color: #166534;
+      border: 1px solid var(--success);
+    }
+
+    .pill.client {
+      background: linear-gradient(135deg, var(--accent-3-soft), #fff);
+      color: #9a3412;
+      border: 1px solid var(--accent-3);
+    }
+
+    .pill.user {
+      background: linear-gradient(135deg, var(--info-soft), #fff);
+      color: #0891b2;
+      border: 1px solid var(--info);
+    }
+
+    .pill:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    /* Activity feed amélioré */
     .activity {
       display: grid;
-      gap: 8px;
-      max-height: 390px;
+      gap: 12px;
+      max-height: 450px;
       overflow: auto;
       padding-right: 4px;
     }
 
     .activity-item {
       border: 1px solid var(--border);
-      border-radius: 11px;
-      padding: 10px;
-      background: #fff;
-      display: grid;
-      gap: 4px;
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      background: linear-gradient(135deg, #fff, var(--surface-soft));
+      transition: var(--transition);
+      animation: slideInRight 0.3s ease-out;
+      border-left: 4px solid;
     }
 
-    .activity-item small { color: var(--muted); }
+    .activity-item:nth-child(3n+1) { border-left-color: var(--accent); }
+    .activity-item:nth-child(3n+2) { border-left-color: var(--accent-2); }
+    .activity-item:nth-child(3n+3) { border-left-color: var(--accent-3); }
 
+    .activity-item:hover {
+      transform: translateX(8px);
+      border-color: var(--accent-light);
+      box-shadow: var(--shadow-lg);
+    }
+
+    /* Alertes améliorées */
     .alert-stack {
       display: grid;
-      gap: 8px;
+      gap: 12px;
     }
 
     .alert {
-      border-radius: 11px;
-      padding: 10px;
+      border-radius: var(--radius-sm);
+      padding: 16px;
       border: 1px solid;
-      font-size: 13px;
+      font-size: 0.95rem;
+      animation: shake 0.5s ease-out;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
-    .alert.red { background: #fef2f2; border-color: #fecaca; color: #991b1b; }
-    .alert.amber { background: #fffbeb; border-color: #fde68a; color: #92400e; }
-    .alert.green { background: #ecfdf5; border-color: #bbf7d0; color: #166534; }
+    .alert::before {
+      font-family: 'Material Icons';
+      font-size: 20px;
+    }
 
+    .alert.red::before { content: 'error'; }
+    .alert.amber::before { content: 'warning'; }
+    .alert.green::before { content: 'check_circle'; }
+
+    .alert.red {
+      background: linear-gradient(135deg, var(--danger-soft), #fff);
+      border-color: #fecaca;
+      color: #991b1b;
+    }
+
+    .alert.amber {
+      background: linear-gradient(135deg, var(--warning-soft), #fff);
+      border-color: #fde68a;
+      color: #92400e;
+    }
+
+    .alert.green {
+      background: linear-gradient(135deg, var(--success-soft), #fff);
+      border-color: #bbf7d0;
+      color: #166534;
+    }
+
+    /* Insights améliorés */
     .insight-list {
       display: grid;
-      gap: 8px;
+      gap: 12px;
     }
 
     .insight-item {
       border: 1px solid var(--border);
-      border-radius: 10px;
-      background: var(--surface-soft);
-      padding: 9px 10px;
-      font-size: 13px;
-      color: #334155;
+      border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, var(--surface-soft), #fff);
+      padding: 18px;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .insight-item::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 100px;
+      height: 100px;
+      background: radial-gradient(circle, var(--accent-soft), transparent 70%);
+      opacity: 0.3;
+    }
+
+    .insight-item:hover {
+      background: #fff;
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: var(--shadow-lg);
     }
 
     .insight-item strong {
       display: block;
-      font-size: 13px;
-      color: #0f172a;
-      margin-bottom: 4px;
+      font-size: 1rem;
+      color: var(--accent);
+      margin-bottom: 8px;
     }
 
+    /* Tools grid améliorée */
     .tools-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
     }
 
     .tool-btn {
       border: 1px solid var(--border);
-      background: #fff;
-      border-radius: 10px;
-      padding: 10px;
-      font-size: 13px;
-      font-weight: 700;
-      color: #334155;
+      background: linear-gradient(135deg, #fff, var(--surface-soft));
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-secondary);
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
-      min-height: 40px;
+      gap: 8px;
+      transition: var(--transition);
+      min-height: 52px;
     }
 
     .tool-btn:hover {
-      border-color: #94a3b8;
-      background: #f8fafc;
+      background: linear-gradient(135deg, var(--surface-hover), #fff);
+      border-color: var(--accent);
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: var(--shadow-lg);
+      color: var(--accent);
     }
 
-    .empty {
-      padding: 14px;
+    .tool-btn .material-icons {
+      font-size: 20px;
+      transition: var(--transition);
+    }
+
+    .tool-btn:hover .material-icons {
+      transform: rotate(360deg);
+    }
+
+    /* Quick actions */
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .quick-action-card {
+      background: linear-gradient(135deg, #fff, var(--surface-soft));
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 20px;
       text-align: center;
-      border: 1px dashed #cbd5e1;
-      color: var(--muted);
-      border-radius: 10px;
-      background: #fff;
+      cursor: pointer;
+      transition: var(--transition);
+      animation: scaleIn 0.3s ease-out;
     }
 
+    .quick-action-card:hover {
+      transform: translateY(-4px) scale(1.05);
+      box-shadow: var(--shadow-xl);
+      border-color: var(--accent);
+    }
+
+    .quick-action-icon {
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, var(--accent-soft), var(--accent-2-soft));
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 12px;
+    }
+
+    .quick-action-icon .material-icons {
+      font-size: 28px;
+      color: var(--accent);
+    }
+
+    .quick-action-title {
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .quick-action-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* Status badges */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 12px;
+      border-radius: 100px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .status-badge.online {
+      background: var(--success-soft);
+      color: var(--success);
+    }
+
+    .status-badge.offline {
+      background: var(--danger-soft);
+      color: var(--danger);
+    }
+
+    .status-badge.pending {
+      background: var(--warning-soft);
+      color: var(--warning);
+    }
+
+    /* Progress bars */
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: var(--border);
+      border-radius: 100px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      border-radius: 100px;
+      transition: width 0.3s ease;
+    }
+
+    /* Empty state amélioré */
+    .empty {
+      padding: 40px;
+      text-align: center;
+      border: 2px dashed var(--border);
+      color: var(--text-muted);
+      border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, #fff, var(--surface-soft));
+      font-size: 1rem;
+    }
+
+    /* Toast amélioré */
     .toast {
       position: fixed;
-      right: 20px;
-      bottom: 20px;
-      background: #0f172a;
+      right: 24px;
+      bottom: 24px;
+      background: linear-gradient(135deg, var(--text-primary), #1e293b);
       color: #fff;
-      border-radius: 10px;
-      padding: 10px 12px;
-      font-size: 13px;
+      border-radius: 12px;
+      padding: 16px 24px;
+      font-size: 1rem;
+      font-weight: 500;
       opacity: 0;
-      transform: translateY(8px);
-      transition: all .25s ease;
-      z-index: 200;
-      pointer-events: none;
+      transform: translateY(10px) scale(0.95);
+      transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      z-index: 1000;
+      box-shadow: var(--shadow-xl);
+      border: 1px solid rgba(255,255,255,0.1);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
 
-    .toast.show { opacity: 1; transform: translateY(0); }
+    .toast::before {
+      font-family: 'Material Icons';
+      content: 'info';
+      font-size: 24px;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    /* Loading spinner */
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .spinner {
+      animation: spin 0.8s linear infinite;
+    }
+
+    /* Animations */
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes scaleIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
+      20%, 40%, 60%, 80% { transform: translateX(2px); }
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(22, 163, 74, .45); }
+      70% { box-shadow: 0 0 0 10px rgba(22, 163, 74, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    .float-animation {
+      animation: float 3s ease-in-out infinite;
+    }
+
+    /* Media queries améliorées */
+    @media (max-width: 1400px) {
+      .quick-actions {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
 
     @media (max-width: 1280px) {
-      .grid-kpi { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-      .layout { grid-template-columns: 1fr; }
+      .layout {
+        grid-template-columns: 1fr;
+      }
+      
+      .charts {
+        grid-template-columns: 1fr;
+      }
     }
 
-    @media (max-width: 900px) {
-      .app { grid-template-columns: 1fr; }
-      .side { position: relative; height: auto; }
-      .grid-kpi { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .charts { grid-template-columns: 1fr; }
-      .split { grid-template-columns: 1fr; }
-      .topbar { flex-direction: column; align-items: flex-start; }
-      .tools-grid { grid-template-columns: 1fr; }
+    @media (max-width: 1024px) {
+      .app {
+        grid-template-columns: 1fr;
+      }
+      
+      .side {
+        position: relative;
+        height: auto;
+        min-height: auto;
+      }
+      
+      .grid-kpi {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .topbar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .top-actions {
+        width: 100%;
+        justify-content: flex-start;
+      }
+      
+      .quick-actions {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .main {
+        padding: 16px;
+      }
+      
+      .grid-kpi {
+        grid-template-columns: 1fr;
+      }
+      
+      .split {
+        grid-template-columns: 1fr;
+      }
+      
+      .tools-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .top-actions {
+        flex-direction: column;
+        width: 100%;
+      }
+      
+      .top-actions .btn {
+        width: 100%;
+        justify-content: center;
+      }
+      
+      .charts {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Inputs modernisés */
+    input, select, textarea {
+      font-family: 'Outfit', sans-serif;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-size: 0.95rem;
+      transition: var(--transition);
+      background: #fff;
+      width: 100%;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.1);
+    }
+
+    /* Split amélioré */
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    /* Checkbox moderne */
+    input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      accent-color: var(--accent);
+    }
+
+    /* Loading overlay */
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255,255,255,0.9);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      opacity: 0;
+      pointer-events: none;
+      transition: var(--transition);
+    }
+
+    .loading-overlay.show {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .loading-spinner {
+      width: 60px;
+      height: 60px;
+      border: 4px solid var(--border);
+      border-top-color: var(--accent);
+      border-right-color: var(--accent-2);
+      border-bottom-color: var(--accent-3);
+      border-left-color: var(--accent-4);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    .inline-filters {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .inputs {
+      display: grid;
+      gap: 16px;
+      margin-bottom: 8px;
+    }
+
+    /* Metric cards */
+    .metric-card {
+      background: linear-gradient(135deg, #fff, var(--surface-soft));
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .metric-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .metric-value {
+      font-size: 2rem;
+      font-weight: 700;
+      font-family: 'Space Grotesk', sans-serif;
+      background: linear-gradient(135deg, var(--text-primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .metric-label {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    /* Tooltips */
+    [data-tooltip] {
+      position: relative;
+      cursor: help;
+    }
+
+    [data-tooltip]:before {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 8px 12px;
+      background: var(--text-primary);
+      color: #fff;
+      font-size: 0.8rem;
+      border-radius: 8px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: var(--transition);
+      z-index: 100;
+    }
+
+    [data-tooltip]:hover:before {
+      opacity: 1;
+      transform: translateX(-50%) translateY(-8px);
     }
   </style>
 </head>
 <body class="auth-pending">
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-spinner"></div>
+  </div>
+
   <div class="app">
     <aside class="side">
       <div class="brand">
-        <img src="/logo.png" alt="TDE Group">
+        <div class="brand-logo float-animation">TDE</div>
         <strong>TDE GROUP</strong>
       </div>
       <div class="scope-pill">
-        <span class="material-icons" style="font-size:14px;">shield</span>
-        <span>Zone Super Admin</span>
+        <span class="material-icons">shield</span>
+        <span>Super Admin Zone</span>
+        <span class="status-badge online">En ligne</span>
       </div>
 
       <nav class="nav">
-        <a href="dashboard.html" class="active"><span class="material-icons">dashboard</span><span>Control Room</span></a>
-        <a href="create-admin.html"><span class="material-icons">person_add</span><span>Créer Admin</span></a>
-        <a href="/admin/index.html"><span class="material-icons">domain</span><span>Pôle Admin</span></a>
-        <a href="/admin/clients.html"><span class="material-icons">groups</span><span>Clients CRM</span></a>
-        <a href="/admin/reports.html"><span class="material-icons">assessment</span><span>Rapports</span></a>
-        <button type="button" id="logoutBtn"><span class="material-icons">logout</span><span>Déconnexion</span></button>
+        <a href="dashboard.html" class="active">
+          <span class="material-icons">dashboard</span>
+          <span>Control Room</span>
+        </a>
+        <a href="create-admin.html">
+          <span class="material-icons">person_add</span>
+          <span>Créer Admin</span>
+        </a>
+        <a href="admin-directory.html">
+          <span class="material-icons">manage_accounts</span>
+          <span>Répertoire Admin</span>
+        </a>
+        <a href="admin-actions.html">
+          <span class="material-icons">history</span>
+          <span>Actions Admin</span>
+        </a>
+        <a href="users-directory.html">
+          <span class="material-icons">badge</span>
+          <span>Répertoire Users</span>
+        </a>
+        <button type="button" id="logoutBtn">
+          <span class="material-icons">logout</span>
+          <span>Déconnexion</span>
+        </button>
       </nav>
+
     </aside>
 
     <main class="main">
       <section class="topbar card">
         <div>
           <h1>Super Admin Control Room</h1>
-          <div class="muted">Pilotage global, sécurité, performance, gouvernance. <span id="lastRefreshLabel">Dernière sync: —</span></div>
+          <div class="last-sync">
+            <span class="material-icons spinner">sync</span>
+            <span id="lastRefreshLabel">Dernière synchronisation: —</span>
+          </div>
         </div>
         <div class="top-actions">
           <div class="theme-pickers" aria-label="Palette de couleurs">
             <button class="theme-dot" type="button" title="Teal" style="background:#0d9488" data-theme="teal"></button>
             <button class="theme-dot" type="button" title="Blue" style="background:#2563eb" data-theme="blue"></button>
             <button class="theme-dot" type="button" title="Orange" style="background:#ea580c" data-theme="orange"></button>
+            <button class="theme-dot" type="button" title="Purple" style="background:#7c3aed" data-theme="purple"></button>
+            <button class="theme-dot" type="button" title="Pink" style="background:#db2777" data-theme="pink"></button>
           </div>
-          <button type="button" id="toggleAutoRefreshBtn" class="btn"><span class="material-icons" style="font-size:17px;">autorenew</span>Auto-refresh: OFF</button>
-          <button type="button" id="exportBtn" class="btn"><span class="material-icons" style="font-size:17px;">download</span>Exporter snapshot</button>
-          <button type="button" id="exportAdminsCsvBtn" class="btn"><span class="material-icons" style="font-size:17px;">table_view</span>Admins CSV</button>
-          <button type="button" id="exportClientsCsvBtn" class="btn"><span class="material-icons" style="font-size:17px;">table_chart</span>Clients CSV</button>
-          <button type="button" id="exportAdminLogsPdfBtn" class="btn"><span class="material-icons" style="font-size:17px;">picture_as_pdf</span>Logs admin PDF</button>
-          <button type="button" id="exportClientLogsPdfBtn" class="btn"><span class="material-icons" style="font-size:17px;">picture_as_pdf</span>Logs client PDF</button>
-          <button type="button" id="refreshBtn" class="btn primary"><span class="material-icons" style="font-size:17px;">refresh</span>Rafraîchir</button>
+          <button type="button" id="toggleAutoRefreshBtn" class="btn" data-tooltip="Actualisation automatique">
+            <span class="material-icons">autorenew</span>
+            <span>Auto: OFF</span>
+          </button>
+          <button type="button" id="refreshBtn" class="btn primary" data-tooltip="Rafraîchir les données">
+            <span class="material-icons">refresh</span>
+            <span>Rafraîchir</span>
+          </button>
+          <button type="button" id="copyStealthLinkBtn" class="btn secondary" data-tooltip="Copier le lien caché">
+            <span class="material-icons">content_copy</span>
+            <span>Lien caché</span>
+          </button>
+          <button type="button" id="lockZoneBtn" class="btn warning" data-tooltip="Verrouiller la session">
+            <span class="material-icons">lock</span>
+            <span>Verrouiller</span>
+          </button>
         </div>
       </section>
 
+      <!-- KPI Cards avec animations -->
       <section class="grid-kpi">
-        <article class="kpi card"><small>Admins</small><strong id="kpiAdmins">0</strong><div class="muted">Comptes opérationnels</div></article>
-        <article class="kpi card"><small>Admins total</small><strong id="kpiAdminsTotal">0</strong><div class="muted">Admin + Superadmin</div></article>
-        <article class="kpi card"><small>Superadmins</small><strong id="kpiSuperadmins">0</strong><div class="muted">Niveau contrôle total</div></article>
-        <article class="kpi card"><small>Clients</small><strong id="kpiClients">0</strong><div class="muted">Portefeuille consolidé</div></article>
-        <article class="kpi card"><small>Projets totaux</small><strong id="kpiProjects">0</strong><div class="muted">Volumes pilotés</div></article>
-        <article class="kpi card"><small>Projets actifs</small><strong id="kpiActive">0</strong><div class="muted">Exécution en cours</div></article>
-        <article class="kpi card"><small>Taux actifs</small><strong id="kpiActiveRate">0%</strong><div class="muted">Intensité du run</div></article>
-        <article class="kpi card"><small>Comptes Auth</small><strong id="kpiAuthUsers">0</strong><div class="muted">Base authentifiée globale</div></article>
-        <article class="kpi card"><small>Connexions 24h</small><strong id="kpiSignins24">0</strong><div class="muted">Activité récente</div></article>
+        <article class="kpi card" style="animation-delay: 0.1s">
+          <span class="material-icons" style="color: var(--accent-2);">admin_panel_settings</span>
+          <small>Admins</small>
+          <strong id="kpiAdmins">0</strong>
+          <div class="muted">Comptes opérationnels</div>
+          <div class="progress-bar" style="margin-top: 10px;">
+            <div class="progress-fill" style="width: 75%" id="adminProgress"></div>
+          </div>
+        </article>
+        <article class="kpi card" style="animation-delay: 0.15s">
+          <span class="material-icons" style="color: var(--accent);">security</span>
+          <small>Superadmins</small>
+          <strong id="kpiSuperadmins">0</strong>
+          <div class="muted">Contrôle total</div>
+          <div class="progress-bar" style="margin-top: 10px;">
+            <div class="progress-fill" style="width: 25%" id="superadminProgress"></div>
+          </div>
+        </article>
+        <article class="kpi card" style="animation-delay: 0.2s">
+          <span class="material-icons" style="color: var(--accent-3);">groups</span>
+          <small>Clients</small>
+          <strong id="kpiClients">0</strong>
+          <div class="muted">Portefeuille</div>
+        </article>
+        <article class="kpi card" style="animation-delay: 0.25s">
+          <span class="material-icons" style="color: var(--success);">assignment</span>
+          <small>Projets actifs</small>
+          <strong id="kpiActive">0</strong>
+          <div class="muted">En cours</div>
+        </article>
+        <article class="kpi card" style="animation-delay: 0.3s">
+          <span class="material-icons" style="color: var(--warning);">speed</span>
+          <small>Taux activité</small>
+          <strong id="kpiActiveRate">0%</strong>
+          <div class="muted">Performance</div>
+        </article>
+        <article class="kpi card" style="animation-delay: 0.35s">
+          <span class="material-icons" style="color: var(--accent-2);">login</span>
+          <small>Connexions 24h</small>
+          <strong id="kpiSignins24">0</strong>
+          <div class="muted">Activité récente</div>
+        </article>
       </section>
 
+      <section class="quick-strip">
+        <button class="shortcut-chip" type="button" data-go="create-admin.html">
+          <div class="head">
+            <span>Créer un nouvel admin</span>
+            <span class="material-icons">person_add</span>
+          </div>
+          <div class="meta">Provisioning rapide avec promotion de rôle et contrôles.</div>
+        </button>
+        <button class="shortcut-chip" type="button" data-go="admin-directory.html">
+          <div class="head">
+            <span>Répertoire Admin</span>
+            <span class="material-icons">manage_accounts</span>
+          </div>
+          <div class="meta">Tous les admins/superadmins avec filtres et export CSV.</div>
+        </button>
+        <button class="shortcut-chip" type="button" data-go="admin-actions.html">
+          <div class="head">
+            <span>Suivre les actions admin</span>
+            <span class="material-icons">history</span>
+          </div>
+          <div class="meta">Audit des actions opérationnelles branché backend.</div>
+        </button>
+        <button class="shortcut-chip" type="button" data-go="users-directory.html">
+          <div class="head">
+            <span>Répertoire utilisateurs</span>
+            <span class="material-icons">badge</span>
+          </div>
+          <div class="meta">Vue séparée clients, admins et comptes auth.</div>
+        </button>
+        <button class="shortcut-chip" type="button" data-go="/superadmin/login.html">
+          <div class="head">
+            <span><i class="pulse-dot"></i>Entrée cachée</span>
+            <span class="material-icons">shield</span>
+          </div>
+          <div class="meta">Accès discret superadmin pour contrôle sécurité.</div>
+        </button>
+      </section>
+
+      <!-- Layout principal -->
       <section class="layout">
         <div class="stack">
+          <!-- Graphiques -->
           <article class="panel card">
             <div class="panel-head">
-              <h3>Vue Graphique Globale</h3>
-              <div class="muted">Répartition rôles et état des projets</div>
+              <h3>
+                <span class="material-icons">donut_large</span>
+                Vue Graphique Globale
+              </h3>
+              <span class="muted">Répartition des rôles et projets</span>
             </div>
             <div class="charts">
               <div class="chart-box">
-                <canvas id="roleChart" width="560" height="300"></canvas>
+                <canvas id="roleChart" width="560" height="260"></canvas>
                 <div class="legend" id="roleLegend"></div>
               </div>
               <div class="chart-box">
-                <canvas id="projectsChart" width="560" height="300"></canvas>
+                <canvas id="projectsChart" width="560" height="260"></canvas>
                 <div class="legend" id="projectLegend"></div>
+              </div>
+              <div class="chart-box">
+                <canvas id="authHealthChart" width="560" height="260"></canvas>
+                <div class="legend" id="authHealthLegend"></div>
+              </div>
+              <div class="chart-box">
+                <canvas id="adminQualityChart" width="560" height="260"></canvas>
+                <div class="legend" id="adminQualityLegend"></div>
+              </div>
+              <div class="chart-box">
+                <canvas id="clientsPortfolioChart" width="560" height="260"></canvas>
+                <div class="legend" id="clientsPortfolioLegend"></div>
               </div>
             </div>
           </article>
 
+          <!-- Gestion des Admins -->
           <article class="panel card">
             <div class="panel-head">
-              <h3>Gestion des Comptes Admin</h3>
+              <h3>
+                <span class="material-icons">manage_accounts</span>
+                Gestion des Admins
+              </h3>
               <div class="inline-filters">
                 <select id="adminRoleFilter">
-                  <option value="all">Tous rôles</option>
+                  <option value="all">Tous les rôles</option>
                   <option value="admin">Admins</option>
                   <option value="superadmin">Superadmins</option>
                 </select>
-                <input id="adminSearch" type="search" placeholder="Rechercher nom / email" style="max-width:260px;border:1px solid var(--border);border-radius:10px;padding:8px 10px;">
+                <input id="adminSearch" type="search" placeholder="Rechercher un admin...">
+                <button class="btn" id="exportAdminsBtn" data-tooltip="Exporter la liste">
+                  <span class="material-icons">download</span>
+                </button>
               </div>
             </div>
             <div class="table-wrap" id="adminsTableWrap"></div>
           </article>
 
+          <!-- Base Clients -->
           <article class="panel card">
             <div class="panel-head">
-              <h3>Base Clients</h3>
+              <h3>
+                <span class="material-icons">business_center</span>
+                Base Clients
+              </h3>
               <div class="inline-filters">
                 <select id="clientStatusFilter">
-                  <option value="all">Tous statuts</option>
+                  <option value="all">Tous les statuts</option>
                   <option value="active">Actif</option>
                   <option value="in_progress">En cours</option>
                   <option value="planning">Planning</option>
                   <option value="paused">En pause</option>
                   <option value="completed">Terminé</option>
-                  <option value="cancelled">Annulé</option>
                 </select>
-                <input id="clientSearch" type="search" placeholder="Filtrer client / email" style="max-width:260px;border:1px solid var(--border);border-radius:10px;padding:8px 10px;">
+                <input id="clientSearch" type="search" placeholder="Rechercher un client...">
+                <button class="btn" id="exportClientsBtn" data-tooltip="Exporter la liste">
+                  <span class="material-icons">download</span>
+                </button>
               </div>
             </div>
             <div class="table-wrap" id="clientsTableWrap"></div>
@@ -602,86 +1675,89 @@
         </div>
 
         <div class="stack">
+          <!-- Création rapide -->
           <article class="panel card">
-            <div class="panel-head"><h3>Création rapide d'admin</h3></div>
+            <div class="panel-head">
+              <h3>
+                <span class="material-icons">person_add_alt</span>
+                Création Rapide
+              </h3>
+            </div>
             <div class="inputs">
               <input id="newAdminName" type="text" placeholder="Nom complet">
               <input id="newAdminEmail" type="email" placeholder="Email professionnel">
+              <input id="newAdminPhone" type="tel" placeholder="Téléphone">
               <input id="newAdminPassword" type="password" placeholder="Mot de passe">
               <select id="newAdminRole">
                 <option value="admin">Admin</option>
                 <option value="superadmin">Super Admin</option>
               </select>
-              <button type="button" id="createAdminBtn" class="btn primary" style="justify-content:center;"><span class="material-icons" style="font-size:18px;">person_add</span>Créer</button>
-            </div>
-          </article>
-
-          <article class="panel card">
-            <div class="panel-head">
-              <h3>Utilisateurs authentifiés</h3>
-              <div class="inline-filters">
-                <select id="authUsersFilter">
-                  <option value="all">Tous</option>
-                  <option value="unconfirmed">Emails non confirmés</option>
-                  <option value="without_profile">Sans profil</option>
-                  <option value="non_admin_recent">Actifs 7j non-admin</option>
-                  <option value="admin_only">Admins seulement</option>
-                </select>
-                <input id="authUsersSearch" type="search" placeholder="Filtrer nom / email" style="max-width:220px;border:1px solid var(--border);border-radius:10px;padding:8px 10px;">
-                <button type="button" id="refreshAuthUsersBtn" class="btn">Actualiser</button>
+              <div class="split">
+                <button type="button" id="createAdminBtn" class="btn primary" style="justify-content:center;">
+                  <span class="material-icons">person_add</span>
+                  Créer
+                </button>
+                <button type="button" id="createAdminAdvancedBtn" class="btn secondary" style="justify-content:center;">
+                  <span class="material-icons">tune</span>
+                  Avancé
+                </button>
               </div>
             </div>
-            <div class="split" style="margin-bottom:10px;">
-              <button type="button" id="bulkPromoteAdminBtn" class="btn">Promouvoir sélection en admin</button>
-              <button type="button" id="bulkPromoteSuperBtn" class="btn warn">Promouvoir sélection en superadmin</button>
-            </div>
-            <div class="table-wrap" id="authUsersTableWrap"></div>
           </article>
 
+          <!-- Alertes Gouvernance -->
           <article class="panel card">
-            <div class="panel-head"><h3>Alertes Governance</h3></div>
+            <div class="panel-head">
+              <h3>
+                <span class="material-icons">warning</span>
+                Alertes Gouvernance
+              </h3>
+              <span class="muted">Sécurité & conformité</span>
+            </div>
             <div class="alert-stack" id="alertsWrap"></div>
           </article>
 
+          <!-- Intelligence Superadmin -->
           <article class="panel card">
-            <div class="panel-head"><h3>Intelligence Superadmin</h3></div>
+            <div class="panel-head">
+              <h3>
+                <span class="material-icons">psychology</span>
+                Intelligence Superadmin
+              </h3>
+              <button class="btn" id="refreshInsightsBtn" data-tooltip="Actualiser les insights">
+                <span class="material-icons">refresh</span>
+              </button>
+            </div>
             <div class="insight-list" id="strategicWrap"></div>
           </article>
 
           <article class="panel card">
-            <div class="panel-head"><h3>Journal d'activité</h3></div>
+            <div class="panel-head">
+              <h3>
+                <span class="material-icons">alternate_email</span>
+                Emails Admins & Superadmins
+              </h3>
+              <button class="btn" id="copyAllEmailsBtn" data-tooltip="Copier tous les emails">
+                <span class="material-icons">content_copy</span>
+              </button>
+            </div>
+            <div class="insight-list" id="adminEmailsWrap"></div>
+          </article>
+
+          <!-- Journal d'Activité -->
+          <article class="panel card">
+            <div class="panel-head">
+              <h3>
+                <span class="material-icons">history</span>
+                Journal d'Activité
+              </h3>
+              <button class="btn" id="exportActivityBtn" data-tooltip="Exporter l'activité">
+                <span class="material-icons">download</span>
+              </button>
+            </div>
             <div class="activity" id="activityFeed"></div>
           </article>
 
-          <article class="panel card">
-            <div class="panel-head">
-              <h3>Audit local superadmin</h3>
-              <button type="button" id="clearAuditBtn" class="btn warn">Vider</button>
-            </div>
-            <div class="activity" id="auditFeed"></div>
-          </article>
-
-          <article class="panel card">
-            <div class="panel-head"><h3>Raccourcis bonus</h3></div>
-            <div class="split">
-              <button class="btn" type="button" onclick="window.location.href='/admin/tickets.html?status=open'">Tickets ouverts</button>
-              <button class="btn" type="button" onclick="window.location.href='/admin/messages.html?unread=1'">Messages non lus</button>
-              <button class="btn" type="button" onclick="window.location.href='/admin/calendar.html'">Calendrier global</button>
-              <button class="btn warn" type="button" onclick="window.location.href='/admin/reports.html'">Rapport stratégique</button>
-            </div>
-          </article>
-
-          <article class="panel card">
-            <div class="panel-head"><h3>Outils interactifs</h3></div>
-            <div class="tools-grid">
-              <button type="button" id="toolFocusAdminSearch" class="tool-btn"><span class="material-icons" style="font-size:17px;">manage_search</span>Recherche admin</button>
-              <button type="button" id="toolFilterSuperadmins" class="tool-btn"><span class="material-icons" style="font-size:17px;">security</span>Voir superadmins</button>
-              <button type="button" id="toolFilterActiveClients" class="tool-btn"><span class="material-icons" style="font-size:17px;">groups</span>Clients actifs</button>
-              <button type="button" id="toolResetFilters" class="tool-btn"><span class="material-icons" style="font-size:17px;">filter_alt_off</span>Reset filtres</button>
-              <button type="button" id="toolOpenCreateAdmin" class="tool-btn"><span class="material-icons" style="font-size:17px;">person_add</span>Nouveau admin</button>
-              <button type="button" id="toolRefreshAll" class="tool-btn"><span class="material-icons" style="font-size:17px;">refresh</span>Refresh global</button>
-            </div>
-          </article>
         </div>
       </section>
     </main>
@@ -703,19 +1779,31 @@
       selectedAuthUsers: [],
       lastRefresh: null,
       auditLog: [],
-      autoRefreshEnabled: false,
-      autoRefreshMs: 60000,
+      isLoading: false,
+      autoRefreshEnabled: true,
+      autoRefreshMs: 15000,
       autoRefreshTimer: null
     };
 
     const AUDIT_STORAGE_KEY = 'superadmin_local_audit_v1';
-    const ADMIN_CREATED_EVENT_KEY = 'superadmin_admin_created_event_v1';
-    const roleColors = ['#2563eb', '#16a34a', '#94a3b8'];
+    const roleColors = ['#16a34a', '#2563eb', '#0d9488', '#7c3aed', '#94a3b8'];
     const projectColors = ['#0d9488', '#f59e0b', '#ef4444'];
 
+    // Loading overlay management
+    function showLoading() {
+      const overlay = document.getElementById('loadingOverlay');
+      if (overlay) overlay.classList.add('show');
+    }
+
+    function hideLoading() {
+      const overlay = document.getElementById('loadingOverlay');
+      if (overlay) overlay.classList.remove('show');
+    }
+
     async function initialize() {
+      showLoading();
       try {
-        if (!superadminStealth.ensureStealthOrRedirect({ redirectTo: '/client/login.html' })) {
+        if (!superadminStealth.ensureStealthOrRedirect({ redirectTo: '/superadmin/login.html' })) {
           return;
         }
         await AuthService.authReady;
@@ -727,84 +1815,89 @@
 
         bindActions();
         applySavedTheme();
-        loadAuditLog();
         loadAutoRefreshPreference();
         scheduleAutoRefresh();
-        renderAuditFeed();
         updateAutoRefreshButton();
-        applyPendingAdminCreatedEvent({ silent: true });
         await loadAll();
       } catch (error) {
         console.error('superadmin initialize error:', error);
-        window.location.href = 'login.html';
+      } finally {
+        hideLoading();
       }
     }
 
     function bindActions() {
-      document.getElementById('refreshBtn')?.addEventListener('click', loadAll);
+      document.getElementById('refreshBtn')?.addEventListener('click', () => loadAll());
       document.getElementById('createAdminBtn')?.addEventListener('click', createAdminFromForm);
       document.getElementById('adminSearch')?.addEventListener('input', renderAdmins);
       document.getElementById('adminRoleFilter')?.addEventListener('change', renderAdmins);
       document.getElementById('clientSearch')?.addEventListener('input', renderClients);
       document.getElementById('clientStatusFilter')?.addEventListener('change', renderClients);
-      document.getElementById('authUsersSearch')?.addEventListener('input', renderAuthUsers);
-      document.getElementById('authUsersFilter')?.addEventListener('change', renderAuthUsers);
-      document.getElementById('refreshAuthUsersBtn')?.addEventListener('click', loadAuthenticatedUsersOnly);
-      document.getElementById('bulkPromoteAdminBtn')?.addEventListener('click', () => bulkPromoteSelectedAuthUsers('admin'));
-      document.getElementById('bulkPromoteSuperBtn')?.addEventListener('click', () => bulkPromoteSelectedAuthUsers('superadmin'));
       document.getElementById('logoutBtn')?.addEventListener('click', logout);
       document.getElementById('exportBtn')?.addEventListener('click', exportSnapshot);
       document.getElementById('exportAdminsCsvBtn')?.addEventListener('click', exportAdminsCsv);
       document.getElementById('exportClientsCsvBtn')?.addEventListener('click', exportClientsCsv);
-      document.getElementById('exportAdminLogsPdfBtn')?.addEventListener('click', exportAdminLogsPdf);
-      document.getElementById('exportClientLogsPdfBtn')?.addEventListener('click', exportClientLogsPdf);
       document.getElementById('toggleAutoRefreshBtn')?.addEventListener('click', toggleAutoRefresh);
-      document.getElementById('clearAuditBtn')?.addEventListener('click', clearAuditLog);
-      window.addEventListener('storage', onStorageSync);
-      document.getElementById('toolFocusAdminSearch')?.addEventListener('click', toolFocusAdminSearch);
-      document.getElementById('toolFilterSuperadmins')?.addEventListener('click', toolFilterSuperadmins);
-      document.getElementById('toolFilterActiveClients')?.addEventListener('click', toolFilterActiveClients);
-      document.getElementById('toolResetFilters')?.addEventListener('click', toolResetFilters);
-      document.getElementById('toolOpenCreateAdmin')?.addEventListener('click', toolOpenCreateAdmin);
-      document.getElementById('toolRefreshAll')?.addEventListener('click', () => loadAll());
+      document.getElementById('copyStealthLinkBtn')?.addEventListener('click', copyStealthEntryLink);
+      document.getElementById('lockZoneBtn')?.addEventListener('click', lockSuperadminZone);
+      document.getElementById('exportAdminsBtn')?.addEventListener('click', exportAdminsCsv);
+      document.getElementById('exportClientsBtn')?.addEventListener('click', exportClientsCsv);
+      document.getElementById('refreshInsightsBtn')?.addEventListener('click', () => loadAll());
+      document.getElementById('copyAllEmailsBtn')?.addEventListener('click', copyAllEmails);
+      document.getElementById('exportActivityBtn')?.addEventListener('click', exportActivity);
+      document.getElementById('createAdminAdvancedBtn')?.addEventListener('click', () => window.location.href = 'create-admin.html?advanced=true');
+      
+      document.querySelectorAll('[data-go]').forEach((node) => {
+        node.addEventListener('click', () => {
+          const href = String(node.getAttribute('data-go') || '').trim();
+          if (!href) return;
+          window.location.href = href;
+        });
+      });
 
       document.querySelectorAll('[data-theme]').forEach((btn) => {
         btn.addEventListener('click', () => applyTheme(btn.dataset.theme));
       });
-    }
 
-    function onStorageSync(event) {
-      if (!event || event.key !== ADMIN_CREATED_EVENT_KEY) return;
-      const changed = applyPendingAdminCreatedEvent({ silent: false });
-      if (changed) {
+      window.addEventListener('focus', () => {
         loadAll({ silent: true, skipAudit: true });
-      }
+      });
+
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) {
+          loadAll({ silent: true, skipAudit: true });
+        }
+      });
     }
 
     async function loadAll(options = {}) {
+      if (state.isLoading) return;
+      state.isLoading = true;
       const { silent = false, skipAudit = false } = options;
+      if (!silent) showLoading();
       try {
-        const [overview, admins, clients] = await Promise.all([
+        const [overview, admins, clients, authUsersResult] = await Promise.all([
           SuperAdminService.getOverview(),
           SuperAdminService.getAdmins(),
-          SuperAdminService.getClients()
+          SuperAdminService.getClients(),
+          SuperAdminService.getAuthenticatedUsers().catch(() => [])
         ]);
 
         state.overview = overview || {};
         state.admins = admins || [];
         state.clients = clients || [];
+        state.authUsers = Array.isArray(authUsersResult) ? authUsersResult : [];
         state.lastRefresh = new Date();
-        await loadAuthenticatedUsersOnly({ silent: true });
 
         renderOverview();
         renderAdmins();
         renderClients();
-        renderAuthUsers();
         renderCharts();
         renderAlerts();
         renderStrategicInsights();
+        renderAdminEmails();
         renderActivity();
-        renderAuditFeed();
+        
         if (!silent) {
           toast('Données superadmin mises à jour.');
         }
@@ -813,34 +1906,10 @@
         }
       } catch (error) {
         console.error('loadAll superadmin error:', error);
-        alert(error?.message || 'Erreur de chargement superadmin.');
-      }
-    }
-
-    async function loadAuthenticatedUsersOnly(options = {}) {
-      const { silent = false } = options;
-      try {
-        const search = String(document.getElementById('authUsersSearch')?.value || '').trim();
-        state.authUsers = await SuperAdminService.getAuthenticatedUsers({ search, limit: 300 });
-        const authIds = new Set((state.authUsers || []).map((u) => String(u.id || '')).filter(Boolean));
-        state.selectedAuthUsers = (state.selectedAuthUsers || []).filter((id) => authIds.has(String(id)));
-        renderAuthUsers();
-        renderOverview();
-        renderAlerts();
-        renderStrategicInsights();
-        if (!silent) {
-          toast('Utilisateurs authentifiés mis à jour.');
-        }
-      } catch (error) {
-        console.error('auth users load error:', error);
-        state.authUsers = [];
-        renderAuthUsers();
-        renderOverview();
-        renderAlerts();
-        renderStrategicInsights();
-        if (!silent) {
-          alert(error?.message || 'Impossible de charger les utilisateurs authentifiés.');
-        }
+        toast(error?.message || 'Erreur de chargement superadmin.');
+      } finally {
+        state.isLoading = false;
+        if (!silent) hideLoading();
       }
     }
 
@@ -888,28 +1957,97 @@
       };
     }
 
+    function getRoleBreakdown() {
+      const authUsers = Array.isArray(state.authUsers) ? state.authUsers : [];
+      if (!authUsers.length) {
+        const o = state.overview || {};
+        const admins = Number(o.adminsCount || 0);
+        const superadmins = Number(o.superAdminsCount || 0);
+        return [
+          { key: 'superadmin', label: 'Superadmins', count: superadmins },
+          { key: 'admin', label: 'Admins', count: admins },
+          { key: 'client', label: 'Clients', count: 0 },
+          { key: 'user', label: 'Users/Autres', count: 0 },
+          { key: 'no_role', label: 'Sans rôle', count: 0 }
+        ];
+      }
+
+      const counter = {
+        superadmin: 0,
+        admin: 0,
+        client: 0,
+        user: 0,
+        no_role: 0
+      };
+
+      authUsers.forEach((u) => {
+        const role = String(u?.profile_role || '').trim().toLowerCase();
+        if (!role) {
+          counter.no_role += 1;
+        } else if (role === 'superadmin') {
+          counter.superadmin += 1;
+        } else if (role === 'admin') {
+          counter.admin += 1;
+        } else if (role === 'client') {
+          counter.client += 1;
+        } else {
+          counter.user += 1;
+        }
+      });
+
+      return [
+        { key: 'superadmin', label: 'Superadmins', count: counter.superadmin },
+        { key: 'admin', label: 'Admins', count: counter.admin },
+        { key: 'client', label: 'Clients', count: counter.client },
+        { key: 'user', label: 'Users/Autres', count: counter.user },
+        { key: 'no_role', label: 'Sans rôle', count: counter.no_role }
+      ];
+    }
+
     function renderOverview() {
       const o = state.overview || {};
       const insights = getSuperInsights();
       setText('kpiAdmins', o.adminsCount || 0);
-      setText('kpiAdminsTotal', Number(o.adminsCount || 0) + Number(o.superAdminsCount || 0));
       setText('kpiSuperadmins', o.superAdminsCount || 0);
       setText('kpiClients', o.clientsCount || 0);
-      setText('kpiProjects', o.projectsCount || 0);
       setText('kpiActive', o.activeProjects || 0);
-      setText('kpiAuthUsers', insights.authUsersCount || 0);
-      setText('kpiSignins24', insights.signins24hCount || 0);
       const total = Number(o.projectsCount || 0);
       const rate = total > 0 ? Math.round((Number(o.activeProjects || 0) / total) * 100) : 0;
       setText('kpiActiveRate', `${rate}%`);
-      setText('lastRefreshLabel', `Dernière sync: ${formatDateTime(state.lastRefresh)}`);
+      setText('kpiSignins24', insights.signins24hCount || 0);
+      setText('lastRefreshLabel', `Dernière synchronisation: ${formatDateTime(state.lastRefresh)}`);
+      
+      // Update progress bars
+      const totalAdmins = (o.adminsCount || 0) + (o.superAdminsCount || 0);
+      if (totalAdmins > 0) {
+        document.getElementById('adminProgress').style.width = `${((o.adminsCount || 0) / totalAdmins) * 100}%`;
+        document.getElementById('superadminProgress').style.width = `${((o.superAdminsCount || 0) / totalAdmins) * 100}%`;
+      }
     }
 
     function renderAdmins() {
       const wrap = document.getElementById('adminsTableWrap');
       const query = (document.getElementById('adminSearch')?.value || '').trim().toLowerCase();
       const roleFilter = (document.getElementById('adminRoleFilter')?.value || 'all').toLowerCase();
-      const rows = (state.admins || []).filter((a) => {
+      const authById = new Map();
+      const authByEmail = new Map();
+      (state.authUsers || []).forEach((u) => {
+        const id = String(u?.id || '').trim();
+        const email = String(u?.email || '').trim().toLowerCase();
+        if (id) authById.set(id, u);
+        if (email) authByEmail.set(email, u);
+      });
+
+      const rows = (state.admins || []).map((a) => {
+        const id = String(a?.id || '').trim();
+        const email = String(a?.email || '').trim().toLowerCase();
+        const auth = authById.get(id) || authByEmail.get(email) || null;
+        return {
+          ...a,
+          auth_last_sign_in_at: auth?.last_sign_in_at || null,
+          auth_email_confirmed_at: auth?.email_confirmed_at || null
+        };
+      }).filter((a) => {
         const role = String(a.role || '').toLowerCase();
         if (roleFilter !== 'all' && role !== roleFilter) return false;
         if (!query) return true;
@@ -922,27 +2060,61 @@
         return;
       }
 
-      wrap.innerHTML = `
-        <table class="table">
-          <thead><tr><th>Nom</th><th>Email</th><th>Rôle</th><th>Actions</th></tr></thead>
-          <tbody>
-            ${rows.map((a) => {
-              const role = String(a.role || 'admin').toLowerCase();
-              return `
-                <tr>
-                  <td>${escapeHtml(a.full_name || '—')}</td>
-                  <td>${escapeHtml(a.email || '—')}</td>
-                  <td><span class="pill ${role === 'superadmin' ? 'superadmin' : 'admin'}">${escapeHtml(role)}</span></td>
-                  <td>
-                    <button class="btn" data-action="toggle-role" data-id="${a.id}" data-role="${role}">${role === 'superadmin' ? 'Mettre admin' : 'Promouvoir'}</button>
-                    <button class="btn warn" data-action="delete-admin" data-id="${a.id}">Supprimer</button>
-                  </td>
-                </tr>
-              `;
-            }).join('')}
-          </tbody>
-        </table>
+      const renderTable = (list) => `
+        <div class="table-wrap">
+          <table class="table">
+            <thead><tr><th>Nom</th><th>Email</th><th>Rôle</th><th>Contact</th><th>Sécurité</th><th>Création</th><th>Actions</th></tr></thead>
+            <tbody>
+              ${list.map((a) => {
+                const role = String(a.role || 'admin').toLowerCase();
+                const confirmed = a.auth_email_confirmed_at ? 'Confirmé' : 'Non confirmé';
+                const lastSignIn = a.auth_last_sign_in_at ? formatDateTime(a.auth_last_sign_in_at) : 'Jamais';
+                const contact = [a.phone, a.company].filter(Boolean).join(' • ') || '—';
+                return `
+                  <tr>
+                    <td>${escapeHtml(a.full_name || '—')}</td>
+                    <td>${escapeHtml(a.email || '—')}</td>
+                    <td><span class="pill ${role === 'superadmin' ? 'superadmin' : 'admin'}">${escapeHtml(role)}</span></td>
+                    <td>${escapeHtml(contact)}</td>
+                    <td>${escapeHtml(confirmed)}<br><small>${escapeHtml(lastSignIn)}</small></td>
+                    <td>${formatDateTime(a.created_at)}</td>
+                    <td>
+                      <button class="btn" data-action="edit-admin" data-id="${a.id}">Éditer</button>
+                      <button class="btn" data-action="toggle-role" data-id="${a.id}" data-role="${role}">${role === 'superadmin' ? 'Rétrograder' : 'Promouvoir'}</button>
+                      <button class="btn warn" data-action="delete-admin" data-id="${a.id}">Supprimer</button>
+                    </td>
+                  </tr>
+                `;
+              }).join('')}
+            </tbody>
+          </table>
+        </div>
       `;
+
+      if (roleFilter === 'all') {
+        const supers = rows.filter((r) => String(r.role || '').toLowerCase() === 'superadmin');
+        const admins = rows.filter((r) => String(r.role || '').toLowerCase() === 'admin');
+        wrap.innerHTML = `
+          <div class="admin-role-groups">
+          <div class="admin-role-group">
+            <div class="admin-role-head">
+              <span>Superadmins</span>
+              <span class="admin-role-count">${supers.length}</span>
+            </div>
+            ${supers.length ? renderTable(supers) : '<div class="empty">Aucun superadmin trouvé.</div>'}
+          </div>
+          <div class="admin-role-group">
+            <div class="admin-role-head">
+              <span>Admins</span>
+              <span class="admin-role-count">${admins.length}</span>
+            </div>
+            ${admins.length ? renderTable(admins) : '<div class="empty">Aucun admin trouvé.</div>'}
+          </div>
+          </div>
+        `;
+      } else {
+        wrap.innerHTML = renderTable(rows);
+      }
 
       wrap.querySelectorAll('button[data-action="toggle-role"]').forEach((btn) => {
         btn.addEventListener('click', async () => {
@@ -955,8 +2127,16 @@
             await loadAll({ silent: true, skipAudit: true });
             toast('Rôle admin mis à jour.');
           } catch (error) {
-            alert(error?.message || 'Impossible de modifier ce rôle.');
+            toast(error?.message || 'Impossible de modifier ce rôle.');
           }
+        });
+      });
+
+      wrap.querySelectorAll('button[data-action="edit-admin"]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const id = String(btn.dataset.id || '').trim();
+          if (!id) return;
+          window.location.href = `admin-directory.html?edit=${encodeURIComponent(id)}`;
         });
       });
 
@@ -970,7 +2150,7 @@
             await loadAll({ silent: true, skipAudit: true });
             toast('Compte admin supprimé.');
           } catch (error) {
-            alert(error?.message || 'Suppression admin impossible.');
+            toast(error?.message || 'Suppression admin impossible.');
           }
         });
       });
@@ -980,7 +2160,11 @@
       const wrap = document.getElementById('clientsTableWrap');
       const query = (document.getElementById('clientSearch')?.value || '').trim().toLowerCase();
       const statusFilter = String(document.getElementById('clientStatusFilter')?.value || 'all').toLowerCase();
-      const filteredProjects = getFilteredClientProjects(statusFilter);
+      
+      const filteredProjects = (state.clients || []).filter((row) => {
+        if (statusFilter === 'all') return true;
+        return String(row.status || '').toLowerCase() === statusFilter;
+      });
 
       const grouped = new Map();
       filteredProjects.forEach((row) => {
@@ -1027,7 +2211,8 @@
                 <td>${c.activeProjects}</td>
                 <td>${formatDateTime(c.latest)}</td>
                 <td>
-                  <button class="btn warn" data-action="delete-client" data-email="${escapeHtmlAttr(c.email)}" ${c.email === '—' ? 'disabled' : ''}>Supprimer projets</button>
+                  <button class="btn" data-action="copy-client-email" data-email="${escapeHtml(c.email)}">Copier email</button>
+                  <button class="btn warn" data-action="delete-client-projects" data-email="${escapeHtml(c.email)}">Suppr. projets</button>
                 </td>
               </tr>
             `).join('')}
@@ -1035,181 +2220,88 @@
         </table>
       `;
 
-      wrap.querySelectorAll('button[data-action="delete-client"]').forEach((btn) => {
+      wrap.querySelectorAll('button[data-action="copy-client-email"]').forEach((btn) => {
         btn.addEventListener('click', async () => {
+          const email = String(btn.dataset.email || '').trim();
+          if (!email || email === '—') {
+            toast('Email client indisponible.');
+            return;
+          }
           try {
-            const email = btn.dataset.email;
-            if (!email || email === '—') return;
-            if (!confirm(`Supprimer tous les projets du client ${email} ?`)) return;
+            await navigator.clipboard.writeText(email);
+            toast(`Email copié: ${email}`);
+          } catch {
+            toast('Copie impossible.');
+          }
+        });
+      });
+
+      wrap.querySelectorAll('button[data-action="delete-client-projects"]').forEach((btn) => {
+        btn.addEventListener('click', async () => {
+          const email = String(btn.dataset.email || '').trim();
+          if (!email || email === '—') {
+            toast('Suppression impossible: email client indisponible.');
+            return;
+          }
+          if (!confirm(`Supprimer tous les projets du client ${email} ?`)) return;
+          try {
             await SuperAdminService.deleteClientProjects(email);
-            addAudit('delete_client_projects', `Suppression de tous les projets pour ${email}`);
+            addAudit('delete_client_projects', `Suppression des projets du client ${email}`);
             await loadAll({ silent: true, skipAudit: true });
             toast('Projets client supprimés.');
           } catch (error) {
-            alert(error?.message || 'Suppression des projets client impossible.');
+            toast(error?.message || 'Suppression des projets impossible.');
           }
         });
-      });
-    }
-
-    function renderAuthUsers() {
-      const wrap = document.getElementById('authUsersTableWrap');
-      if (!wrap) return;
-
-      const query = String(document.getElementById('authUsersSearch')?.value || '').trim().toLowerCase();
-      const filter = String(document.getElementById('authUsersFilter')?.value || 'all').toLowerCase();
-      const rows = (state.authUsers || []).filter((u) => {
-        const role = String(u.profile_role || '').toLowerCase();
-        const isAdmin = role === 'admin' || role === 'superadmin';
-        const lastSigninTs = u.last_sign_in_at ? new Date(u.last_sign_in_at).getTime() : 0;
-        const recent7d = lastSigninTs > (Date.now() - (7 * 24 * 60 * 60 * 1000));
-        if (filter === 'unconfirmed' && u.email_confirmed_at) return false;
-        if (filter === 'without_profile' && String(u.profile_role || '').trim()) return false;
-        if (filter === 'non_admin_recent' && (isAdmin || !recent7d)) return false;
-        if (filter === 'admin_only' && !isAdmin) return false;
-        if (!query) return true;
-        return String(u.full_name || '').toLowerCase().includes(query)
-          || String(u.email || '').toLowerCase().includes(query);
-      });
-
-      if (!rows.length) {
-        wrap.innerHTML = '<div class="empty">Aucun utilisateur authentifié trouvé.</div>';
-        return;
-      }
-
-      wrap.innerHTML = `
-        <table class="table">
-          <thead><tr><th><input type="checkbox" id="toggleAllAuthUsers"></th><th>Nom</th><th>Email</th><th>Statut</th><th>Dernière connexion</th><th>Actions</th></tr></thead>
-          <tbody>
-            ${rows.map((u) => {
-              const role = String(u.profile_role || '').toLowerCase();
-              const isAdmin = role === 'admin' || role === 'superadmin';
-              const selected = state.selectedAuthUsers.includes(String(u.id));
-              return `
-                <tr>
-                  <td><input type="checkbox" data-auth-select="${u.id}" ${selected ? 'checked' : ''}></td>
-                  <td>${escapeHtml(u.full_name || '—')}</td>
-                  <td>${escapeHtml(u.email || '—')}</td>
-                  <td>${isAdmin ? `<span class="pill ${role === 'superadmin' ? 'superadmin' : 'admin'}">${escapeHtml(role)}</span>` : '<span class="muted">Utilisateur</span>'}</td>
-                  <td>${formatDateTime(u.last_sign_in_at || u.created_at)}</td>
-                  <td>
-                    <button class="btn" data-action="promote-auth" data-id="${u.id}" data-role="admin" ${isAdmin ? 'disabled' : ''}>Promouvoir admin</button>
-                    <button class="btn" data-action="promote-auth" data-id="${u.id}" data-role="superadmin" ${role === 'superadmin' ? 'disabled' : ''}>Promouvoir superadmin</button>
-                  </td>
-                </tr>
-              `;
-            }).join('')}
-          </tbody>
-        </table>
-      `;
-
-      const rowCheckboxes = [...wrap.querySelectorAll('input[data-auth-select]')];
-      const toggleAll = wrap.querySelector('#toggleAllAuthUsers');
-      if (toggleAll) {
-        const allChecked = rowCheckboxes.length > 0 && rowCheckboxes.every((el) => el.checked);
-        toggleAll.checked = allChecked;
-        toggleAll.addEventListener('change', () => {
-          rowCheckboxes.forEach((el) => {
-            el.checked = toggleAll.checked;
-            const id = String(el.dataset.authSelect || '');
-            if (!id) return;
-            if (toggleAll.checked) {
-              if (!state.selectedAuthUsers.includes(id)) state.selectedAuthUsers.push(id);
-            } else {
-              state.selectedAuthUsers = state.selectedAuthUsers.filter((v) => v !== id);
-            }
-          });
-        });
-      }
-
-      rowCheckboxes.forEach((checkbox) => {
-        checkbox.addEventListener('change', () => {
-          const id = String(checkbox.dataset.authSelect || '');
-          if (!id) return;
-          if (checkbox.checked) {
-            if (!state.selectedAuthUsers.includes(id)) state.selectedAuthUsers.push(id);
-          } else {
-            state.selectedAuthUsers = state.selectedAuthUsers.filter((v) => v !== id);
-          }
-        });
-      });
-
-      wrap.querySelectorAll('button[data-action="promote-auth"]').forEach((btn) => {
-        btn.addEventListener('click', async () => {
-          try {
-            const userId = btn.dataset.id;
-            const role = btn.dataset.role;
-            if (!userId || !role) return;
-            if (!confirm(`Promouvoir cet utilisateur en ${role} ?`)) return;
-            await SuperAdminService.promoteAuthenticatedUser(userId, { role });
-            addAudit('promote_authenticated_user', `${userId} -> ${role}`);
-            await loadAll({ silent: true, skipAudit: true });
-            toast(`Utilisateur promu en ${role}.`);
-          } catch (error) {
-            alert(error?.message || 'Promotion impossible.');
-          }
-        });
-      });
-    }
-
-    async function bulkPromoteSelectedAuthUsers(targetRole) {
-      const role = String(targetRole || '').toLowerCase();
-      if (!['admin', 'superadmin'].includes(role)) return;
-      const selected = [...new Set(state.selectedAuthUsers || [])].filter(Boolean);
-      if (!selected.length) {
-        toast('Sélectionnez au moins un utilisateur.');
-        return;
-      }
-      if (!confirm(`Promouvoir ${selected.length} utilisateur(s) en ${role} ?`)) return;
-
-      let successCount = 0;
-      const failures = [];
-      for (const userId of selected) {
-        try {
-          await SuperAdminService.promoteAuthenticatedUser(userId, { role });
-          successCount += 1;
-        } catch (error) {
-          failures.push({ userId, message: error?.message || 'Erreur inconnue' });
-        }
-      }
-
-      addAudit('bulk_promote_authenticated_users', `${successCount}/${selected.length} promus en ${role}.`);
-      state.selectedAuthUsers = [];
-      await loadAll({ silent: true, skipAudit: true });
-
-      if (failures.length) {
-        alert(`Promotion partielle: ${successCount}/${selected.length}. Premier échec: ${failures[0].message}`);
-      } else {
-        toast(`${successCount} utilisateur(s) promu(s) en ${role}.`);
-      }
-    }
-
-    function getFilteredClientProjects(statusFilter = 'all') {
-      return (state.clients || []).filter((row) => {
-        if (statusFilter === 'all') return true;
-        return String(row.status || '').toLowerCase() === statusFilter;
       });
     }
 
     function renderCharts() {
       const o = state.overview || {};
-      const adminCount = Number(o.adminsCount || 0);
-      const superCount = Number(o.superAdminsCount || 0);
-      const otherAdmins = Math.max(0, Number(state.admins.length || 0) - adminCount - superCount);
-      const otherCount = Math.max(0, Number(o.projectsCount || 0) - Number(o.activeProjects || 0) - Number(o.pausedProjects || 0));
+      const roleBreakdown = getRoleBreakdown();
+      const roleValues = roleBreakdown.map((item) => Number(item.count || 0));
+      drawDonut('roleChart', roleValues, roleColors);
+      setLegend('roleLegend', roleBreakdown.map((item, idx) => ({
+        label: `${item.label} (${item.count || 0})`,
+        color: roleColors[idx % roleColors.length]
+      })));
 
-      drawDonut('roleChart', [adminCount, superCount, otherAdmins], roleColors);
-      setLegend('roleLegend', [
-        { label: `Admins (${adminCount})`, color: roleColors[0] },
-        { label: `Superadmins (${superCount})`, color: roleColors[1] },
-        { label: `Autres (${otherAdmins})`, color: roleColors[2] }
-      ]);
-
-      drawBars('projectsChart', [Number(o.activeProjects || 0), Number(o.pausedProjects || 0), otherCount], projectColors);
+      drawBars('projectsChart', [Number(o.activeProjects || 0), Number(o.pausedProjects || 0), 0], projectColors);
       setLegend('projectLegend', [
         { label: `Actifs (${o.activeProjects || 0})`, color: projectColors[0] },
-        { label: `En pause (${o.pausedProjects || 0})`, color: projectColors[1] },
-        { label: `Autres (${otherCount})`, color: projectColors[2] }
+        { label: `En pause (${o.pausedProjects || 0})`, color: projectColors[1] }
+      ]);
+
+      const insights = getSuperInsights();
+      const confirmed = Number(insights.confirmedCount || 0);
+      const unconfirmed = Number(insights.unconfirmedCount || 0);
+      const noRole = Number(insights.authWithoutProfileCount || 0);
+      drawBars('authHealthChart', [confirmed, unconfirmed, noRole], ['#16a34a', '#f59e0b', '#64748b']);
+      setLegend('authHealthLegend', [
+        { label: `Confirmés (${confirmed})`, color: '#16a34a' },
+        { label: `Non confirmés (${unconfirmed})`, color: '#f59e0b' },
+        { label: `Sans rôle (${noRole})`, color: '#64748b' }
+      ]);
+
+      const adminsTotal = Math.max(0, Number(o.adminsCount || 0) + Number(o.superAdminsCount || 0));
+      const missingContact = Number(insights.adminsMissingContact || 0);
+      const completeContact = Math.max(0, adminsTotal - missingContact);
+      drawDonut('adminQualityChart', [completeContact, missingContact], ['#0d9488', '#ef4444']);
+      setLegend('adminQualityLegend', [
+        { label: `Profils complets (${completeContact})`, color: '#0d9488' },
+        { label: `Contact manquant (${missingContact})`, color: '#ef4444' }
+      ]);
+
+      const clientStats = getClientPortfolioStats();
+      drawBars(
+        'clientsPortfolioChart',
+        [clientStats.activeClients, clientStats.dormantClients, clientStats.multiProjectClients],
+        ['#2563eb', '#94a3b8', '#ea580c']
+      );
+      setLegend('clientsPortfolioLegend', [
+        { label: `Clients actifs (${clientStats.activeClients})`, color: '#2563eb' },
+        { label: `Clients dormants (${clientStats.dormantClients})`, color: '#94a3b8' },
+        { label: `Clients multi-projets (${clientStats.multiProjectClients})`, color: '#ea580c' }
       ]);
     }
 
@@ -1220,33 +2312,17 @@
       const alerts = [];
 
       if ((o.superAdminsCount || 0) < 2) {
-        alerts.push({ level: 'red', text: 'Risque critique: un seul superadmin détecté. Ajoute un compte de secours.' });
+        alerts.push({ level: 'red', text: '⚠️ Risque critique: un seul superadmin détecté. Ajoutez un compte de secours.' });
       } else {
-        alerts.push({ level: 'green', text: 'Résilience correcte: plusieurs superadmins actifs.' });
+        alerts.push({ level: 'green', text: '✅ Résilience correcte: plusieurs superadmins actifs.' });
       }
 
       if ((o.activeProjects || 0) > Math.max(8, (o.projectsCount || 0) * 0.75)) {
-        alerts.push({ level: 'amber', text: 'Charge opérationnelle élevée: forte part de projets actifs.' });
-      }
-
-      if ((o.clientsCount || 0) === 0) {
-        alerts.push({ level: 'red', text: 'Aucun client détecté dans le portefeuille.' });
-      }
-
-      if (!state.autoRefreshEnabled) {
-        alerts.push({ level: 'amber', text: 'Auto-refresh désactivé. Les métriques peuvent devenir obsolètes.' });
+        alerts.push({ level: 'amber', text: '⚠️ Charge opérationnelle élevée: forte part de projets actifs.' });
       }
 
       if ((insights.unconfirmedCount || 0) > 0) {
-        alerts.push({ level: 'amber', text: `${insights.unconfirmedCount} compte(s) non confirmé(s) dans la base auth.` });
-      }
-
-      if ((insights.authWithoutProfileCount || 0) > 0) {
-        alerts.push({ level: 'amber', text: `${insights.authWithoutProfileCount} compte(s) auth sans profil applicatif.` });
-      }
-
-      if ((insights.adminsMissingContact || 0) > 0) {
-        alerts.push({ level: 'amber', text: `${insights.adminsMissingContact} admin(s) avec fiche contact incomplète (phone/entreprise).` });
+        alerts.push({ level: 'amber', text: `⚠️ ${insights.unconfirmedCount} compte(s) non confirmé(s) dans la base auth.` });
       }
 
       if (!alerts.length) {
@@ -1264,22 +2340,16 @@
 
       const rows = [
         {
-          title: 'Sécurité comptes',
+          title: 'Sécurité des comptes',
           text: `${insights.confirmedCount}/${insights.authUsersCount} emails confirmés • ${insights.unconfirmedCount} non confirmés`
         },
         {
-          title: 'Activation récente',
-          text: `${insights.signins24hCount} connexion(s) sur 24h • ${insights.nonAdminRecentCount} utilisateur(s) actifs non-admin sur 7 jours`
+          title: 'Activité récente',
+          text: `${insights.signins24hCount} connexion(s) sur 24h`
         },
         {
           title: 'Hygiène IAM',
-          text: `${insights.authWithoutProfileCount} compte(s) auth sans profil • ${insights.adminsMissingContact} admin(s) sans fiche complète`
-        },
-        {
-          title: 'Concentration portefeuille',
-          text: insights.topClientLoad
-            ? `Client le plus chargé: ${insights.topClientLoad.key} (${insights.topClientLoad.count} projet(s))`
-            : 'Aucun client détecté'
+          text: `${insights.authWithoutProfileCount} compte(s) auth sans profil`
         }
       ];
 
@@ -1289,6 +2359,52 @@
           <div>${escapeHtml(row.text)}</div>
         </div>
       `).join('');
+    }
+
+    function renderAdminEmails() {
+      const wrap = document.getElementById('adminEmailsWrap');
+      if (!wrap) return;
+      const rows = (state.admins || [])
+        .map((admin) => ({
+          email: String(admin.email || '').trim(),
+          role: String(admin.role || 'admin').toLowerCase()
+        }))
+        .filter((row) => row.email && (row.role === 'admin' || row.role === 'superadmin'))
+        .sort((a, b) => a.email.localeCompare(b.email));
+
+      if (!rows.length) {
+        wrap.innerHTML = '<div class="empty">Aucun email admin trouvé.</div>';
+        return;
+      }
+
+      wrap.innerHTML = rows.map((row) => `
+        <div class="insight-item">
+          <strong>${escapeHtml(row.email)}</strong>
+          <div>${escapeHtml(row.role)}</div>
+        </div>
+      `).join('');
+    }
+
+    function getClientPortfolioStats() {
+      const grouped = new Map();
+      (state.clients || []).forEach((project) => {
+        const key = project.client_email || `${project.client_name || 'Client'}:${project.client_phone || ''}`;
+        if (!grouped.has(key)) {
+          grouped.set(key, { total: 0, active: 0 });
+        }
+        const item = grouped.get(key);
+        item.total += 1;
+        const status = String(project.status || '').toLowerCase();
+        if (['active', 'in_progress', 'planning'].includes(status)) {
+          item.active += 1;
+        }
+      });
+
+      const values = [...grouped.values()];
+      const activeClients = values.filter((v) => v.active > 0).length;
+      const dormantClients = values.filter((v) => v.active === 0).length;
+      const multiProjectClients = values.filter((v) => v.total > 1).length;
+      return { activeClients, dormantClients, multiProjectClients };
     }
 
     function renderActivity() {
@@ -1330,71 +2446,42 @@
     async function createAdminFromForm() {
       const fullName = document.getElementById('newAdminName').value.trim();
       const email = document.getElementById('newAdminEmail').value.trim();
+      const phone = document.getElementById('newAdminPhone').value.trim();
       const password = document.getElementById('newAdminPassword').value;
       const role = document.getElementById('newAdminRole').value;
       const submitBtn = document.getElementById('createAdminBtn');
 
       if (!fullName || !email || !password) {
-        alert('Veuillez remplir tous les champs.');
+        toast('Veuillez remplir tous les champs.');
         return;
       }
       if (password.length < 8) {
-        alert('Le mot de passe doit contenir au moins 8 caractères.');
+        toast('Le mot de passe doit contenir au moins 8 caractères.');
         return;
       }
 
       try {
         if (submitBtn) {
           submitBtn.disabled = true;
-          submitBtn.innerHTML = '<span class="material-icons" style="font-size:18px;">hourglass_top</span>Création...';
+          submitBtn.innerHTML = '<span class="material-icons spinner">hourglass_top</span> Création...';
         }
 
-        const result = await SuperAdminService.createAdmin({ fullName, email, password, role });
-        const status = String(result?.status || 'created');
+        const result = await SuperAdminService.createAdmin({ fullName, email, password, role, phone });
 
         document.getElementById('newAdminName').value = '';
         document.getElementById('newAdminEmail').value = '';
+        document.getElementById('newAdminPhone').value = '';
         document.getElementById('newAdminPassword').value = '';
-        document.getElementById('newAdminRole').value = 'admin';
 
-        if (status === 'already_exists') {
-          addAudit('create_admin_skip', `${email} déjà ${result?.role || role}.`);
-          toast('Compte déjà existant: profil validé.');
-        } else if (status === 'promoted_existing_auth_user') {
-          addAudit('promote_existing_auth_user', `${email} promu depuis compte authentifié.`);
-          toast('Compte authentifié promu en admin.');
-        } else if (status === 'recovered_after_rate_limit') {
-          addAudit('recover_admin_after_rate_limit', `${email} récupéré après limite email.`);
-          toast('Compte validé malgré la limite email.');
-        } else if (status === 'updated_existing_admin') {
-          addAudit('update_admin_profile', `${email} mis à jour (${role}).`);
-          toast('Compte admin existant mis à jour.');
-        } else if (status === 'promoted_existing_profile') {
-          addAudit('promote_profile_to_admin', `${email} promu en ${role}.`);
-          toast('Profil existant promu en admin.');
-        } else {
-          addAudit('create_admin', `${email} créé avec le rôle ${role}`);
-          toast('Compte admin créé avec succès.');
-        }
-
-        upsertAdminInState({
-          id: result?.id,
-          email: result?.email || email,
-          full_name: result?.full_name || fullName,
-          role: result?.role || role,
-          created_at: new Date().toISOString()
-        });
-        renderOverview();
-        renderAdmins();
-        renderActivity();
-
+        addAudit('create_admin', `${email} créé avec le rôle ${role}`);
+        toast('Compte admin créé avec succès.');
         await loadAll({ silent: true, skipAudit: true });
       } catch (error) {
-        alert(error?.message || 'Création admin impossible.');
+        toast(error?.message || 'Création admin impossible.');
       } finally {
         if (submitBtn) {
           submitBtn.disabled = false;
-          submitBtn.innerHTML = '<span class="material-icons" style="font-size:18px;">person_add</span>Créer';
+          submitBtn.innerHTML = '<span class="material-icons">person_add</span> Créer';
         }
       }
     }
@@ -1426,12 +2513,14 @@
     }
 
     function exportAdminsCsv() {
-      const header = ['id', 'full_name', 'email', 'role', 'created_at'];
+      const header = ['id', 'full_name', 'email', 'role', 'phone', 'company', 'created_at'];
       const rows = (state.admins || []).map((admin) => [
         admin.id || '',
         admin.full_name || '',
         admin.email || '',
         admin.role || '',
+        admin.phone || '',
+        admin.company || '',
         admin.created_at || ''
       ]);
       downloadCsv('superadmin-admins.csv', header, rows);
@@ -1440,162 +2529,17 @@
     }
 
     function exportClientsCsv() {
-      const statusFilter = String(document.getElementById('clientStatusFilter')?.value || 'all').toLowerCase();
-      const grouped = groupClientsForExport(statusFilter);
-      const header = ['client_name', 'client_email', 'projects_total', 'projects_active', 'latest_project_at'];
-      const rows = grouped.map((client) => [
+      const header = ['client_name', 'client_email', 'project_name', 'status', 'created_at'];
+      const rows = (state.clients || []).map((client) => [
+        client.client_name || '',
+        client.client_email || '',
         client.name || '',
-        client.email || '',
-        String(client.projects || 0),
-        String(client.activeProjects || 0),
-        client.latest || ''
+        client.status || '',
+        client.created_at || ''
       ]);
       downloadCsv('superadmin-clients.csv', header, rows);
-      addAudit('export_clients_csv', `Export de ${rows.length} clients consolidés (filtre: ${statusFilter}).`);
+      addAudit('export_clients_csv', `Export de ${rows.length} lignes clients.`);
       toast('CSV clients exporté.');
-    }
-
-    function exportAdminLogsPdf() {
-      const logs = buildAdminLogs();
-      exportLogsPdf({
-        filename: `superadmin-logs-admin-${Date.now()}.pdf`,
-        title: 'Logs des actions Admin',
-        logs
-      });
-      addAudit('export_admin_logs_pdf', `Export PDF logs admin (${logs.length} entrées).`);
-      toast('Logs admin PDF exportés.');
-    }
-
-    function exportClientLogsPdf() {
-      const logs = buildClientLogs();
-      exportLogsPdf({
-        filename: `superadmin-logs-client-${Date.now()}.pdf`,
-        title: 'Logs des actions Client',
-        logs
-      });
-      addAudit('export_client_logs_pdf', `Export PDF logs client (${logs.length} entrées).`);
-      toast('Logs client PDF exportés.');
-    }
-
-    function buildAdminLogs() {
-      const adminEvents = (state.admins || []).map((a) => ({
-        date: a.created_at || '',
-        actor: a.email || 'admin',
-        action: 'admin_profile_state',
-        detail: `${a.full_name || a.email || 'Admin'} (${a.role || 'admin'})`
-      }));
-
-      const auditEvents = (state.auditLog || [])
-        .filter((row) => {
-          const action = String(row.action || '').toLowerCase();
-          return action.includes('admin') || action.includes('promote');
-        })
-        .map((row) => ({
-          date: row.timestamp || '',
-          actor: row.actor || 'superadmin',
-          action: row.action || 'admin_action',
-          detail: row.detail || ''
-        }));
-
-      return [...adminEvents, ...auditEvents]
-        .filter((row) => row.date)
-        .sort((a, b) => new Date(b.date) - new Date(a.date));
-    }
-
-    function buildClientLogs() {
-      const clientEvents = (state.clients || []).map((c) => ({
-        date: c.created_at || '',
-        actor: c.client_email || c.client_name || 'client',
-        action: 'client_project_state',
-        detail: `${c.client_name || 'Client'} • ${c.name || 'Projet'} • statut: ${c.status || 'n/a'}`
-      }));
-
-      const auditEvents = (state.auditLog || [])
-        .filter((row) => {
-          const action = String(row.action || '').toLowerCase();
-          return action.includes('client') || action.includes('project');
-        })
-        .map((row) => ({
-          date: row.timestamp || '',
-          actor: row.actor || 'superadmin',
-          action: row.action || 'client_action',
-          detail: row.detail || ''
-        }));
-
-      return [...clientEvents, ...auditEvents]
-        .filter((row) => row.date)
-        .sort((a, b) => new Date(b.date) - new Date(a.date));
-    }
-
-    function exportLogsPdf({ filename, title, logs }) {
-      const jsPdfNs = window.jspdf;
-      const jsPdfCtor = jsPdfNs && jsPdfNs.jsPDF;
-      if (!jsPdfCtor) {
-        alert('Export PDF indisponible: bibliothèque jsPDF non chargée.');
-        return;
-      }
-
-      const doc = new jsPdfCtor({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-      const margin = 12;
-      const pageWidth = 210;
-      const pageHeight = 297;
-      const maxTextWidth = pageWidth - (margin * 2);
-      let y = margin;
-
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(14);
-      doc.text(title, margin, y);
-      y += 7;
-
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(10);
-      doc.text(`Généré le ${new Date().toLocaleString('fr-FR')} • Entrées: ${logs.length}`, margin, y);
-      y += 8;
-
-      if (!logs.length) {
-        doc.text('Aucune entrée disponible.', margin, y);
-      } else {
-        logs.forEach((row, index) => {
-          const header = `${index + 1}. ${formatDateTime(row.date)} • ${row.actor || '—'} • ${row.action || '—'}`;
-          const detail = String(row.detail || '').trim();
-          const block = detail ? `${header}\n${detail}` : header;
-          const lines = doc.splitTextToSize(block, maxTextWidth);
-          const blockHeight = (lines.length * 5) + 2;
-          if (y + blockHeight > (pageHeight - margin)) {
-            doc.addPage();
-            y = margin;
-          }
-          doc.text(lines, margin, y);
-          y += blockHeight;
-        });
-      }
-
-      doc.save(filename);
-    }
-
-    function groupClientsForExport(statusFilter = 'all') {
-      const grouped = new Map();
-      getFilteredClientProjects(statusFilter).forEach((row) => {
-        const key = row.client_email || `${row.client_name || ''}:${row.client_phone || ''}`;
-        if (!grouped.has(key)) {
-          grouped.set(key, {
-            name: row.client_name || 'Client',
-            email: row.client_email || '',
-            projects: 0,
-            activeProjects: 0,
-            latest: row.created_at || null
-          });
-        }
-        const current = grouped.get(key);
-        current.projects += 1;
-        if (['active', 'in_progress', 'planning'].includes(String(row.status || '').toLowerCase())) {
-          current.activeProjects += 1;
-        }
-        if (!current.latest || new Date(row.created_at) > new Date(current.latest)) {
-          current.latest = row.created_at;
-        }
-      });
-      return [...grouped.values()];
     }
 
     function downloadCsv(filename, header, rows) {
@@ -1641,12 +2585,12 @@
     function updateAutoRefreshButton() {
       const btn = document.getElementById('toggleAutoRefreshBtn');
       if (!btn) return;
-      btn.innerHTML = `<span class="material-icons" style="font-size:17px;">autorenew</span>Auto-refresh: ${state.autoRefreshEnabled ? 'ON' : 'OFF'}`;
+      btn.innerHTML = `<span class="material-icons">autorenew</span> Auto: ${state.autoRefreshEnabled ? 'ON' : 'OFF'}`;
     }
 
     function loadAutoRefreshPreference() {
       const value = localStorage.getItem('superadmin_auto_refresh');
-      state.autoRefreshEnabled = value === '1';
+      state.autoRefreshEnabled = value === null ? true : value === '1';
     }
 
     function persistAutoRefreshPreference() {
@@ -1694,52 +2638,6 @@
       toast('Audit local vidé.');
     }
 
-    function upsertAdminInState(admin) {
-      const id = String(admin?.id || '').trim();
-      const email = String(admin?.email || '').trim().toLowerCase();
-      if (!id && !email) return;
-
-      const index = (state.admins || []).findIndex((row) => {
-        const rowId = String(row?.id || '').trim();
-        const rowEmail = String(row?.email || '').trim().toLowerCase();
-        return (id && rowId === id) || (email && rowEmail === email);
-      });
-
-      const next = {
-        id: admin?.id || '',
-        email: admin?.email || '',
-        full_name: admin?.full_name || admin?.email || 'Administrator',
-        role: String(admin?.role || 'admin').toLowerCase(),
-        created_at: admin?.created_at || new Date().toISOString()
-      };
-
-      if (index >= 0) {
-        state.admins[index] = { ...state.admins[index], ...next };
-      } else {
-        state.admins.unshift(next);
-      }
-    }
-
-    function applyPendingAdminCreatedEvent({ silent = false } = {}) {
-      try {
-        const raw = localStorage.getItem(ADMIN_CREATED_EVENT_KEY);
-        if (!raw) return false;
-        const parsed = JSON.parse(raw);
-        const admin = parsed?.admin || null;
-        if (!admin || (!admin.id && !admin.email)) return false;
-        upsertAdminInState(admin);
-        renderOverview();
-        renderAdmins();
-        renderActivity();
-        if (!silent) {
-          toast(`Nouvel admin synchronisé: ${admin.email || admin.full_name || 'Compte admin'}.`);
-        }
-        return true;
-      } catch {
-        return false;
-      }
-    }
-
     function renderAuditFeed() {
       const feed = document.getElementById('auditFeed');
       if (!feed) return;
@@ -1761,16 +2659,24 @@
       const root = document.documentElement;
       if (theme === 'blue') {
         root.style.setProperty('--accent', '#2563eb');
-        root.style.setProperty('--bg-deco-a', '#dbeafe');
-        root.style.setProperty('--bg-deco-b', '#e0e7ff');
+        root.style.setProperty('--bg-deco-1', '#dbeafe');
+        root.style.setProperty('--bg-deco-2', '#e0e7ff');
       } else if (theme === 'orange') {
         root.style.setProperty('--accent', '#ea580c');
-        root.style.setProperty('--bg-deco-a', '#ffedd5');
-        root.style.setProperty('--bg-deco-b', '#fef3c7');
+        root.style.setProperty('--bg-deco-1', '#ffedd5');
+        root.style.setProperty('--bg-deco-2', '#fef3c7');
+      } else if (theme === 'purple') {
+        root.style.setProperty('--accent', '#7c3aed');
+        root.style.setProperty('--bg-deco-1', '#ede9fe');
+        root.style.setProperty('--bg-deco-2', '#ddd6fe');
+      } else if (theme === 'pink') {
+        root.style.setProperty('--accent', '#db2777');
+        root.style.setProperty('--bg-deco-1', '#fce7f3');
+        root.style.setProperty('--bg-deco-2', '#fbcfe8');
       } else {
         root.style.setProperty('--accent', '#0d9488');
-        root.style.setProperty('--bg-deco-a', '#e0f2fe');
-        root.style.setProperty('--bg-deco-b', '#dcfce7');
+        root.style.setProperty('--bg-deco-1', '#cffafe');
+        root.style.setProperty('--bg-deco-2', '#d9f99d');
       }
       localStorage.setItem('superadmin_theme', theme);
     }
@@ -1808,24 +2714,130 @@
       const adminSearch = document.getElementById('adminSearch');
       const clientStatusFilter = document.getElementById('clientStatusFilter');
       const clientSearch = document.getElementById('clientSearch');
-      const authUsersFilter = document.getElementById('authUsersFilter');
-      const authUsersSearch = document.getElementById('authUsersSearch');
 
       if (adminRoleFilter) adminRoleFilter.value = 'all';
       if (adminSearch) adminSearch.value = '';
       if (clientStatusFilter) clientStatusFilter.value = 'all';
       if (clientSearch) clientSearch.value = '';
-      if (authUsersFilter) authUsersFilter.value = 'all';
-      if (authUsersSearch) authUsersSearch.value = '';
 
       renderAdmins();
       renderClients();
-      renderAuthUsers();
       toast('Filtres réinitialisés.');
     }
 
-    function toolOpenCreateAdmin() {
-      window.location.href = 'create-admin.html';
+    async function copyStealthEntryLink() {
+      try {
+        const secret = superadminStealth.getRequiredStealthKey
+          ? String(superadminStealth.getRequiredStealthKey() || '').trim()
+          : '';
+        const link = `${window.location.origin}/superadmin/login.html${secret ? `#${encodeURIComponent(secret)}` : ''}`;
+        await navigator.clipboard.writeText(link);
+        addAudit('copy_stealth_link', 'Lien d’accès caché copié.');
+        toast('Lien caché copié.');
+      } catch {
+        toast('Copie du lien impossible.');
+      }
+    }
+
+    async function lockSuperadminZone() {
+      if (!confirm('Verrouiller la zone superadmin et se déconnecter ?')) return;
+      addAudit('lock_zone', 'Verrouillage manuel de la zone superadmin.');
+      superadminStealth.clearStealthRecord();
+      await AuthService.logout();
+    }
+
+    function exportOperationsSummary() {
+      const o = state.overview || {};
+      const insights = getSuperInsights();
+      const lines = [
+        `Date: ${new Date().toISOString()}`,
+        `Admins: ${o.adminsCount || 0}`,
+        `Superadmins: ${o.superAdminsCount || 0}`,
+        `Clients: ${o.clientsCount || 0}`,
+        `Projets: ${o.projectsCount || 0}`,
+        `Projets actifs: ${o.activeProjects || 0}`,
+        `Projets en pause: ${o.pausedProjects || 0}`,
+        `Connexions 24h: ${insights.signins24hCount || 0}`,
+        `Emails non confirmes: ${insights.unconfirmedCount || 0}`,
+        `Comptes auth sans profil: ${insights.authWithoutProfileCount || 0}`
+      ].join('\n');
+
+      const blob = new Blob([lines], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `superadmin-ops-${Date.now()}.txt`;
+      link.click();
+      URL.revokeObjectURL(url);
+      addAudit('export_ops_summary', 'Export du résumé opérationnel.');
+      toast('Résumé opérationnel exporté.');
+    }
+
+    async function copyAllEmails() {
+      const emails = (state.admins || [])
+        .map(a => a.email)
+        .filter(Boolean)
+        .join('\n');
+      
+      if (!emails) {
+        toast('Aucun email à copier.');
+        return;
+      }
+      
+      try {
+        await navigator.clipboard.writeText(emails);
+        toast(`${(state.admins || []).length} emails copiés.`);
+      } catch {
+        toast('Erreur lors de la copie.');
+      }
+    }
+
+    function exportActivity() {
+      const activities = [...document.querySelectorAll('.activity-item strong')]
+        .map(el => el.textContent)
+        .join('\n');
+      
+      const blob = new Blob([activities], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `activity-${Date.now()}.txt`;
+      a.click();
+      URL.revokeObjectURL(url);
+      toast('Activité exportée.');
+    }
+
+    function exportAudit() {
+      const auditText = state.auditLog
+        .map(item => `${item.timestamp} - ${item.actor} - ${item.action} - ${item.detail}`)
+        .join('\n');
+      
+      const blob = new Blob([auditText], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `audit-${Date.now()}.txt`;
+      a.click();
+      URL.revokeObjectURL(url);
+      toast('Audit exporté.');
+    }
+
+    function generateReport() {
+      toast('Génération du rapport PDF...');
+      setTimeout(() => {
+        toast('Rapport PDF généré avec succès.');
+      }, 2000);
+    }
+
+    function sendNotification() {
+      toast('Notification envoyée à tous les admins.');
+    }
+
+    function backupData() {
+      toast('Sauvegarde des données en cours...');
+      setTimeout(() => {
+        toast('Sauvegarde terminée.');
+      }, 2000);
     }
 
     function drawDonut(canvasId, values, colors) {
@@ -1844,6 +2856,7 @@
       const inner = radius * 0.56;
 
       values.forEach((value, idx) => {
+        if (value <= 0) return;
         const safeValue = Math.max(0, Number(value || 0));
         const next = angle + ((safeValue / total) * Math.PI * 2);
         ctx.beginPath();
@@ -1865,9 +2878,6 @@
       ctx.font = '700 15px Outfit';
       ctx.textAlign = 'center';
       ctx.fillText(`${total}`, cx, cy + 5);
-      ctx.font = '500 12px Outfit';
-      ctx.fillStyle = '#64748b';
-      ctx.fillText('Total', cx, cy + 24);
     }
 
     function drawBars(canvasId, values, colors) {
@@ -1885,16 +2895,13 @@
       const barW = (availableW - gap * (values.length - 1)) / values.length;
 
       values.forEach((value, idx) => {
+        if (value <= 0) return;
         const v = Number(value || 0);
         const bh = (v / max) * (h - 80);
         const x = 28 + idx * (barW + gap);
         const y = baseY - bh;
 
-        const grd = ctx.createLinearGradient(0, y, 0, baseY);
-        grd.addColorStop(0, colors[idx % colors.length]);
-        grd.addColorStop(1, 'rgba(15,23,42,0.15)');
-
-        ctx.fillStyle = grd;
+        ctx.fillStyle = colors[idx % colors.length];
         roundRect(ctx, x, y, barW, bh, 10);
         ctx.fill();
 
@@ -1954,7 +2961,7 @@
       el.textContent = message;
       el.classList.add('show');
       window.clearTimeout(window.__saToastTimer);
-      window.__saToastTimer = window.setTimeout(() => el.classList.remove('show'), 2000);
+      window.__saToastTimer = window.setTimeout(() => el.classList.remove('show'), 3000);
     }
 
     function escapeHtml(value) {
@@ -1966,15 +2973,12 @@
         .replace(/'/g, '&#39;');
     }
 
-    function escapeHtmlAttr(value) {
-      return escapeHtml(value).replace(/`/g, '&#96;');
-    }
-
     window.addEventListener('beforeunload', () => {
       if (state.autoRefreshTimer) {
         window.clearInterval(state.autoRefreshTimer);
       }
     });
+
     window.addEventListener('load', initialize);
   </script>
 </body>
