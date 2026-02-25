@@ -168,7 +168,7 @@ CREATE TABLE IF NOT EXISTS public.messages (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- Enable RLS on messages
+-- Enable RLS on messagesc
 ALTER TABLE public.messages ENABLE ROW LEVEL SECURITY;
 
 -- RLS: Users can see messages from their projects
