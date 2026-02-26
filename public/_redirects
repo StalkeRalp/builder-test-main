@@ -1,0 +1,23 @@
+/my-project /my-project.html 200
+/client/index /client/login.html 301
+/client/index.html /client/login.html 301
+/admin/chat /admin/messages.html 301
+/admin/chat.html /admin/messages.html 301
+/construction /construction.html 200
+/consultancy /consultancy.html 200
+/it-services /it-services.html 200
+/energy /energy.html 200
+/supply /supply.html 200
+/suggestions /suggestions.html 200
+
+/admin /admin/index.html 200
+/admin/:page /admin/:page.html 200
+
+/client /client/login.html 200
+/client/:page /client/:page.html 200
+
+/superadmin /superadmin/login.html 200
+/superadmin/:page /superadmin/:page.html 200
+
+/assets/* /assets/:splat 200
+/src/* /src/:splat 200
