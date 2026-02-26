@@ -1083,7 +1083,7 @@
             document.getElementById('projectIdShort').textContent = projectId !== '-' ? `#${String(projectId).slice(0, 8)}` : '-';
             document.getElementById('projectManager').textContent = project.manager || project.project_manager || '-';
             document.getElementById('projectProgress').textContent = `${clampProgress(project.progress)}%`;
-            document.getElementById('projectBudget').textContent = formatBudget(project.budget, project.currency || 'EUR');
+            document.getElementById('projectBudget').textContent = formatBudget(project.budget, project.currency || 'XOF');
             document.getElementById('sessionStatus').textContent = clientAuthService.isAuthenticated() ? 'Connecté' : 'Expiré';
         }
 
@@ -1233,7 +1233,7 @@
             return Number.isNaN(date.getTime()) ? new Date(0) : date;
         }
 
-        function formatBudget(amount, currency = 'EUR') {
+        function formatBudget(amount, currency = 'XOF') {
             const num = Number(amount);
             if (!Number.isFinite(num)) return '-';
             try {

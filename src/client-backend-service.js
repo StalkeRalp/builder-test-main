@@ -322,8 +322,15 @@ class ClientBackendService {
 
         try {
             const urlObj = new URL(publicUrl, window.location.origin);
-            const marker = '/storage/v1/object/public/';
-            const markerIndex = urlObj.pathname.indexOf(marker);
+            const publicMarker = '/storage/v1/object/public/';
+            const signedMarker = '/storage/v1/object/sign/';
+            let marker = publicMarker;
+            let markerIndex = urlObj.pathname.indexOf(publicMarker);
+
+            if (markerIndex === -1) {
+                marker = signedMarker;
+                markerIndex = urlObj.pathname.indexOf(signedMarker);
+            }
             if (markerIndex === -1) {
                 return { success: false, error: 'URL document invalide.' };
             }
@@ -440,20 +447,20 @@ class ClientBackendService {
             sender_id: null,
             sender_role: 'client',
             sender_name: options.senderName || 'Client',
-            content: (content || '').trim(),
-            read: false
+            content: (content || '').trim()
         };
 
         if (options.photoUrl) payload.photo_url = options.photoUrl;
 
         try {
-            const { data, error } = await supabase
+            const insert = await supabase
                 .from('messages')
                 .insert(payload)
                 .select()
                 .single();
-            if (error) throw error;
-            return { success: true, data };
+
+            if (insert.error) throw insert.error;
+            return { success: true, data: insert.data };
         } catch (error) {
             console.error('Error sending message fallback:', error);
             return { success: false, error: error.message };
@@ -474,14 +481,24 @@ class ClientBackendService {
             }
         }
 
-        const { error } = await supabase
-            .from('messages')
-            .update({ read: true })
-            .eq('project_id', projectId)
-            .eq('sender_role', 'admin');
+        try {
+            const { error } = await supabase
+                .from('messages')
+                .update({ read: true })
+                .eq('project_id', projectId)
+                .eq('sender_role', 'admin');
 
-        if (error) {
-            console.error('Error marking admin messages as read (fallback):', error);
+            if (error) {
+                const msg = String(error.message || '').toLowerCase();
+                if (!msg.includes('read') && !msg.includes('schema cache')) {
+                    console.error('Error marking admin messages as read (fallback):', error);
+                }
+            }
+        } catch (error) {
+            const msg = String(error?.message || '').toLowerCase();
+            if (!msg.includes('read') && !msg.includes('schema cache')) {
+                console.error('Error marking admin messages as read (fallback):', error);
+            }
         }
     }
 
@@ -565,19 +582,38 @@ class ClientBackendService {
             title: ticket.title?.trim() || ticket.subject?.trim() || 'Nouveau ticket',
             description: ticket.description?.trim() || ticket.message?.trim() || '',
             priority: ticket.priority || 'medium',
-            status: ticket.status || 'open',
-            created_by: ticket.created_by || null,
-            tags: ticket.tags || []
+            status: ticket.status || 'open'
         };
 
         try {
-            const { data, error } = await supabase
+            let { data, error } = await supabase
                 .from('tickets')
                 .insert(payload)
                 .select()
                 .single();
-            if (error) throw error;
 
+            if (error) {
+                const message = String(error.message || '').toLowerCase();
+                if (message.includes('created_by') && message.includes('null')) {
+                    const { data: projectMeta } = await supabase
+                        .from('projects')
+                        .select('created_by')
+                        .eq('id', projectId)
+                        .maybeSingle();
+
+                    if (projectMeta?.created_by) {
+                        const retry = await supabase
+                            .from('tickets')
+                            .insert({ ...payload, created_by: projectMeta.created_by })
+                            .select()
+                            .single();
+                        data = retry.data;
+                        error = retry.error;
+                    }
+                }
+            }
+
+            if (error) throw error;
             return { success: true, data };
         } catch (error) {
             console.error('Error creating ticket fallback:', error);

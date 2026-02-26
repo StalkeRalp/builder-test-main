@@ -776,10 +776,19 @@
         </div>
     </div>
 
-    <script type="module" src="../src/client-auth-service.js"></script>
-    <script type="module" src="../src/client-data-service.js"></script>
-    <script type="module" src="../src/client-ui-helpers.js"></script>
     <script>
+        (async () => {
+        if (!window.clientAuthService) {
+            await import(/* @vite-ignore */ '../src/client-auth-service.js');
+        }
+        if (!window.clientDataService) {
+            await import(/* @vite-ignore */ '../src/client-data-service.js');
+        }
+        if (!window.ClientUIHelpers) {
+            await import(/* @vite-ignore */ '../src/client-ui-helpers.js');
+        }
+
+        const clientAuthService = window.clientAuthService;
         const elements = {
             form: document.getElementById('loginForm'),
             projectId: document.getElementById('projectId'),
@@ -854,7 +863,7 @@
             setLoadingState(true);
 
             try {
-                const { default: clientBackendService } = await import('../src/client-backend-service.js');
+                const { default: clientBackendService } = await import(/* @vite-ignore */ '../src/client-backend-service.js');
                 const result = await clientBackendService.loginWithProjectPin(
                     projectId,
                     pin,
@@ -917,6 +926,7 @@
             }
             elements.projectId.focus();
         });
+        })();
     </script>
   <script src="/js/refresh-feedback.js" defer></script>
 </body>

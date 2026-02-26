@@ -2735,7 +2735,7 @@
             });
         }
 
-        function formatBudget(amount, currency = 'EUR') {
+        function formatBudget(amount, currency = 'XOF') {
             if (amount === null || amount === undefined || amount === '') return '-';
             const value = Number(amount);
             if (!Number.isFinite(value)) return '-';

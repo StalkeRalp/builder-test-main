@@ -5,30 +5,9 @@
 [build.environment]
   NODE_VERSION = "20"
 
-# ─── Redirections SPA ────────────────────────────────────────────────────────
-# Admin routes
-[[redirects]]
-  from = "/admin/*"
-  to = "/admin/:splat"
-  status = 200
-
-# Client routes
-[[redirects]]
-  from = "/client/*"
-  to = "/client/:splat"
-  status = 200
-
-# Superadmin routes
-[[redirects]]
-  from = "/superadmin/*"
-  to = "/superadmin/:splat"
-  status = 200
-
-# Fallback SPA — page principale
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+# Note:
+# Les redirections/pages sont gérées via `public/_redirects` (copié dans dist).
+# On évite ici un fallback SPA global qui peut casser le chargement des modules JS.
 
 # ─── Headers de sécurité & performance ───────────────────────────────────────
 [[headers]]

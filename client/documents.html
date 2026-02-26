@@ -1214,7 +1214,7 @@
             document.getElementById('projectName').textContent = projectData.name || 'Projet client';
             document.getElementById('projectId').textContent = projectId !== '-' ? `#${String(projectId).slice(0, 8)}` : '-';
             document.getElementById('projectManager').textContent = projectData.manager || projectData.project_manager || '-';
-            document.getElementById('projectBudget').textContent = formatBudget(projectData.budget, projectData.currency || 'EUR');
+            document.getElementById('projectBudget').textContent = formatBudget(projectData.budget, projectData.currency || 'XOF');
             document.getElementById('projectType').textContent = formatProjectType(projectData.project_type || projectData.type);
 
             const status = formatProjectStatus(projectData.status);
@@ -1280,7 +1280,7 @@
                 return resolvedUrlCache.get(normalizedUrl);
             }
             try {
-                const { default: clientBackendService } = await import('../src/client-backend-service.js');
+                const { default: clientBackendService } = await import(/* @vite-ignore */ '../src/client-backend-service.js');
                 const signed = await clientBackendService.getSignedDocumentUrl(normalizedUrl, 300);
                 if (signed?.success && signed.url) {
                     resolvedUrlCache.set(normalizedUrl, signed.url);
@@ -1498,7 +1498,7 @@
             return /\.(png|jpe?g|webp|gif|bmp|svg)(\?.*)?$/.test(url);
         }
 
-        function formatBudget(amount, currency = 'EUR') {
+        function formatBudget(amount, currency = 'XOF') {
             const value = Number(amount);
             if (!Number.isFinite(value)) return '-';
             try {
