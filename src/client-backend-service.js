@@ -5,6 +5,7 @@
 
 import { supabase } from './supabase-client.js';
 const CURRENT_SUPABASE_URL = (import.meta.env.VITE_SUPABASE_URL || '').replace(/\/+$/, '');
+const CURRENT_SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
 
 class ClientBackendService {
     constructor() {
@@ -44,10 +45,66 @@ class ClientBackendService {
         return sessionStorage.getItem(this.PIN_KEY) || null;
     }
 
+    _isAbortError(error) {
+        const name = String(error?.name || '');
+        const message = String(error?.message || '').toLowerCase();
+        const hint = String(error?.hint || '').toLowerCase();
+        return name === 'AbortError' || message.includes('aborted') || hint.includes('aborted');
+    }
+
+    async _rpcViaRest(functionName, args = {}) {
+        if (!CURRENT_SUPABASE_URL || !CURRENT_SUPABASE_ANON_KEY) {
+            throw new Error('Supabase config manquante pour fallback REST.');
+        }
+
+        const response = await fetch(`${CURRENT_SUPABASE_URL}/rest/v1/rpc/${functionName}`, {
+            method: 'POST',
+            headers: {
+                apikey: CURRENT_SUPABASE_ANON_KEY,
+                Authorization: `Bearer ${CURRENT_SUPABASE_ANON_KEY}`,
+                'Content-Type': 'application/json',
+                Prefer: 'return=representation'
+            },
+            body: JSON.stringify(args || {})
+        });
+
+        let payload = null;
+        try {
+            payload = await response.json();
+        } catch {
+            payload = null;
+        }
+
+        if (!response.ok) {
+            const message =
+                payload?.message ||
+                payload?.error_description ||
+                payload?.error ||
+                `RPC ${functionName} failed (${response.status})`;
+            throw {
+                message,
+                details: payload?.details || null,
+                hint: payload?.hint || null,
+                code: payload?.code || String(response.status)
+            };
+        }
+
+        return payload;
+    }
+
     async _rpc(functionName, args = {}) {
-        const { data, error } = await supabase.rpc(functionName, args);
-        if (error) throw error;
-        return data;
+        try {
+            const { data, error } = await supabase.rpc(functionName, args);
+            if (error) throw error;
+            return data;
+        } catch (error) {
+            if (!this._isAbortError(error)) throw error;
+            try {
+                return await this._rpcViaRest(functionName, args);
+            } catch (restError) {
+                throw restError;
+            }
+        }
     }
 
     _isMissingRpc(error) {
@@ -63,12 +120,10 @@ class ClientBackendService {
      */
     async loginWithProjectPin(projectId, pin, rememberProjectId = false) {
         try {
-            const { data, error } = await supabase.rpc('login_client', {
+            const data = await this._rpc('login_client', {
                 p_id: projectId,
                 p_pin: pin
             });
-
-            if (error) throw error;
             if (!data) {
                 return { success: false, error: 'Project ID ou PIN invalide.' };
             }
@@ -98,6 +153,9 @@ class ClientBackendService {
             return { success: true, project: data };
         } catch (error) {
             console.error('Client login error:', error);
+            if (this._isAbortError(error)) {
+                return { success: false, error: 'Connexion interrompue. Vérifiez votre réseau puis réessayez.' };
+            }
             return { success: false, error: error.message || 'Erreur de connexion client.' };
         }
     }
@@ -114,11 +172,10 @@ class ClientBackendService {
         if (!projectId || !pin) return null;
 
         try {
-            const { data, error } = await supabase.rpc('get_project_details_for_client', {
+            const data = await this._rpc('get_project_details_for_client', {
                 p_id: projectId,
                 p_pin: pin
             });
-            if (error) throw error;
             return data || null;
         } catch (error) {
             console.error('Error fetching client project:', error);
