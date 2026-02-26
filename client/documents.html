@@ -1280,7 +1280,7 @@
                 return resolvedUrlCache.get(normalizedUrl);
             }
             try {
-                const { default: clientBackendService } = await import(/* @vite-ignore */ '../src/client-backend-service.js');
+                const { default: clientBackendService } = await import('../src/client-backend-service.js');
                 const signed = await clientBackendService.getSignedDocumentUrl(normalizedUrl, 300);
                 if (signed?.success && signed.url) {
                     resolvedUrlCache.set(normalizedUrl, signed.url);
