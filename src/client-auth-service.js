@@ -48,7 +48,7 @@ class ClientAuthService {
     // Stocker
     sessionStorage.setItem(this.SESSION_KEY, JSON.stringify(session));
     sessionStorage.setItem(this.PIN_KEY, pin);
-    
+
     if (rememberMe) {
       localStorage.setItem(this.PROJECT_ID_KEY, projectId);
     }
@@ -121,3 +121,4 @@ class ClientAuthService {
 }
 
 const clientAuthService = new ClientAuthService();
+window.clientAuthService = clientAuthService;

@@ -261,3 +261,5 @@ const ClientUIHelpers = {
     document.body.removeChild(a);
   }
 };
+
+window.ClientUIHelpers = ClientUIHelpers;
