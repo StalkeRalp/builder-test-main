@@ -175,7 +175,7 @@
             <div class="table-container">
                 <table>
                     <thead>
-                        <tr><th>ID</th><th>Client</th><th>Sujet</th><th>Priorité</th><th>Statut</th><th>SLA 1ère réponse</th><th>Créé</th><th>Actions</th></tr>
+                        <tr><th>Créé</th><th>ID</th><th>Client</th><th>Sujet</th><th>Priorité</th><th>Statut</th><th>SLA 1ère réponse</th><th>Actions</th></tr>
                     </thead>
                     <tbody id="ticketsTableBody">
                         <tr><td colspan="8" style="text-align: center; padding: 40px;"><div class="empty-state" style="margin: 0;"><div class="material-icons">inbox</div><h3>Aucun ticket</h3></div></td></tr>
@@ -328,13 +328,13 @@
 
                 return `
                     <tr>
+                        <td>${new Date(ticket.created_at).toLocaleDateString('fr-FR')}</td>
                         <td>${ticket.id.substring(0, 8)}</td>
                         <td>${ticket.created_by_display || ticket.created_by_email || ticket.created_by || 'Client'}</td>
                         <td><strong>${ticket.title || ticket.subject || 'Ticket'}</strong></td>
                         <td><span class="urgent-dot ${urgencyClass}"></span><span class="material-icons" style="color: ${ticket.priority === 'high' ? '#ef4444' : ticket.priority === 'medium' ? '#f59e0b' : '#10b981'}; font-size: 16px;">${priorityIcon}</span> ${priorityLabel}</td>
                         <td><span style="background: ${statusBg}; color: ${statusColor}; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">${ticket.status}</span></td>
                         <td>${slaLabel}</td>
-                        <td>${new Date(ticket.created_at).toLocaleDateString('fr-FR')}</td>
                         <td>
                             <select id="status-${ticket.id}" data-current="${ticket.status}" onchange="updateTicketStatus('${ticket.id}', true)" style="padding: 4px 8px; border: 1px solid #e5e7eb; border-radius: 8px; margin-right: 8px;">
                                 <option value="open" ${ticket.status === 'open' ? 'selected' : ''}>Ouvert</option>
