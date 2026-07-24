@@ -12,8 +12,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Poppins:wght@500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
   <script type="module" crossorigin src="./assets/modulepreload-polyfill-B5Qt9EMX.js"></script>
-  <script type="module" crossorigin src="./assets/main-dSo_EM4c.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/style-DwbtG8b5.css">
+  <script type="module" crossorigin src="./assets/main-Co3-TK1j.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/style-C7FxxWdr.css">
 </head>
 
 <body class="bg-[#080c14] text-slate-100 font-sans antialiased overflow-x-hidden selection:bg-emerald-500 selection:text-white">
@@ -22,7 +22,7 @@
 
     <!-- Navigation -->
     <nav class="fixed top-0 left-0 right-0 z-50 glass-nav transition-all duration-500 py-3" id="navbar">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-[96rem] mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center">
                 <a href="index.html" class="flex items-center gap-3.5 group">
                     <img src="./logo.png" alt="TDE Group Logo" class="h-14 sm:h-16 w-auto object-contain transition-transform duration-500 group-hover:scale-105" />
@@ -94,16 +94,43 @@
                     <a href="suggestions.html" class="px-5 py-2 rounded-full text-xs font-semibold text-slate-300 hover:text-white hover:bg-white/10 transition-all">Suggestions</a>
                 </div>
 
+                <!-- Right Action Buttons (Unified Utilities + CTAs) -->
                 <div class="hidden md:flex items-center gap-3">
-                    <a href="my-project.html" class="px-4 py-2 rounded-full text-xs font-bold text-slate-300 hover:text-white hover:bg-white/10 transition-all flex items-center gap-2 border border-white/5">
+                    <!-- Unified Utility Capsule (Language + Theme) -->
+                    <div class="flex items-center p-1 bg-slate-900/80 border border-white/10 rounded-full text-xs font-bold shadow-inner gap-1">
+                        <button class="lang-btn px-2.5 py-1 rounded-full transition-all flex items-center gap-1" data-lang="fr">
+                            <span>🇫🇷</span> <span>FR</span>
+                        </button>
+                        <button class="lang-btn px-2.5 py-1 rounded-full transition-all flex items-center gap-1" data-lang="en">
+                            <span>🇬🇧</span> <span>EN</span>
+                        </button>
+                        <span class="w-[1px] h-4 bg-white/20 mx-0.5"></span>
+                        <button class="theme-toggle-btn px-2.5 py-1 rounded-full text-slate-300 hover:text-white transition-all flex items-center justify-center" title="Thème Clair / Sombre">
+                            <i data-lucide="sun" class="theme-icon-sun w-3.5 h-3.5 text-amber-400 hidden"></i>
+                            <i data-lucide="moon" class="theme-icon-moon w-3.5 h-3.5 text-emerald-300"></i>
+                        </button>
+                    </div>
+
+                    <!-- Action CTAs -->
+                    <a href="my-project.html" class="px-4 py-2 rounded-full text-xs font-bold text-slate-300 hover:text-white hover:bg-white/10 transition-all flex items-center gap-2 border border-white/10 bg-slate-900/40">
                         <i data-lucide="layout-dashboard" class="w-3.5 h-3.5 text-emerald-400"></i> <span data-i18n="nav.portal">Mon Projet</span>
                     </a>
-                    <a href="contact.html" data-i18n="nav.contact" class="btn-shiny px-6 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 text-white text-xs font-bold rounded-full shadow-lg shadow-emerald-600/30 hover:shadow-emerald-600/50 transition-all border border-emerald-400/30">
+                    <a href="contact.html" data-i18n="nav.contact" class="btn-shiny px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 text-white text-xs font-bold rounded-full shadow-lg shadow-emerald-600/30 hover:shadow-emerald-600/50 transition-all border border-emerald-400/30">
                         Nous Contacter
                     </a>
                 </div>
 
-                <div class="md:hidden flex items-center">
+                <!-- Mobile Navigation Bar Controls -->
+                <div class="md:hidden flex items-center gap-2">
+                    <div class="flex items-center p-1 bg-slate-900/80 border border-white/10 rounded-lg text-xs font-bold gap-1">
+                        <button class="lang-btn px-2 py-0.5 rounded-md transition-all" data-lang="fr">FR</button>
+                        <button class="lang-btn px-2 py-0.5 rounded-md transition-all" data-lang="en">EN</button>
+                        <span class="w-[1px] h-3 bg-white/20"></span>
+                        <button class="theme-toggle-btn p-1 rounded-md text-slate-300 hover:text-white transition-all flex items-center justify-center" title="Thème Clair / Sombre">
+                            <i data-lucide="sun" class="theme-icon-sun w-3.5 h-3.5 text-amber-400 hidden"></i>
+                            <i data-lucide="moon" class="theme-icon-moon w-3.5 h-3.5 text-emerald-300"></i>
+                        </button>
+                    </div>
                     <button id="mobile-menu-btn" class="text-slate-300 hover:text-white p-2 rounded-xl bg-slate-900/80 border border-white/10">
                         <i data-lucide="menu" class="w-6 h-6"></i>
                     </button>

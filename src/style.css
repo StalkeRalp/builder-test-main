@@ -58,6 +58,14 @@ body {
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
+/* Prevent text wrapping inside navigation elements */
+.glass-nav a,
+.glass-nav button,
+.glass-nav span,
+.glass-nav .lang-btn {
+  white-space: nowrap !important;
+}
+
 .glass-nav-light {
   background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(16px);
@@ -331,3 +339,177 @@ body {
     font-size: 18px;
   }
 }
+
+/* ============================================
+   LIGHT MODE UNIFIED DESIGN SYSTEM
+   ============================================ */
+html.light-mode {
+  color-scheme: light;
+}
+
+html.light-mode body {
+  background-color: #f8fafc;
+  color: #0f172a;
+}
+
+/* Scroll progress in Light mode */
+html.light-mode #scroll-progress {
+  background: linear-gradient(90deg, #2563eb 0%, #0284c7 50%, #0d9488 100%);
+  box-shadow: 0 0 10px rgba(37, 99, 235, 0.4);
+}
+
+/* Navigation bar in Light mode */
+html.light-mode .glass-nav {
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06);
+}
+
+/* Nav links in Light mode */
+html.light-mode nav a:not(.btn-shiny),
+html.light-mode nav button {
+  color: #334155;
+}
+
+html.light-mode nav a:not(.btn-shiny):hover,
+html.light-mode nav button:hover {
+  color: #1d4ed8;
+}
+
+html.light-mode .glass-nav .bg-slate-900\/60,
+html.light-mode .glass-nav .bg-slate-900\/80 {
+  background-color: rgba(241, 245, 249, 0.9) !important;
+  border-color: rgba(203, 213, 225, 0.8) !important;
+}
+
+html.light-mode #mobile-menu {
+  background-color: rgba(255, 255, 255, 0.98) !important;
+  border-bottom-color: rgba(226, 232, 240, 0.9) !important;
+  box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.1) !important;
+}
+
+html.light-mode #mobile-menu a:not(.btn-shiny) {
+  color: #1e293b !important;
+}
+
+html.light-mode #mobile-menu a:not(.btn-shiny):hover {
+  background-color: #f1f5f9 !important;
+}
+
+/* Mega dropdown in Light mode */
+html.light-mode nav .group > div {
+  background-color: rgba(255, 255, 255, 0.98) !important;
+  border-color: rgba(226, 232, 240, 0.9) !important;
+  box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.12) !important;
+}
+
+html.light-mode nav .group > div div {
+  color: #0f172a;
+}
+
+/* Glass Cards & Bento in Light mode */
+html.light-mode .glass-card {
+  background: rgba(255, 255, 255, 0.9) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(226, 232, 240, 0.9) !important;
+  box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.07) !important;
+}
+
+html.light-mode .glass-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(37, 99, 235, 0.35) !important;
+  box-shadow: 0 25px 50px -12px rgba(37, 99, 235, 0.16) !important;
+}
+
+/* Text Overrides for Light Mode */
+html.light-mode .text-white,
+html.light-mode .text-slate-100 {
+  color: #0f172a !important;
+}
+
+html.light-mode .text-slate-200,
+html.light-mode .text-slate-300 {
+  color: #334155 !important;
+}
+
+html.light-mode .text-slate-400 {
+  color: #64748b !important;
+}
+
+/* Keep Shiny Button / Primary CTA Text White */
+html.light-mode .btn-shiny,
+html.light-mode .btn-shiny *,
+html.light-mode .bg-gradient-to-r.from-blue-600 *,
+html.light-mode .bg-blue-600 * {
+  color: #ffffff !important;
+}
+
+/* Ambient glow subtle adjustment for light mode */
+html.light-mode .ambient-glow-blue,
+html.light-mode .ambient-glow-purple {
+  background: radial-gradient(circle, rgba(37, 99, 235, 0.12) 0%, rgba(0, 0, 0, 0) 70%) !important;
+}
+
+/* Form Inputs in Light Mode */
+html.light-mode input,
+html.light-mode textarea,
+html.light-mode select {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+html.light-mode input::placeholder,
+html.light-mode textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+html.light-mode input:focus,
+html.light-mode textarea:focus,
+html.light-mode select:focus {
+  border-color: #2563eb !important;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15) !important;
+}
+
+/* Footer in Light Mode */
+html.light-mode footer {
+  background-color: #f1f5f9 !important;
+  border-top-color: #e2e8f0 !important;
+  color: #475569 !important;
+}
+
+html.light-mode footer .text-white {
+  color: #0f172a !important;
+}
+
+html.light-mode footer a {
+  color: #475569 !important;
+}
+
+html.light-mode footer a:hover {
+  color: #2563eb !important;
+}
+
+/* Scroll To Top button in Light mode */
+html.light-mode #scrollToTopBtn {
+  background: rgba(255, 255, 255, 0.95);
+  color: #0f172a;
+  border-color: rgba(203, 213, 225, 0.9);
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.1);
+}
+
+html.light-mode #scrollToTopBtn:hover {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+/* Gradient Texts in Light Mode */
+html.light-mode .gradient-text-hero {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #2563eb 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+

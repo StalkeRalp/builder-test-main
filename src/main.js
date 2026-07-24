@@ -1,5 +1,6 @@
 import './style.css'
 import { initI18n } from './i18n.js'
+import { initTheme } from './theme.js'
 
 // ====== CREATE SCROLL PROGRESS INDICATOR ======
 if (!document.getElementById('scroll-progress')) {
@@ -64,6 +65,9 @@ const revealObserver = new IntersectionObserver((entries) => {
 }, revealOptions);
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Initialize Theme System (Light / Dark Mode)
+  initTheme();
+
   // Initialize i18n Language System (Default French)
   initI18n();
 

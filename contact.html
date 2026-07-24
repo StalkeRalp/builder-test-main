@@ -25,7 +25,7 @@
 
     <!-- Navigation Bar (Glassmorphic) -->
     <nav class="fixed top-0 left-0 right-0 z-50 glass-nav transition-all duration-500 py-3" id="navbar">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-[96rem] mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center">
                 <!-- Brand Logo -->
                 <a href="index.html" class="flex items-center gap-3.5 group">
@@ -112,33 +112,44 @@
                         class="px-5 py-2 rounded-full text-xs font-semibold text-slate-300 hover:text-white hover:bg-white/10 transition-all">Suggestions</a>
                 </div>
 
-                <!-- Right Action Buttons + Language Switcher -->
+                <!-- Right Action Buttons (Unified Utilities + CTAs) -->
                 <div class="hidden md:flex items-center gap-3">
-                    <!-- Language Selector Toggle -->
-                    <div class="flex items-center p-1 bg-slate-900/80 border border-white/10 rounded-full text-xs font-bold shadow-inner">
+                    <!-- Unified Utility Capsule (Language + Theme) -->
+                    <div class="flex items-center p-1 bg-slate-900/80 border border-white/10 rounded-full text-xs font-bold shadow-inner gap-1">
                         <button class="lang-btn px-2.5 py-1 rounded-full transition-all flex items-center gap-1" data-lang="fr">
                             <span>🇫🇷</span> <span>FR</span>
                         </button>
                         <button class="lang-btn px-2.5 py-1 rounded-full transition-all flex items-center gap-1" data-lang="en">
                             <span>🇬🇧</span> <span>EN</span>
                         </button>
+                        <span class="w-[1px] h-4 bg-white/20 mx-0.5"></span>
+                        <button class="theme-toggle-btn px-2.5 py-1 rounded-full text-slate-300 hover:text-white transition-all flex items-center justify-center" title="Thème Clair / Sombre">
+                            <i data-lucide="sun" class="theme-icon-sun w-3.5 h-3.5 text-amber-400 hidden"></i>
+                            <i data-lucide="moon" class="theme-icon-moon w-3.5 h-3.5 text-blue-300"></i>
+                        </button>
                     </div>
 
+                    <!-- Action CTAs -->
                     <a href="my-project.html"
-                        class="px-4 py-2 rounded-full text-xs font-bold text-slate-300 hover:text-white hover:bg-white/10 transition-all flex items-center gap-2 border border-white/5">
+                        class="px-4 py-2 rounded-full text-xs font-bold text-slate-300 hover:text-white hover:bg-white/10 transition-all flex items-center gap-2 border border-white/10 bg-slate-900/40">
                         <i data-lucide="layout-dashboard" class="w-3.5 h-3.5 text-blue-400"></i> <span data-i18n="nav.portal">Mon Projet</span>
                     </a>
                     <a href="contact.html" data-i18n="nav.contact"
-                        class="btn-shiny px-6 py-2.5 bg-gradient-to-r from-blue-600 to-cyan-600 text-white text-xs font-bold rounded-full shadow-lg shadow-blue-600/30 hover:shadow-blue-600/50 transition-all duration-300 border border-blue-400/30">
+                        class="btn-shiny px-5 py-2.5 bg-gradient-to-r from-blue-600 to-cyan-600 text-white text-xs font-bold rounded-full shadow-lg shadow-blue-600/30 hover:shadow-blue-600/50 transition-all duration-300 border border-blue-400/30">
                         Nous Contacter
                     </a>
                 </div>
 
-                <!-- Mobile Menu Button -->
+                <!-- Mobile Navigation Bar Controls -->
                 <div class="md:hidden flex items-center gap-2">
-                    <div class="flex items-center p-0.5 bg-slate-900/80 border border-white/10 rounded-lg text-xs font-bold">
+                    <div class="flex items-center p-1 bg-slate-900/80 border border-white/10 rounded-lg text-xs font-bold gap-1">
                         <button class="lang-btn px-2 py-0.5 rounded-md transition-all" data-lang="fr">FR</button>
                         <button class="lang-btn px-2 py-0.5 rounded-md transition-all" data-lang="en">EN</button>
+                        <span class="w-[1px] h-3 bg-white/20"></span>
+                        <button class="theme-toggle-btn p-1 rounded-md text-slate-300 hover:text-white transition-all flex items-center justify-center" title="Thème Clair / Sombre">
+                            <i data-lucide="sun" class="theme-icon-sun w-3.5 h-3.5 text-amber-400 hidden"></i>
+                            <i data-lucide="moon" class="theme-icon-moon w-3.5 h-3.5 text-blue-300"></i>
+                        </button>
                     </div>
                     <button id="mobile-menu-btn"
                         class="text-slate-300 hover:text-white p-2 rounded-xl bg-slate-900/80 border border-white/10">
