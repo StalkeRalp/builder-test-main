@@ -1,0 +1,9 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Version=1.0
+Terminal=false
+Type=Application
+Name=Claude
+Exec=/opt/google/chrome/google-chrome "--profile-directory=Profile 6" --app-id=fmpnliohjhemenmnlpbfagaolkdacoja
+Icon=chrome-fmpnliohjhemenmnlpbfagaolkdacoja-Profile_6
+StartupWMClass=crx_fmpnliohjhemenmnlpbfagaolkdacoja

@@ -1,652 +1,289 @@
 <!DOCTYPE html>
 <html lang="fr" class="scroll-smooth">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TDE Group - Accès sécurisé aux projets</title>
-    <meta name="description" content="Portail d'accès client et administrateur TDE Group - Gérez vos projets en toute sécurité" />
-    
-    <!-- Polices optimisées -->
+    <title>TDE Group • Accès Portail Projet (Client & Admin)</title>
+    <meta name="description"
+        content="Accédez à votre espace sécurisé TDE Group. Choisissez entre le Portail Client pour le suivi de vos projets ou le Portail Admin pour la gestion." />
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- Tailwind CSS via CDN pour l'exemple (à remplacer par votre fichier local) -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Poppins:wght@500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="./src/style.css" />
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
-    
-    <style>
-        /* Variables personnalisées */
-        :root {
-            --primary: #0d9488;
-            --primary-dark: #0f766e;
-            --primary-light: #14b8a6;
-            --secondary: #1e293b;
-            --secondary-dark: #0f172a;
-            --accent: #8b5cf6;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --dark: #0f172a;
-            --gray: #64748b;
-            --light: #f8fafc;
-        }
-
-        /* Styles de base */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            background: #f8fafc;
-            min-height: 100vh;
-            color: var(--dark);
-        }
-
-        /* Navigation améliorée */
-        .navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 50;
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(13, 148, 136, 0.1);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-        }
-
-        .nav-container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0 24px;
-            height: 80px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-decoration: none;
-            transition: transform 0.3s ease;
-        }
-
-        .logo-container:hover {
-            transform: translateY(-2px);
-        }
-
-        .logo-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(13, 148, 136, 0.1);
-            box-shadow: 0 10px 20px -5px rgba(13, 148, 136, 0.3);
-            overflow: hidden;
-        }
-        .logo-icon img {
-            width: 36px;
-            height: 36px;
-            object-fit: contain;
-        }
-
-        .logo-text {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .logo-main {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-weight: 800;
-            font-size: 1.5rem;
-            line-height: 1.2;
-            color: var(--dark);
-            letter-spacing: -0.02em;
-        }
-
-        .logo-sub {
-            font-size: 0.7rem;
-            font-weight: 600;
-            color: var(--primary);
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-        }
-
-        .nav-back {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 18px;
-            background: rgba(13, 148, 136, 0.05);
-            border-radius: 40px;
-            color: var(--dark);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(13, 148, 136, 0.1);
-        }
-
-        .nav-back:hover {
-            background: rgba(13, 148, 136, 0.1);
-            transform: translateX(-4px);
-            border-color: rgba(13, 148, 136, 0.3);
-        }
-
-        /* Hero section améliorée */
-        .hero-section {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-            padding: 100px 20px 40px;
-        }
-
-        .hero-background {
-            position: absolute;
-            inset: 0;
-            background: url('/images/acceuil.jpeg') center/cover no-repeat;
-        }
-
-        .hero-background::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(67, 56, 202, 0.85), rgba(14, 116, 144, 0.75), rgba(15, 23, 42, 0.85));
-            mix-blend-mode: multiply;
-        }
-
-        .hero-background::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.18), transparent 45%);
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            max-width: 1200px;
-            width: 100%;
-            text-align: center;
-            animation: fadeInUp 0.8s ease;
-        }
-
-        .floating-orb {
-            position: absolute;
-            width: 200px;
-            height: 200px;
-            border-radius: 999px;
-            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.35), rgba(255,255,255,0.05));
-            filter: blur(1px);
-            animation: floatOrb 10s ease-in-out infinite;
-            z-index: 1;
-        }
-        .floating-orb.secondary {
-            width: 140px;
-            height: 140px;
-            left: 8%;
-            bottom: 12%;
-            top: auto;
-            animation-delay: -3s;
-        }
-        .floating-orb.primary {
-            right: 10%;
-            top: 16%;
-        }
-        @keyframes floatOrb {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-14px); }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Badge d'accès */
-        .access-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 24px;
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-radius: 50px;
-            color: white;
-            font-weight: 600;
-            font-size: 0.9rem;
-            letter-spacing: 0.5px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            margin-bottom: 30px;
-            animation: floatBadge 6s ease-in-out infinite;
-        }
-
-        .access-badge i {
-            color: var(--primary-light);
-        }
-
-        /* Titres */
-        .hero-title {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: clamp(2.5rem, 8vw, 5rem);
-            font-weight: 800;
-            line-height: 1.1;
-            color: white;
-            margin-bottom: 20px;
-            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .hero-subtitle {
-            font-size: 1.2rem;
-            color: rgba(255, 255, 255, 0.9);
-            max-width: 700px;
-            margin: 0 auto 50px;
-            line-height: 1.6;
-        }
-
-        /* Grille des cartes */
-        .cards-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 30px;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        @media (max-width: 768px) {
-            .cards-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-        }
-
-        /* Cartes d'accès */
-        .access-card {
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-radius: 32px;
-            padding: 40px 30px;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .access-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 40px 80px rgba(13, 148, 136, 0.3);
-            border-color: var(--primary);
-        }
-
-        /* Icônes de carte */
-        .card-icon {
-            width: 80px;
-            height: 80px;
-            border-radius: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 25px;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-        .card-icon::after {
-            content: '';
-            position: absolute;
-            inset: -6px;
-            border-radius: 28px;
-            border: 1px solid rgba(255,255,255,0.35);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .card-icon i {
-            width: 40px;
-            height: 40px;
-            color: white;
-        }
-
-        .access-card:hover .card-icon {
-            transform: scale(1.1) rotate(5deg);
-        }
-        .access-card:hover .card-icon::after {
-            opacity: 1;
-        }
-
-        /* Titres de carte */
-        .card-title {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--dark);
-            margin-bottom: 15px;
-        }
-
-        .card-description {
-            color: var(--gray);
-            font-size: 1rem;
-            line-height: 1.6;
-            margin-bottom: 30px;
-            flex-grow: 1;
-        }
-
-        /* Boutons noir sur blanc centrés */
-        .card-actions {
-            display: flex;
-            justify-content: center;
-            margin-top: auto;
-        }
-
-        .btn-access {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            padding: 16px 40px;
-            background: #000000;
-            color: white;
-            border: 2px solid #000000;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 1rem;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            min-width: 200px;
-            letter-spacing: 0.5px;
-        }
-
-        .btn-access:hover {
-            background: white;
-            color: black;
-            border-color: black;
-            transform: translateY(-3px);
-            box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.3);
-        }
-
-        .btn-access i {
-            transition: transform 0.3s ease;
-        }
-
-        .btn-access:hover i {
-            transform: translateX(5px);
-        }
-
-        /* Badge de sécurité */
-        .security-badge {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            margin-top: 40px;
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 0.9rem;
-        }
-
-        .security-badge i {
-            color: var(--success);
-        }
-
-        /* Responsive */
-        @media (max-width: 640px) {
-            .nav-container {
-                padding: 0 16px;
-                height: 70px;
-            }
-
-            .logo-main {
-                font-size: 1.2rem;
-            }
-
-            .logo-sub {
-                font-size: 0.6rem;
-            }
-
-            .logo-icon {
-                width: 40px;
-                height: 40px;
-                font-size: 20px;
-            }
-
-            .access-card {
-                padding: 30px 20px;
-            }
-
-            .card-title {
-                font-size: 1.8rem;
-            }
-
-            .btn-access {
-                padding: 14px 30px;
-                min-width: 180px;
-            }
-        }
-
-        /* Animation supplémentaire */
-        .fade-in {
-            animation: fadeIn 1s ease forwards;
-            opacity: 0;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-    </style>
 </head>
 
-<body>
-    <!-- Navigation améliorée -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="index.html" class="logo-container">
-                <div class="logo-icon">
-                    <img src="/logo.png" alt="TDE Group">
-                </div>
-                <div class="logo-text">
-                    <span class="logo-main">TDE Group</span>
-                    <span class="logo-sub">Multi-Services</span>
-                </div>
-            </a>
-                            <div
-                    class="hidden md:flex space-x-1 items-center bg-white/50 p-1 rounded-full border border-gray-100 shadow-sm">
-                    <a href="index.html"
-                        class="px-5 py-2.5 rounded-full text-tde-secondary font-medium bg-tde-light/50 transition-all">Home</a>
+<body class="bg-[#080c14] text-slate-100 font-sans antialiased overflow-x-hidden selection:bg-blue-500 selection:text-white">
+
+    <!-- Scroll Progress Indicator Bar -->
+    <div id="scroll-progress"></div>
+
+    <!-- Navigation Bar (Glassmorphic) -->
+    <nav class="fixed top-0 left-0 right-0 z-50 glass-nav transition-all duration-500 py-3" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center">
+                <!-- Brand Logo -->
+                <a href="index.html" class="flex items-center gap-3.5 group">
+                    <img src="/logo.png" alt="TDE Group Logo"
+                        class="h-14 sm:h-16 w-auto object-contain transition-transform duration-500 group-hover:scale-105" />
+                    <div class="flex flex-col">
+                        <span class="font-display font-extrabold text-2xl sm:text-3xl tracking-tight text-white group-hover:text-blue-300 transition-colors">
+                            TDE<span class="text-blue-400">.</span>Group
+                        </span>
+                        <span class="text-[9px] sm:text-[10px] font-bold tracking-[0.25em] text-blue-300 uppercase -mt-1 opacity-90">Services Internationaux</span>
+                    </div>
+                </a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-1 bg-slate-900/60 p-1.5 rounded-full border border-white/10 shadow-2xl backdrop-blur-xl">
+                    <a href="index.html" data-i18n="nav.home"
+                        class="px-5 py-2 rounded-full text-xs font-semibold text-slate-300 hover:text-white hover:bg-white/10 transition-all">Accueil</a>
+                    
+                    <!-- Mega Dropdown Menu for Services -->
                     <div class="relative group">
                         <button
-                            class="px-5 py-2.5 rounded-full text-slate-600 font-medium hover:text-tde-secondary hover:bg-white transition-all flex items-center gap-1">
-                            Services <i data-lucide="chevron-down" class="w-4 h-4 mt-0.5"></i>
+                            class="px-5 py-2 rounded-full text-xs font-semibold text-slate-300 hover:text-white hover:bg-white/10 transition-all flex items-center gap-1.5">
+                            <span data-i18n="nav.services">Services</span> <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-blue-400 group-hover:rotate-180 transition-transform duration-300"></i>
                         </button>
-                        <!-- Dropdown -->
                         <div
-                            class="absolute left-1/2 -translate-x-1/2 mt-4 w-64 bg-white/95 backdrop-blur-xl rounded-2xl shadow-xl border border-gray-100 py-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top overflow-hidden">
+                            class="absolute left-1/2 -translate-x-1/2 mt-4 w-72 bg-slate-900/95 backdrop-blur-2xl rounded-2xl shadow-2xl border border-white/10 p-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top translate-y-2 group-hover:translate-y-0">
                             <a href="construction.html"
-                                class="flex items-center gap-3 px-4 py-3 hover:bg-tde-light group/item">
-                                <span
-                                    class="bg-blue-50 p-2 rounded-lg text-blue-600 group-hover/item:bg-blue-600 group-hover/item:text-white transition-colors"><i
-                                        data-lucide="hard-hat" class="w-4 h-4"></i></span>
-                                <span
-                                    class="text-sm font-medium text-slate-700 group-hover/item:text-blue-700">Construction</span>
+                                class="flex items-center gap-3.5 p-3 rounded-xl hover:bg-white/5 transition-all group/item">
+                                <div class="p-2.5 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-400 group-hover/item:bg-blue-600 group-hover/item:text-white transition-colors">
+                                    <i data-lucide="hard-hat" class="w-4 h-4"></i>
+                                </div>
+                                <div>
+                                    <div class="text-xs font-bold text-slate-100 group-hover/item:text-blue-300 transition-colors" data-i18n="nav.construction">Construction</div>
+                                    <div class="text-[11px] text-slate-400" data-i18n="nav.construction_desc">Infrastructure & Ingénierie</div>
+                                </div>
                             </a>
                             <a href="consultancy.html"
-                                class="flex items-center gap-3 px-4 py-3 hover:bg-tde-light group/item">
-                                <span
-                                    class="bg-rose-50 p-2 rounded-lg text-rose-600 group-hover/item:bg-rose-600 group-hover/item:text-white transition-colors"><i
-                                        data-lucide="trending-up" class="w-4 h-4"></i></span>
-                                <span
-                                    class="text-sm font-medium text-slate-700 group-hover/item:text-rose-700">Consultancy</span>
+                                class="flex items-center gap-3.5 p-3 rounded-xl hover:bg-white/5 transition-all group/item">
+                                <div class="p-2.5 rounded-lg bg-rose-500/10 border border-rose-500/20 text-rose-400 group-hover/item:bg-rose-600 group-hover/item:text-white transition-colors">
+                                    <i data-lucide="trending-up" class="w-4 h-4"></i>
+                                </div>
+                                <div>
+                                    <div class="text-xs font-bold text-slate-100 group-hover/item:text-rose-300 transition-colors" data-i18n="nav.consultancy">Conseil & Stratégie</div>
+                                    <div class="text-[11px] text-slate-400" data-i18n="nav.consultancy_desc">Stratégie & Croissance</div>
+                                </div>
                             </a>
                             <a href="it-services.html"
-                                class="flex items-center gap-3 px-4 py-3 hover:bg-tde-light group/item">
-                                <span
-                                    class="bg-indigo-50 p-2 rounded-lg text-indigo-600 group-hover/item:bg-indigo-600 group-hover/item:text-white transition-colors"><i
-                                        data-lucide="monitor" class="w-4 h-4"></i></span>
-                                <span class="text-sm font-medium text-slate-700 group-hover/item:text-indigo-700">IT
-                                    Services</span>
+                                class="flex items-center gap-3.5 p-3 rounded-xl hover:bg-white/5 transition-all group/item">
+                                <div class="p-2.5 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 group-hover/item:bg-indigo-600 group-hover/item:text-white transition-colors">
+                                    <i data-lucide="monitor" class="w-4 h-4"></i>
+                                </div>
+                                <div>
+                                    <div class="text-xs font-bold text-slate-100 group-hover/item:text-indigo-300 transition-colors" data-i18n="nav.it">IT & Technologie</div>
+                                    <div class="text-[11px] text-slate-400" data-i18n="nav.it_desc">Systèmes & Cyber-sécurité</div>
+                                </div>
                             </a>
                             <a href="energy.html"
-                                class="flex items-center gap-3 px-4 py-3 hover:bg-tde-light group/item">
-                                <span
-                                    class="bg-amber-50 p-2 rounded-lg text-amber-600 group-hover/item:bg-amber-500 group-hover/item:text-white transition-colors"><i
-                                        data-lucide="zap" class="w-4 h-4"></i></span>
-                                <span class="text-sm font-medium text-slate-700 group-hover/item:text-amber-700">Energy
-                                    Solutions</span>
+                                class="flex items-center gap-3.5 p-3 rounded-xl hover:bg-white/5 transition-all group/item">
+                                <div class="p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-400 group-hover/item:bg-amber-600 group-hover/item:text-white transition-colors">
+                                    <i data-lucide="zap" class="w-4 h-4"></i>
+                                </div>
+                                <div>
+                                    <div class="text-xs font-bold text-slate-100 group-hover/item:text-amber-300 transition-colors" data-i18n="nav.energy">Solutions Énergie</div>
+                                    <div class="text-[11px] text-slate-400" data-i18n="nav.energy_desc">Puissance & Solaire Durable</div>
+                                </div>
                             </a>
                             <a href="supply.html"
-                                class="flex items-center gap-3 px-4 py-3 hover:bg-tde-light group/item">
-                                <span
-                                    class="bg-emerald-50 p-2 rounded-lg text-emerald-600 group-hover/item:bg-emerald-600 group-hover/item:text-white transition-colors"><i
-                                        data-lucide="package" class="w-4 h-4"></i></span>
-                                <span
-                                    class="text-sm font-medium text-slate-700 group-hover/item:text-emerald-700">General
-                                    Supply</span>
+                                class="flex items-center gap-3.5 p-3 rounded-xl hover:bg-white/5 transition-all group/item">
+                                <div class="p-2.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 group-hover/item:bg-emerald-600 group-hover/item:text-white transition-colors">
+                                    <i data-lucide="package" class="w-4 h-4"></i>
+                                </div>
+                                <div>
+                                    <div class="text-xs font-bold text-slate-100 group-hover/item:text-emerald-300 transition-colors" data-i18n="nav.supply">Fourniture Générale</div>
+                                    <div class="text-[11px] text-slate-400" data-i18n="nav.supply_desc">Logistique & Sourcing Global</div>
+                                </div>
                             </a>
                         </div>
                     </div>
-                    <a href="#about"
-                        class="px-5 py-2.5 rounded-full text-slate-600 font-medium hover:text-tde-secondary hover:bg-white transition-all">About</a>
-                    <a href="suggestions.html"
-                        class="px-5 py-2.5 rounded-full text-slate-600 font-medium hover:text-tde-secondary hover:bg-white transition-all">Suggestions</a>
+                    <a href="index.html#projects" data-i18n="nav.projects"
+                        class="px-5 py-2 rounded-full text-xs font-semibold text-slate-300 hover:text-white hover:bg-white/10 transition-all">Projets Réalisés</a>
+                    <a href="index.html#about" data-i18n="nav.about"
+                        class="px-5 py-2 rounded-full text-xs font-semibold text-slate-300 hover:text-white hover:bg-white/10 transition-all">À Propos</a>
+                    <a href="suggestions.html" data-i18n="nav.suggestions"
+                        class="px-5 py-2 rounded-full text-xs font-semibold text-slate-300 hover:text-white hover:bg-white/10 transition-all">Suggestions</a>
                 </div>
 
-            <a href="index.html" class="nav-back">
-                <i data-lucide="arrow-left" class="w-4 h-4"></i>
-                <span>Retour au site</span>
-            </a>
+                <!-- Right Action Buttons + Language Switcher -->
+                <div class="hidden md:flex items-center gap-3">
+                    <!-- Language Selector Toggle -->
+                    <div class="flex items-center p-1 bg-slate-900/80 border border-white/10 rounded-full text-xs font-bold shadow-inner">
+                        <button class="lang-btn px-2.5 py-1 rounded-full transition-all flex items-center gap-1" data-lang="fr">
+                            <span>🇫🇷</span> <span>FR</span>
+                        </button>
+                        <button class="lang-btn px-2.5 py-1 rounded-full transition-all flex items-center gap-1" data-lang="en">
+                            <span>🇬🇧</span> <span>EN</span>
+                        </button>
+                    </div>
+
+                    <a href="my-project.html"
+                        class="px-4 py-2 rounded-full text-xs font-bold text-white bg-blue-600/40 border border-blue-400/30 transition-all flex items-center gap-2 shadow-sm">
+                        <i data-lucide="layout-dashboard" class="w-3.5 h-3.5 text-blue-400"></i> <span data-i18n="nav.portal">Mon Projet</span>
+                    </a>
+                    <a href="contact.html" data-i18n="nav.contact"
+                        class="btn-shiny px-6 py-2.5 bg-gradient-to-r from-blue-600 to-cyan-600 text-white text-xs font-bold rounded-full shadow-lg shadow-blue-600/30 hover:shadow-blue-600/50 transition-all duration-300 border border-blue-400/30">
+                        Nous Contacter
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center gap-2">
+                    <div class="flex items-center p-0.5 bg-slate-900/80 border border-white/10 rounded-lg text-xs font-bold">
+                        <button class="lang-btn px-2 py-0.5 rounded-md transition-all" data-lang="fr">FR</button>
+                        <button class="lang-btn px-2 py-0.5 rounded-md transition-all" data-lang="en">EN</button>
+                    </div>
+                    <button id="mobile-menu-btn"
+                        class="text-slate-300 hover:text-white p-2 rounded-xl bg-slate-900/80 border border-white/10">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu"
+            class="hidden md:hidden bg-slate-950/95 backdrop-blur-2xl border-b border-white/10 shadow-2xl absolute w-full left-0 top-full p-6 transition-all">
+            <div class="flex flex-col space-y-3">
+                <a href="index.html" data-i18n="nav.home" class="px-4 py-3 rounded-xl text-sm font-bold text-slate-300 hover:bg-white/5">Accueil</a>
+                <div class="px-4 pt-2 text-[10px] font-bold tracking-widest text-slate-400 uppercase" data-i18n="bento.tag">Nos Pôles d'Expertise</div>
+                <a href="construction.html" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-300 hover:bg-white/5 hover:text-blue-400 transition-all flex items-center gap-3">
+                    <i data-lucide="hard-hat" class="w-4 h-4 text-blue-400"></i> <span data-i18n="nav.construction">Construction</span>
+                </a>
+                <a href="consultancy.html" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-300 hover:bg-white/5 hover:text-rose-400 transition-all flex items-center gap-3">
+                    <i data-lucide="trending-up" class="w-4 h-4 text-rose-400"></i> <span data-i18n="nav.consultancy">Conseil & Stratégie</span>
+                </a>
+                <a href="it-services.html" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-300 hover:bg-white/5 hover:text-indigo-400 transition-all flex items-center gap-3">
+                    <i data-lucide="monitor" class="w-4 h-4 text-indigo-400"></i> <span data-i18n="nav.it">IT & Technologie</span>
+                </a>
+                <a href="energy.html" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-300 hover:bg-white/5 hover:text-amber-400 transition-all flex items-center gap-3">
+                    <i data-lucide="zap" class="w-4 h-4 text-amber-400"></i> <span data-i18n="nav.energy">Solutions Énergie</span>
+                </a>
+                <a href="supply.html" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-300 hover:bg-white/5 hover:text-emerald-400 transition-all flex items-center gap-3">
+                    <i data-lucide="package" class="w-4 h-4 text-emerald-400"></i> <span data-i18n="nav.supply">Fourniture Générale</span>
+                </a>
+                <a href="index.html#projects" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-300 hover:bg-white/5 transition-all flex items-center gap-3">
+                    <i data-lucide="folder-check" class="w-4 h-4 text-blue-400"></i> <span data-i18n="nav.projects">Projets Réalisés</span>
+                </a>
+                <a href="suggestions.html" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-300 hover:bg-white/5 flex items-center gap-3">
+                    <i data-lucide="message-square" class="w-4 h-4 text-blue-400"></i> <span data-i18n="nav.suggestions">Suggestions</span>
+                </a>
+                <div class="border-t border-white/10 pt-3 flex flex-col gap-2">
+                    <a href="my-project.html" data-i18n="nav.portal" class="w-full text-center py-3 rounded-xl text-xs font-bold text-white bg-blue-600/40 border border-blue-400/30">
+                        Mon Projet
+                    </a>
+                    <a href="contact.html" data-i18n="nav.contact" class="w-full text-center py-3 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-blue-600 to-cyan-600 shadow-lg">
+                        Nous Contacter
+                    </a>
+                </div>
+            </div>
         </div>
     </nav>
 
-    <!-- Section principale -->
-    <main class="hero-section">
-        <!-- Fond overlay -->
-        <div class="hero-background"></div>
-        <div class="floating-orb primary"></div>
-        <div class="floating-orb secondary"></div>
+    <!-- PORTAL SELECTION HERO SECTION -->
+    <section class="relative min-h-screen flex items-center justify-center pt-32 pb-24 overflow-hidden">
+        <div class="ambient-glow-blue top-1/3 left-1/2 -translate-x-1/2 opacity-75 animate-pulse-glow"></div>
+        <div class="ambient-glow-blue bottom-10 right-10 opacity-40"></div>
 
-        <!-- Contenu -->
-        <div class="hero-content">
-            <!-- Badge d'accès -->
-            <div class="access-badge fade-in">
-                <i data-lucide="sparkles" class="w-5 h-5"></i>
-                <span>Accès sécurisé aux projets</span>
+        <div class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            
+            <!-- Badge -->
+            <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-blue-500/30 bg-blue-950/40 backdrop-blur-xl mb-8">
+                <i data-lucide="shield-check" class="w-4 h-4 text-blue-400"></i>
+                <span class="text-xs font-bold tracking-wider text-blue-200 uppercase" data-i18n="portal.badge">ACCÈS SÉCURISÉ AUX PORTAILS TDE</span>
             </div>
 
-            <!-- Titres -->
-            <h1 class="hero-title fade-in" style="animation-delay: 0.1s;">
-                Bienvenue sur votre<br>espace projet
+            <!-- Title -->
+            <h1 class="font-display text-4xl sm:text-6xl font-extrabold tracking-tight text-white mb-6">
+                <span data-i18n="portal.title_main">Sélectionnez Votre</span> <br />
+                <span class="gradient-text-blue" data-i18n="portal.title_sub">Espace de Connexion</span>
             </h1>
-            
-            <p class="hero-subtitle fade-in" style="animation-delay: 0.2s;">
-                Accédez rapidement à votre espace dédié. Client ou administrateur, 
-                retrouvez toutes vos ressources en un clic.
+
+            <p class="text-base sm:text-lg text-slate-300 max-w-2xl mx-auto mb-16 font-normal leading-relaxed" data-i18n="portal.subtitle">
+                Bienvenue sur le portail TDE Group. Veuillez choisir ci-dessous selon votre profil (Client ou Administrateur) pour être redirigé vers votre espace dédié.
             </p>
 
-            <!-- Grille des cartes d'accès -->
-            <div class="cards-grid fade-in" style="animation-delay: 0.3s;">
-                <!-- Carte Client -->
-                <div class="access-card">
-                    <div class="card-icon" style="background: linear-gradient(135deg, #0d9488, #14b8a6);">
-                        <i data-lucide="layout-dashboard" class="w-10 h-10"></i>
+            <!-- Grid of 2 Choices (Client vs Admin) -->
+            <div class="grid md:grid-cols-2 gap-8 text-left">
+                
+                <!-- 1. ESPACE CLIENT CARD -->
+                <div class="glass-card p-8 sm:p-10 rounded-3xl border border-white/10 hover:border-blue-500/40 transition-all duration-500 flex flex-col justify-between group relative overflow-hidden">
+                    <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-blue-600/10 rounded-full blur-2xl group-hover:bg-blue-600/20 transition-all"></div>
+                    <div>
+                        <div class="w-16 h-16 rounded-2xl bg-blue-500/10 border border-blue-400/30 flex items-center justify-center text-blue-400 mb-6 group-hover:scale-110 transition-transform">
+                            <i data-lucide="user-check" class="w-8 h-8"></i>
+                        </div>
+                        <span class="text-xs font-bold text-blue-400 uppercase tracking-widest" data-i18n="portal.client_tag">Portail Client</span>
+                        <h2 class="font-display text-2xl sm:text-3xl font-extrabold text-white mt-1 mb-4 group-hover:text-blue-300 transition-colors" data-i18n="portal.client_title">Espace Client</h2>
+                        <p class="text-slate-300 text-sm leading-relaxed mb-8" data-i18n="portal.client_desc">
+                            Suivez en temps réel l'avancement de vos chantiers, vos livrables informatiques, consultez les rapports de projet et échangez directement avec votre chef de projet TDE.
+                        </p>
                     </div>
-                    
-                    <h3 class="card-title">Espace Client</h3>
-                    
-                    <p class="card-description">
-                        Suivez l'avancement de vos projets en temps réel, 
-                        consultez les documents partagés et échangez avec 
-                        votre équipe projet.
-                    </p>
-                    
-                    <div class="card-actions">
-                        <a href="/client/login.html" class="btn-access">
-                            <span>Accéder</span>
-                            <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                        </a>
-                    </div>
+
+                    <a href="/client/login.html"
+                        class="btn-shiny w-full py-4 bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-bold rounded-xl shadow-lg shadow-blue-600/30 hover:shadow-blue-600/50 transition-all flex items-center justify-center gap-2 text-sm border border-blue-400/30">
+                        <span data-i18n="portal.btn_client">Accéder à l'Espace Client</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </a>
                 </div>
 
-                <!-- Carte Administrateur -->
-                <div class="access-card">
-                    <div class="card-icon" style="background: linear-gradient(135deg, #1e293b, #0f172a);">
-                        <i data-lucide="shield-check" class="w-10 h-10"></i>
+                <!-- 2. ESPACE ADMIN CARD -->
+                <div class="glass-card p-8 sm:p-10 rounded-3xl border border-white/10 hover:border-indigo-500/40 transition-all duration-500 flex flex-col justify-between group relative overflow-hidden">
+                    <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-indigo-600/10 rounded-full blur-2xl group-hover:bg-indigo-600/20 transition-all"></div>
+                    <div>
+                        <div class="w-16 h-16 rounded-2xl bg-indigo-500/10 border border-indigo-400/30 flex items-center justify-center text-indigo-400 mb-6 group-hover:scale-110 transition-transform">
+                            <i data-lucide="shield-alert" class="w-8 h-8"></i>
+                        </div>
+                        <span class="text-xs font-bold text-indigo-400 uppercase tracking-widest" data-i18n="portal.admin_tag">Administration & Gestion</span>
+                        <h2 class="font-display text-2xl sm:text-3xl font-extrabold text-white mt-1 mb-4 group-hover:text-indigo-300 transition-colors" data-i18n="portal.admin_title">Espace Admin</h2>
+                        <p class="text-slate-300 text-sm leading-relaxed mb-8" data-i18n="portal.admin_desc">
+                            Portail réservé aux administrateurs, managers de projets et techniciens TDE Group pour la gestion des données, le suivi analytique et l'administration du système.
+                        </p>
                     </div>
-                    
-                    <h3 class="card-title">Espace Admin</h3>
-                    
-                    <p class="card-description">
-                        Pilotez l'ensemble des projets, gérez les équipes, 
-                        suivez les indicateurs de performance et accédez 
-                        aux rapports détaillés.
-                    </p>
-                    
-                    <div class="card-actions">
-                        <a href="/admin/login.html" class="btn-access">
-                            <span>Se connecter</span>
-                            <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                        </a>
-                    </div>
+
+                    <a href="/admin/login.html"
+                        class="w-full py-4 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl border border-white/15 hover:border-indigo-400/40 transition-all flex items-center justify-center gap-2 text-sm shadow-xl">
+                        <span data-i18n="portal.btn_admin">Se Connecter comme Admin</span>
+                        <i data-lucide="lock" class="w-4 h-4 text-indigo-400"></i>
+                    </a>
                 </div>
+
             </div>
 
-            <!-- Badge de sécurité -->
-            <div class="security-badge">
-                <i data-lucide="lock" class="w-4 h-4"></i>
-                <span>Connexion sécurisée • Accès protégé</span>
+            <!-- Footer indicator -->
+            <div class="mt-16 inline-flex items-center gap-2 text-xs text-slate-400">
+                <i data-lucide="lock" class="w-3.5 h-3.5 text-emerald-400"></i>
+                <span data-i18n="portal.secure_note">Connexion chiffrée SSL • Authentification sécurisée 256 bits</span>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-[#05080f] text-slate-400 pt-16 pb-10 border-t border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-slate-400">
+                <div class="flex items-center gap-3">
+                    <img src="/logo.png" alt="TDE Logo" class="h-8 w-auto object-contain" />
+                    <span class="font-display font-extrabold text-lg text-white">TDE Group</span>
+                </div>
+                <p>&copy; 2026 TDE Group. Tous droits réservés.</p>
             </div>
         </div>
-    </main>
+    </footer>
 
-    <!-- Script d'initialisation des icônes -->
+    <!-- Main JavaScript Modules -->
+    <script type="module" src="/src/main.js"></script>
     <script>
-        // Initialisation de Lucide Icons
         lucide.createIcons();
-
-        // Animation supplémentaire au scroll
-        document.addEventListener('DOMContentLoaded', function() {
-            const cards = document.querySelectorAll('.access-card');
-            
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.style.opacity = '1';
-                        entry.target.style.transform = 'translateY(0)';
-                    }
-                });
-            }, { threshold: 0.1 });
-
-            cards.forEach(card => {
-                card.style.opacity = '0';
-                card.style.transform = 'translateY(30px)';
-                card.style.transition = 'all 0.6s ease';
-                observer.observe(card);
-            });
-        });
     </script>
 </body>
+
 </html>
-       

@@ -1,0 +1,9 @@
+#Ghidra Lock File
+#Sat May 09 16:00:28 WAT 2026
+<META>\ Supports\ File\ Channel\ Locking=Channel Lock
+Hostname=localhost
+OS\ Architecture=amd64
+OS\ Name=Linux
+OS\ Version=6.19.11+kali-amd64
+Timestamp=5/9/26, 4\:00\u202FPM
+Username=stalker

@@ -1,355 +1,362 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="fr" class="scroll-smooth">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Suggestions - TDE Group</title>
+    <title>TDE Group • Vos Suggestions & Boîte à Idées</title>
+    <meta name="description"
+        content="Partagez vos suggestions et vos idées avec la direction de TDE Group. Votre avis nous permet d'améliorer constamment la qualité de nos services." />
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Poppins:wght@500;600;700;800;900&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="./src/style.css" />
+    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 </head>
 
-<body class="bg-gray-50 text-slate-800 font-sans antialiased overflow-x-hidden">
+<body class="bg-[#080c14] text-slate-100 font-sans antialiased overflow-x-hidden selection:bg-blue-500 selection:text-white">
 
-    <!-- Navigation -->
-    <nav class="fixed w-full z-50 bg-white/90 backdrop-blur-md border-b border-tde-light transition-all duration-300 shadow-sm"
-        id="navbar">
+    <!-- Scroll Progress Indicator Bar -->
+    <div id="scroll-progress"></div>
+
+    <!-- Navigation Bar (Glassmorphic) -->
+    <nav class="fixed top-0 left-0 right-0 z-50 glass-nav transition-all duration-500 py-3" id="navbar">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-24 items-center">
-                <div class="flex-shrink-0 flex items-center">
-                    <a href="index.html" class="flex items-center gap-3 group">
-                        <img src="/logo.png" alt="TDE Group Logo"
-                            class="h-12 w-auto object-contain transform group-hover:scale-105 transition-transform duration-300" />
-                        <div class="flex flex-col">
-                            <span
-                                class="font-display font-bold text-2xl text-slate-900 tracking-tight leading-none group-hover:text-tde-secondary transition-colors">TDE
-                                Group</span>
-                            <span
-                                class="text-[10px] font-medium text-tde-accent tracking-widest uppercase">Multi-Services</span>
-                        </div>
-                    </a>
-                </div>
-                <div
-                    class="hidden md:flex space-x-1 items-center bg-white/50 p-1 rounded-full border border-gray-100 shadow-sm">
-                    <a href="index.html"
-                        class="px-5 py-2.5 rounded-full text-slate-600 font-medium hover:text-tde-secondary hover:bg-white transition-all">Home</a>
+            <div class="flex justify-between items-center">
+                <!-- Brand Logo -->
+                <a href="index.html" class="flex items-center gap-3.5 group">
+                    <img src="/logo.png" alt="TDE Group Logo"
+                        class="h-14 sm:h-16 w-auto object-contain transition-transform duration-500 group-hover:scale-105" />
+                    <div class="flex flex-col">
+                        <span class="font-display font-extrabold text-2xl sm:text-3xl tracking-tight text-white group-hover:text-blue-300 transition-colors">
+                            TDE<span class="text-blue-400">.</span>Group
+                        </span>
+                        <span class="text-[9px] sm:text-[10px] font-bold tracking-[0.25em] text-blue-300 uppercase -mt-1 opacity-90">Services Internationaux</span>
+                    </div>
+                </a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-1 bg-slate-900/60 p-1.5 rounded-full border border-white/10 shadow-2xl backdrop-blur-xl">
+                    <a href="index.html" data-i18n="nav.home"
+                        class="px-5 py-2 rounded-full text-xs font-semibold text-slate-300 hover:text-white hover:bg-white/10 transition-all">Accueil</a>
+                    
+                    <!-- Mega Dropdown Menu for Services -->
                     <div class="relative group">
                         <button
-                            class="px-5 py-2.5 rounded-full text-slate-600 font-medium hover:text-tde-secondary hover:bg-white transition-all flex items-center gap-1">
-                            Services <i data-lucide="chevron-down" class="w-4 h-4 mt-0.5"></i>
+                            class="px-5 py-2 rounded-full text-xs font-semibold text-slate-300 hover:text-white hover:bg-white/10 transition-all flex items-center gap-1.5">
+                            <span data-i18n="nav.services">Services</span> <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-blue-400 group-hover:rotate-180 transition-transform duration-300"></i>
                         </button>
                         <div
-                            class="absolute left-1/2 -translate-x-1/2 mt-4 w-64 bg-white/95 backdrop-blur-xl rounded-2xl shadow-xl border border-gray-100 py-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top overflow-hidden">
+                            class="absolute left-1/2 -translate-x-1/2 mt-4 w-72 bg-slate-900/95 backdrop-blur-2xl rounded-2xl shadow-2xl border border-white/10 p-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top translate-y-2 group-hover:translate-y-0">
                             <a href="construction.html"
-                                class="flex items-center gap-3 px-4 py-3 hover:bg-tde-light group/item">
-                                <span
-                                    class="bg-blue-50 p-2 rounded-lg text-blue-600 group-hover/item:bg-blue-600 group-hover/item:text-white transition-colors"><i
-                                        data-lucide="hard-hat" class="w-4 h-4"></i></span>
-                                <span
-                                    class="text-sm font-medium text-slate-700 group-hover/item:text-blue-700">Construction</span>
-                            </a>
-                            <a href="energy.html"
-                                class="flex items-center gap-3 px-4 py-3 hover:bg-tde-light group/item">
-                                <span
-                                    class="bg-amber-50 p-2 rounded-lg text-amber-600 group-hover/item:bg-amber-500 group-hover/item:text-white transition-colors"><i
-                                        data-lucide="zap" class="w-4 h-4"></i></span>
-                                <span class="text-sm font-medium text-slate-700 group-hover/item:text-amber-700">Energy
-                                    Solutions</span>
-                            </a>
-                            <a href="it-services.html"
-                                class="flex items-center gap-3 px-4 py-3 hover:bg-tde-light group/item">
-                                <span
-                                    class="bg-indigo-50 p-2 rounded-lg text-indigo-600 group-hover/item:bg-indigo-600 group-hover/item:text-white transition-colors"><i
-                                        data-lucide="monitor" class="w-4 h-4"></i></span>
-                                <span class="text-sm font-medium text-slate-700 group-hover/item:text-indigo-700">IT
-                                    Services</span>
+                                class="flex items-center gap-3.5 p-3 rounded-xl hover:bg-white/5 transition-all group/item">
+                                <div class="p-2.5 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-400 group-hover/item:bg-blue-600 group-hover/item:text-white transition-colors">
+                                    <i data-lucide="hard-hat" class="w-4 h-4"></i>
+                                </div>
+                                <div>
+                                    <div class="text-xs font-bold text-slate-100 group-hover/item:text-blue-300 transition-colors" data-i18n="nav.construction">Construction</div>
+                                    <div class="text-[11px] text-slate-400" data-i18n="nav.construction_desc">Infrastructure & Ingénierie</div>
+                                </div>
                             </a>
                             <a href="consultancy.html"
-                                class="flex items-center gap-3 px-4 py-3 hover:bg-tde-light group/item">
-                                <span
-                                    class="bg-rose-50 p-2 rounded-lg text-rose-600 group-hover/item:bg-rose-600 group-hover/item:text-white transition-colors"><i
-                                        data-lucide="trending-up" class="w-4 h-4"></i></span>
-                                <span
-                                    class="text-sm font-medium text-slate-700 group-hover/item:text-rose-700">Consultancy</span>
+                                class="flex items-center gap-3.5 p-3 rounded-xl hover:bg-white/5 transition-all group/item">
+                                <div class="p-2.5 rounded-lg bg-rose-500/10 border border-rose-500/20 text-rose-400 group-hover/item:bg-rose-600 group-hover/item:text-white transition-colors">
+                                    <i data-lucide="trending-up" class="w-4 h-4"></i>
+                                </div>
+                                <div>
+                                    <div class="text-xs font-bold text-slate-100 group-hover/item:text-rose-300 transition-colors" data-i18n="nav.consultancy">Conseil & Stratégie</div>
+                                    <div class="text-[11px] text-slate-400" data-i18n="nav.consultancy_desc">Stratégie & Croissance</div>
+                                </div>
+                            </a>
+                            <a href="it-services.html"
+                                class="flex items-center gap-3.5 p-3 rounded-xl hover:bg-white/5 transition-all group/item">
+                                <div class="p-2.5 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 group-hover/item:bg-indigo-600 group-hover/item:text-white transition-colors">
+                                    <i data-lucide="monitor" class="w-4 h-4"></i>
+                                </div>
+                                <div>
+                                    <div class="text-xs font-bold text-slate-100 group-hover/item:text-indigo-300 transition-colors" data-i18n="nav.it">IT & Technologie</div>
+                                    <div class="text-[11px] text-slate-400" data-i18n="nav.it_desc">Systèmes & Cyber-sécurité</div>
+                                </div>
+                            </a>
+                            <a href="energy.html"
+                                class="flex items-center gap-3.5 p-3 rounded-xl hover:bg-white/5 transition-all group/item">
+                                <div class="p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-400 group-hover/item:bg-amber-600 group-hover/item:text-white transition-colors">
+                                    <i data-lucide="zap" class="w-4 h-4"></i>
+                                </div>
+                                <div>
+                                    <div class="text-xs font-bold text-slate-100 group-hover/item:text-amber-300 transition-colors" data-i18n="nav.energy">Solutions Énergie</div>
+                                    <div class="text-[11px] text-slate-400" data-i18n="nav.energy_desc">Puissance & Solaire Durable</div>
+                                </div>
                             </a>
                             <a href="supply.html"
-                                class="flex items-center gap-3 px-4 py-3 hover:bg-tde-light group/item">
-                                <span
-                                    class="bg-emerald-50 p-2 rounded-lg text-emerald-600 group-hover/item:bg-emerald-600 group-hover/item:text-white transition-colors"><i
-                                        data-lucide="package" class="w-4 h-4"></i></span>
-                                <span
-                                    class="text-sm font-medium text-slate-700 group-hover/item:text-emerald-700">General
-                                    Supply</span>
+                                class="flex items-center gap-3.5 p-3 rounded-xl hover:bg-white/5 transition-all group/item">
+                                <div class="p-2.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 group-hover/item:bg-emerald-600 group-hover/item:text-white transition-colors">
+                                    <i data-lucide="package" class="w-4 h-4"></i>
+                                </div>
+                                <div>
+                                    <div class="text-xs font-bold text-slate-100 group-hover/item:text-emerald-300 transition-colors" data-i18n="nav.supply">Fourniture Générale</div>
+                                    <div class="text-[11px] text-slate-400" data-i18n="nav.supply_desc">Logistique & Sourcing Global</div>
+                                </div>
                             </a>
                         </div>
                     </div>
-                    <a href="index.html#about"
-                        class="px-5 py-2.5 rounded-full text-slate-600 font-medium hover:text-tde-secondary hover:bg-white transition-all">About</a>
-                    <a href="suggestions.html"
-                        class="px-5 py-2.5 rounded-full text-tde-secondary bg-purple-50 font-medium hover:text-tde-secondary hover:bg-white transition-all">Suggestions</a>
+                    <a href="index.html#projects" data-i18n="nav.projects"
+                        class="px-5 py-2 rounded-full text-xs font-semibold text-slate-300 hover:text-white hover:bg-white/10 transition-all">Projets Réalisés</a>
+                    <a href="index.html#about" data-i18n="nav.about"
+                        class="px-5 py-2 rounded-full text-xs font-semibold text-slate-300 hover:text-white hover:bg-white/10 transition-all">À Propos</a>
+                    <a href="suggestions.html" data-i18n="nav.suggestions"
+                        class="px-5 py-2 rounded-full text-xs font-bold text-white bg-blue-600/40 border border-blue-400/30 transition-all shadow-sm">Suggestions</a>
                 </div>
-                <div class="hidden md:flex items-center gap-4">
-                    <a href="/client/login.html"
-                        class="text-sm font-bold text-slate-600 hover:text-tde-primary transition-colors flex items-center gap-2">
-                        <i data-lucide="layout-dashboard" class="w-4 h-4"></i> My Project
+
+                <!-- Right Action Buttons + Language Switcher -->
+                <div class="hidden md:flex items-center gap-3">
+                    <!-- Language Selector Toggle -->
+                    <div class="flex items-center p-1 bg-slate-900/80 border border-white/10 rounded-full text-xs font-bold shadow-inner">
+                        <button class="lang-btn px-2.5 py-1 rounded-full transition-all flex items-center gap-1" data-lang="fr">
+                            <span>🇫🇷</span> <span>FR</span>
+                        </button>
+                        <button class="lang-btn px-2.5 py-1 rounded-full transition-all flex items-center gap-1" data-lang="en">
+                            <span>🇬🇧</span> <span>EN</span>
+                        </button>
+                    </div>
+
+                    <a href="my-project.html"
+                        class="px-4 py-2 rounded-full text-xs font-bold text-slate-300 hover:text-white hover:bg-white/10 transition-all flex items-center gap-2 border border-white/5">
+                        <i data-lucide="layout-dashboard" class="w-3.5 h-3.5 text-blue-400"></i> <span data-i18n="nav.portal">Mon Projet</span>
                     </a>
-                    <a href="#contact"
-                        class="px-6 py-3 bg-black text-purple-50 rounded-full font-semibold shadow-lg shadow-gray-900/30 hover:shadow-gray-900/50 hover:-translate-y-0.5 transition-all duration-300">
-                        Contact Us
+                    <a href="contact.html" data-i18n="nav.contact"
+                        class="btn-shiny px-6 py-2.5 bg-gradient-to-r from-blue-600 to-cyan-600 text-white text-xs font-bold rounded-full shadow-lg shadow-blue-600/30 hover:shadow-blue-600/50 transition-all duration-300 border border-blue-400/30">
+                        Nous Contacter
                     </a>
                 </div>
-                <div class="md:hidden flex items-center">
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center gap-2">
+                    <!-- Mobile Language Quick Toggle -->
+                    <div class="flex items-center p-0.5 bg-slate-900/80 border border-white/10 rounded-lg text-xs font-bold">
+                        <button class="lang-btn px-2 py-0.5 rounded-md transition-all" data-lang="fr">FR</button>
+                        <button class="lang-btn px-2 py-0.5 rounded-md transition-all" data-lang="en">EN</button>
+                    </div>
                     <button id="mobile-menu-btn"
-                        class="text-slate-600 hover:text-tde-secondary focus:outline-none p-2 rounded-lg hover:bg-gray-100 transition-colors">
-                        <i data-lucide="menu" class="w-7 h-7"></i>
+                        class="text-slate-300 hover:text-white p-2 rounded-xl bg-slate-900/80 border border-white/10">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
                     </button>
                 </div>
             </div>
         </div>
+
+        <!-- Mobile Menu Dropdown -->
         <div id="mobile-menu"
-            class="hidden md:hidden bg-white/95 backdrop-blur-xl border-t border-gray-100 shadow-2xl absolute w-full">
-            <div class="px-4 pt-2 pb-8 space-y-2">
-                <a href="index.html"
-                    class="block px-4 py-3 text-base font-medium text-slate-600 hover:text-tde-secondary rounded-xl">Home</a>
-                <div class="px-4 py-2">
-                    <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">Services</span>
+            class="hidden md:hidden bg-slate-950/95 backdrop-blur-2xl border-b border-white/10 shadow-2xl absolute w-full left-0 top-full p-6 transition-all">
+            <div class="flex flex-col space-y-3">
+                <a href="index.html" data-i18n="nav.home" class="px-4 py-3 rounded-xl text-sm font-bold text-slate-300 hover:bg-white/5">Accueil</a>
+                <div class="px-4 pt-2 text-[10px] font-bold tracking-widest text-slate-400 uppercase" data-i18n="bento.tag">Nos Pôles d'Expertise</div>
+                <a href="construction.html" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-300 hover:bg-white/5 hover:text-blue-400 transition-all flex items-center gap-3">
+                    <i data-lucide="hard-hat" class="w-4 h-4 text-blue-400"></i> <span data-i18n="nav.construction">Construction</span>
+                </a>
+                <a href="consultancy.html" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-300 hover:bg-white/5 hover:text-rose-400 transition-all flex items-center gap-3">
+                    <i data-lucide="trending-up" class="w-4 h-4 text-rose-400"></i> <span data-i18n="nav.consultancy">Conseil & Stratégie</span>
+                </a>
+                <a href="it-services.html" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-300 hover:bg-white/5 hover:text-indigo-400 transition-all flex items-center gap-3">
+                    <i data-lucide="monitor" class="w-4 h-4 text-indigo-400"></i> <span data-i18n="nav.it">IT & Technologie</span>
+                </a>
+                <a href="energy.html" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-300 hover:bg-white/5 hover:text-amber-400 transition-all flex items-center gap-3">
+                    <i data-lucide="zap" class="w-4 h-4 text-amber-400"></i> <span data-i18n="nav.energy">Solutions Énergie</span>
+                </a>
+                <a href="supply.html" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-300 hover:bg-white/5 hover:text-emerald-400 transition-all flex items-center gap-3">
+                    <i data-lucide="package" class="w-4 h-4 text-emerald-400"></i> <span data-i18n="nav.supply">Fourniture Générale</span>
+                </a>
+                <a href="index.html#projects" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-300 hover:bg-white/5 transition-all flex items-center gap-3">
+                    <i data-lucide="folder-check" class="w-4 h-4 text-blue-400"></i> <span data-i18n="nav.projects">Projets Réalisés</span>
+                </a>
+                <a href="suggestions.html" class="px-4 py-2.5 rounded-xl text-sm font-bold text-white bg-blue-600/30 border border-blue-500/30 flex items-center gap-3">
+                    <i data-lucide="message-square" class="w-4 h-4 text-blue-400"></i> <span data-i18n="nav.suggestions">Suggestions</span>
+                </a>
+                <div class="border-t border-white/10 pt-3 flex flex-col gap-2">
+                    <a href="my-project.html" data-i18n="nav.portal" class="w-full text-center py-3 rounded-xl text-xs font-bold text-white bg-slate-800 border border-white/10">
+                        Mon Projet
+                    </a>
+                    <a href="contact.html" data-i18n="nav.contact" class="w-full text-center py-3 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-blue-600 to-cyan-600 shadow-lg">
+                        Nous Contacter
+                    </a>
                 </div>
-                <a href="construction.html"
-                    class="block px-4 py-2 text-base font-medium text-slate-600 hover:text-tde-secondary hover:pl-6 transition-all">Construction</a>
-                <a href="energy.html"
-                    class="block px-4 py-2 text-base font-medium text-slate-600 hover:text-tde-secondary hover:pl-6 transition-all">Energy
-                    & Power</a>
-                <a href="it-services.html"
-                    class="block px-4 py-2 text-base font-medium text-slate-600 hover:text-tde-secondary hover:pl-6 transition-all">IT
-                    Services</a>
-                <a href="consultancy.html"
-                    class="block px-4 py-2 text-base font-medium text-slate-600 hover:text-tde-secondary hover:pl-6 transition-all">Consultancy</a>
-                <a href="supply.html"
-                    class="block px-4 py-2 text-base font-medium text-slate-600 hover:text-tde-secondary hover:pl-6 transition-all">Supply</a>
-                <a href="suggestions.html"
-                    class="block px-4 py-3 text-base font-bold text-tde-secondary bg-purple-50 rounded-xl">Suggestions</a>
-                <a href="#contact"
-                    class="block px-4 py-3 text-center text-base font-bold text-white bg-premium-gradient rounded-xl shadow-lg mt-4">Contact
-                    Us</a>
             </div>
         </div>
     </nav>
 
-    <main>
-        <!-- Hero Section -->
-        <section class="relative h-[50vh] min-h-[400px] flex items-center justify-center overflow-hidden">
-            <div class="absolute inset-0 z-0 bg-slate-900">
-                <!-- Using a neutral/business background for suggestions if no specific one, or reuse one -->
-                <img src="/images/acceuil.jpeg" alt="Suggestions" class="w-full h-full object-cover opacity-30">
-                <div
-                    class="absolute inset-0 bg-gradient-to-r from-purple-900/90 via-slate-900/80 to-indigo-900/40 mix-blend-multiply">
-                </div>
+    <!-- HERO SECTION SUGGESTIONS -->
+    <section class="relative pt-36 pb-20 overflow-hidden">
+        <div class="ambient-glow-blue top-1/4 left-1/2 -translate-x-1/2 opacity-75 animate-pulse-glow"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+            <!-- Badge -->
+            <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-blue-500/30 bg-blue-950/40 backdrop-blur-xl mb-6">
+                <i data-lucide="message-square" class="w-4 h-4 text-blue-400"></i>
+                <span class="text-xs font-bold tracking-wider text-blue-200 uppercase" data-i18n="suggestions.badge">FEEDBACK & BOÎTE À IDÉES</span>
             </div>
 
-            <div class="relative z-10 max-w-7xl mx-auto px-4 text-center text-white">
-                <div
-                    class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-purple-400/30 bg-purple-900/30 backdrop-blur-md mb-6 animate-fade-in">
-                    <i data-lucide="message-square" class="w-4 h-4 text-purple-300"></i>
-                    <span class="text-purple-100 font-medium tracking-wider text-sm">FEEDBACK & IDEAS</span>
-                </div>
-                <h1 class="font-display text-4xl md:text-6xl font-bold mb-6 animate-fade-in shadow-sm leading-tight">
-                    We Value <br /><span class="text-purple-300">Your Suggestions</span></h1>
-                <p class="text-xl text-purple-50 max-w-2xl mx-auto animate-slide-up leading-relaxed">
-                    Help us improve by sharing your thoughts anonymously.
-                </p>
-            </div>
-        </section>
+            <h1 class="font-display text-4xl sm:text-6xl font-extrabold tracking-tight text-white mb-6">
+                <span data-i18n="suggestions.title_main">Vos Idées pour</span> <br />
+                <span class="gradient-text-blue" data-i18n="suggestions.title_sub">L'Amélioration Continue</span>
+            </h1>
 
-        <!-- Form Section -->
-        <section class="py-24 bg-white">
-            <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="bg-white rounded-3xl shadow-2xl border border-gray-100 p-8 md:p-12">
-                    <div class="text-center mb-10">
-                        <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <i data-lucide="mail-plus" class="w-8 h-8 text-tde-secondary"></i>
+            <p class="text-base sm:text-lg text-slate-300 max-w-2xl mx-auto mb-12 font-normal leading-relaxed" data-i18n="suggestions.subtitle">
+                Partagez vos impressions et suggestions en toute confidentialité pour nous aider à parfaire nos services.
+            </p>
+        </div>
+    </section>
+
+    <!-- FORM SECTION -->
+    <section class="py-12 relative pb-28">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="glass-card p-8 sm:p-12 rounded-3xl border border-white/10 relative shadow-2xl">
+                
+                <div class="text-center mb-10">
+                    <div class="w-16 h-16 rounded-2xl bg-blue-500/10 border border-blue-400/30 flex items-center justify-center text-blue-400 mx-auto mb-4">
+                        <i data-lucide="mail-plus" class="w-8 h-8"></i>
+                    </div>
+                    <h2 class="font-display text-2xl sm:text-3xl font-extrabold text-white mb-2" data-i18n="suggestions.form_title">Soumettre une Suggestion</h2>
+                    <p class="text-slate-400 text-sm" data-i18n="suggestions.form_subtitle">Votre retour est transmis directement à la direction de TDE Group.</p>
+                </div>
+
+                <form id="suggestionForm" class="space-y-6">
+                    <!-- Name Field (Optional) -->
+                    <div>
+                        <label for="name" class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2" data-i18n="suggestions.lbl_name">
+                            Votre Nom (Optionnel)
+                        </label>
+                        <div class="relative">
+                            <span class="absolute left-4 top-3.5 text-slate-500">
+                                <i data-lucide="user" class="w-5 h-5"></i>
+                            </span>
+                            <input type="text" id="name" name="name"
+                                class="w-full pl-12 pr-4 py-3.5 rounded-xl bg-slate-900/80 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all text-sm"
+                                placeholder="Jean Dupont (facultatif)">
                         </div>
-                        <h2 class="font-display text-3xl font-bold text-slate-900 mb-4">Send a Suggestion</h2>
-                        <p class="text-slate-600">
-                            Your feedback is sent directly to our team.
                     </div>
 
-                    <form id="suggestionForm" class="space-y-6">
-                        <!-- Name Field (Optional) -->
-                        <div class="transform transition-all duration-300 hover:scale-[1.01]">
-                            <label for="name" class="block text-sm font-medium text-slate-700 mb-2">
-                                Your Name <span class="text-gray-400 text-xs">(Optional)</span>
-                            </label>
-                            <div class="relative group">
-                                <span
-                                    class="absolute left-4 top-3.5 text-gray-400 group-focus-within:text-purple-500 transition-colors">
-                                    <i data-lucide="user" class="w-5 h-5"></i>
-                                </span>
-                                <input type="text" id="name" name="name"
-                                    class="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent focus:bg-white outline-none transition-all duration-300 placeholder-gray-400 hover:border-purple-300"
-                                    placeholder="John Doe">
-                            </div>
+                    <!-- Email Field -->
+                    <div>
+                        <label for="email" class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2" data-i18n="suggestions.lbl_email">
+                            Votre Adresse Email *
+                        </label>
+                        <div class="relative">
+                            <span class="absolute left-4 top-3.5 text-slate-500">
+                                <i data-lucide="at-sign" class="w-5 h-5"></i>
+                            </span>
+                            <input type="email" id="email" name="email" required
+                                class="w-full pl-12 pr-4 py-3.5 rounded-xl bg-slate-900/80 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all text-sm"
+                                placeholder="votre.email@exemple.com">
                         </div>
+                    </div>
 
-                        <!-- Email Field -->
-                        <div class="transform transition-all duration-300 hover:scale-[1.01]">
-                            <label for="email" class="block text-sm font-medium text-slate-700 mb-2">
-                                Your Email Address <span class="text-red-500">*</span>
-                            </label>
-                            <div class="relative group">
-                                <span
-                                    class="absolute left-4 top-3.5 text-gray-400 group-focus-within:text-purple-500 transition-colors">
-                                    <i data-lucide="at-sign" class="w-5 h-5"></i>
-                                </span>
-                                <input type="email" id="email" name="email" required
-                                    class="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent focus:bg-white outline-none transition-all duration-300 placeholder-gray-400 hover:border-purple-300"
-                                    placeholder="you@example.com">
-                            </div>
+                    <!-- Suggestion Field -->
+                    <div>
+                        <label for="suggestion" class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2" data-i18n="suggestions.lbl_msg">
+                            Votre Suggestion / Idée *
+                        </label>
+                        <div class="relative">
+                            <span class="absolute left-4 top-3.5 text-slate-500">
+                                <i data-lucide="message-circle" class="w-5 h-5"></i>
+                            </span>
+                            <textarea id="suggestion" name="message" rows="6" required
+                                class="w-full pl-12 pr-4 py-3.5 rounded-xl bg-slate-900/80 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all text-sm resize-none"
+                                placeholder="Dites-nous comment nous pouvons améliorer nos services..."></textarea>
                         </div>
+                    </div>
 
-                        <!-- Suggestion Field -->
-                        <div class="transform transition-all duration-300 hover:scale-[1.01]">
-                            <label for="suggestion" class="block text-sm font-medium text-slate-700 mb-2">
-                                Your Suggestion <span class="text-red-500">*</span>
-                            </label>
-                            <div class="relative group">
-                                <span
-                                    class="absolute left-4 top-3.5 text-gray-400 group-focus-within:text-purple-500 transition-colors">
-                                    <i data-lucide="message-circle" class="w-5 h-5"></i>
-                                </span>
-                                <textarea id="suggestion" name="message" rows="6" required
-                                    class="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent focus:bg-white outline-none transition-all duration-300 placeholder-gray-400 hover:border-purple-300 resize-none"
-                                    placeholder="Tell us what you think..."></textarea>
-                            </div>
+                    <!-- Success Message (hidden by default) -->
+                    <div id="successMessage" class="hidden">
+                        <div class="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-semibold text-center flex items-center justify-center gap-3">
+                            <i data-lucide="check-circle" class="w-5 h-5 text-emerald-400 shrink-0"></i>
+                            <span>Merci ! Votre suggestion a bien été transmise à notre direction.</span>
                         </div>
+                    </div>
 
-                        <!-- Success Message (hidden by default) -->
-                        <div id="successMessage" class="hidden">
-                            <div
-                                class="p-4 bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-200 rounded-xl transform transition-all duration-500 animate-fade-in">
-                                <div class="flex items-center gap-3 text-green-800">
-                                    <div class="animate-bounce">
-                                        <i data-lucide="check-circle" class="w-6 h-6"></i>
-                                    </div>
-                                    <div>
-                                        <p class="font-bold">Thank you!</p>
-                                        <p class="text-sm">Your suggestion has been sent successfully.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <!-- Status Message -->
+                    <p id="formStatus" class="text-center text-sm hidden transition-all duration-300"></p>
 
-                        <!-- Status Message -->
-                        <p id="formStatus" class="text-center text-sm hidden transition-all duration-300"></p>
+                    <button type="submit" id="submitBtn"
+                        class="btn-shiny w-full py-4 bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-bold rounded-xl shadow-xl shadow-blue-600/30 hover:shadow-blue-600/50 transition-all flex items-center justify-center gap-2 text-sm border border-blue-400/30">
+                        <span id="btnText" data-i18n="suggestions.btn_send">Envoyer la Suggestion</span>
+                        <i data-lucide="send" class="w-4 h-4" id="btnIcon"></i>
+                    </button>
+                </form>
 
-                        <div class="flex justify-center">
-                            <button type="submit" id="submitBtn"
-                                class="group relative max-w-md px-10 py-4 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-bold rounded-xl shadow-lg shadow-purple-500/40 hover:shadow-purple-600/60 hover:shadow-xl hover:-translate-y-1 active:translate-y-0 transition-all duration-300 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 overflow-hidden">
-                                <!-- Animated background -->
-                                <div
-                                    class="absolute inset-0 bg-gradient-to-r from-purple-400 to-pink-400 opacity-0 group-hover:opacity-20 transition-opacity duration-300">
-                                </div>
-                                <span id="btnText" class="relative z-10">Send Suggestion</span>
-                                <i data-lucide="send"
-                                    class="w-5 h-5 relative z-10 group-hover:translate-x-1 transition-transform duration-300"
-                                    id="btnIcon"></i>
-                            </button>
-                        </div>
-                    </form>
-                </div>
             </div>
-        </section>
-    </main>
+        </div>
+    </section>
 
-    <!-- Footer -->
-    <footer id="contact" class="bg-slate-900 text-white pt-20 pb-10 border-t border-slate-800">
+    <!-- FOOTER -->
+    <footer class="bg-[#05080f] text-slate-400 pt-16 pb-10 border-t border-white/10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
-                <div>
+                <!-- Col 1 -->
+                <div class="space-y-4">
                     <div class="flex items-center gap-3">
-                        <div class="bg-white/10 p-2 rounded-lg">
-                            <i data-lucide="building-2" class="w-6 h-6 text-tde-accent"></i>
-                        </div>
-                        <span class="font-display font-bold text-2xl tracking-tight">TDE Group</span>
+                        <img src="/logo.png" alt="TDE Logo" class="h-12 w-auto object-contain" />
+                        <span class="font-display font-extrabold text-2xl text-white">TDE Group</span>
                     </div>
-                    <p class="text-slate-400 text-sm leading-relaxed mt-4">
-                        Your Trusted Partner in Construction, Energy, Technology & Business Solutions.
+                    <p class="text-xs text-slate-400 leading-relaxed" data-i18n="footer.desc">
+                        Votre partenaire de confiance en construction, infrastructures IT, énergie propre & logistique globale.
                     </p>
                 </div>
+
+                <!-- Col 2 -->
                 <div>
-                    <h4 class="font-bold text-lg mb-6 text-white border-l-4 border-tde-secondary pl-3">Quick Links</h4>
-                    <ul class="space-y-3 text-sm text-slate-400">
-                        <li><a href="index.html" class="hover:text-tde-accent hover:pl-1 transition-all">Home</a></li>
-                        <li><a href="index.html#about" class="hover:text-tde-accent hover:pl-1 transition-all">About
-                                Us</a></li>
-                        <li><a href="index.html#services"
-                                class="hover:text-tde-accent hover:pl-1 transition-all">Services</a></li>
-                        <li><a href="suggestions.html"
-                                class="hover:text-tde-accent hover:pl-1 transition-all">Suggestions</a></li>
-                        <li><a href="#contact" class="hover:text-tde-accent hover:pl-1 transition-all">Contact</a></li>
+                    <h4 class="font-bold text-sm text-white uppercase tracking-wider mb-5" data-i18n="footer.quick_links">Liens Rapides</h4>
+                    <ul class="space-y-2.5 text-xs">
+                        <li><a href="index.html" class="hover:text-blue-300 transition-colors" data-i18n="nav.home">Accueil</a></li>
+                        <li><a href="index.html#about" class="hover:text-blue-300 transition-colors" data-i18n="nav.about">À Propos</a></li>
+                        <li><a href="index.html#projects" class="hover:text-blue-300 transition-colors" data-i18n="nav.projects">Projets Réalisés</a></li>
+                        <li><a href="suggestions.html" class="hover:text-blue-300 transition-colors" data-i18n="nav.suggestions">Suggestions</a></li>
+                        <li><a href="my-project.html" class="hover:text-blue-300 transition-colors" data-i18n="nav.portal">Mon Projet</a></li>
                     </ul>
                 </div>
+
+                <!-- Col 3 -->
                 <div>
-                    <h4 class="font-bold text-lg mb-6 text-white border-l-4 border-tde-secondary pl-3">Our Services</h4>
-                    <ul class="space-y-3 text-sm text-slate-400">
-                        <li><a href="construction.html"
-                                class="hover:text-tde-accent hover:pl-1 transition-all">Construction</a></li>
-                        <li><a href="energy.html" class="hover:text-tde-accent hover:pl-1 transition-all">Energy &
-                                Power</a></li>
-                        <li><a href="it-services.html" class="hover:text-tde-accent hover:pl-1 transition-all">IT
-                                Solutions</a></li>
-                        <li><a href="consultancy.html"
-                                class="hover:text-tde-accent hover:pl-1 transition-all">Consultancy</a></li>
-                        <li><a href="supply.html" class="hover:text-tde-accent hover:pl-1 transition-all">General
-                                Supply</a></li>
+                    <h4 class="font-bold text-sm text-white uppercase tracking-wider mb-5" data-i18n="footer.verticals">Nos Pôles</h4>
+                    <ul class="space-y-2.5 text-xs">
+                        <li><a href="construction.html" class="hover:text-blue-300 transition-colors" data-i18n="nav.construction">Construction</a></li>
+                        <li><a href="consultancy.html" class="hover:text-rose-300 transition-colors" data-i18n="nav.consultancy">Conseil & Stratégie</a></li>
+                        <li><a href="it-services.html" class="hover:text-indigo-300 transition-colors" data-i18n="nav.it">IT & Technologie</a></li>
+                        <li><a href="energy.html" class="hover:text-amber-300 transition-colors" data-i18n="nav.energy">Solutions Énergie</a></li>
+                        <li><a href="supply.html" class="hover:text-emerald-300 transition-colors" data-i18n="nav.supply">Fourniture Générale</a></li>
                     </ul>
                 </div>
+
+                <!-- Col 4 -->
                 <div>
-                    <h4 class="font-bold text-lg mb-6 text-white border-l-4 border-tde-secondary pl-3">Contact Us</h4>
-                    <ul class="space-y-4 text-sm text-slate-400">
+                    <h4 class="font-bold text-sm text-white uppercase tracking-wider mb-5" data-i18n="footer.contact_us">Contact</h4>
+                    <ul class="space-y-3 text-xs">
                         <li class="flex items-start gap-3">
-                            <i data-lucide="map-pin" class="w-5 h-5 text-tde-accent shrink-0 mt-0.5"></i>
-                            <span>123 Business Avenue,<br>Tech City, TC 90210</span>
+                            <i data-lucide="map-pin" class="w-4 h-4 text-blue-400 shrink-0 mt-0.5"></i>
+                            <span>Douala, Cameroun</span>
                         </li>
                         <li class="flex items-center gap-3">
-                            <i data-lucide="phone" class="w-5 h-5 text-tde-accent shrink-0"></i>
-                            <span class="font-mono">+1 (555) 123-4567</span>
-                        </li>
-                        <li class="flex items-center gap-3">
-                            <i data-lucide="mail" class="w-5 h-5 text-tde-accent shrink-0"></i>
+                            <i data-lucide="mail" class="w-4 h-4 text-blue-400 shrink-0"></i>
                             <span>contact@tdegroup.com</span>
                         </li>
                     </ul>
                 </div>
             </div>
-            <div
-                class="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-500">
-                <p>&copy; 2026 TDE Group. All rights reserved.</p>
+
+            <!-- Bottom Copyright Bar -->
+            <div class="border-t border-white/10 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-slate-400">
+                <p>&copy; 2026 TDE Group. <span data-i18n="footer.rights">Tous droits réservés.</span></p>
             </div>
         </div>
     </footer>
 
+    <!-- Main JavaScript Modules -->
     <script type="module" src="/src/main.js"></script>
     <script>
         lucide.createIcons();
-        const menuBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-        const navbar = document.getElementById('navbar');
-        if (menuBtn) menuBtn.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); });
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 20) {
-                navbar.classList.add('shadow-md');
-                navbar.classList.replace('h-24', 'h-20');
-            } else {
-                navbar.classList.remove('shadow-md');
-                navbar.classList.replace('h-20', 'h-24');
-            }
-        });
 
         // EmailJS initialization
         emailjs.init("qd_1OXHxfJaEOUh7O");
@@ -365,75 +372,47 @@
         form.addEventListener('submit', function (e) {
             e.preventDefault();
 
-            // Disable button and show loading state with animation
             submitBtn.disabled = true;
-            submitBtn.classList.add('scale-95');
-            btnText.textContent = 'Sending...';
+            btnText.textContent = 'Envoi en cours...';
             btnIcon.setAttribute('data-lucide', 'loader');
             btnIcon.classList.add('animate-spin');
             lucide.createIcons();
             formStatus.classList.add('hidden');
             successMessage.classList.add('hidden');
 
-            // Send email using EmailJS
             emailjs.sendForm(
                 'service_r7jr1vz',
                 'template_0dnx6fs',
                 form
             ).then(() => {
-                // Success with enhanced animations
-                submitBtn.classList.remove('scale-95');
-                submitBtn.classList.add('scale-100');
-
-                // Show success message with fade-in
                 successMessage.classList.remove('hidden');
-                successMessage.classList.add('animate-fade-in');
-
-                formStatus.textContent = '✅ Redirecting to home page...';
-                formStatus.className = 'text-green-600 text-center text-sm mt-4 font-medium animate-pulse';
+                formStatus.textContent = '✅ Redirection vers la page d\'accueil...';
+                formStatus.className = 'text-emerald-400 text-center text-xs mt-4 font-semibold animate-pulse';
                 formStatus.classList.remove('hidden');
 
-                // Update button with success state
-                btnText.textContent = 'Sent Successfully!';
+                btnText.textContent = 'Transmis avec Succès !';
                 btnIcon.setAttribute('data-lucide', 'check-circle');
                 btnIcon.classList.remove('animate-spin');
-                btnIcon.classList.add('animate-bounce');
                 lucide.createIcons();
 
-                // Add success color to button
-                submitBtn.classList.remove('from-purple-500', 'to-purple-600');
-                submitBtn.classList.add('from-green-500', 'to-emerald-600');
-
-                // Reset form with fade out
                 setTimeout(() => {
-                    form.classList.add('opacity-50', 'pointer-events-none');
                     form.reset();
                 }, 500);
 
-                // Redirect to index.html after 2.5 seconds
                 setTimeout(() => {
                     window.location.href = 'index.html';
                 }, 2500);
             }).catch((error) => {
-                // Error with shake animation
-                submitBtn.classList.remove('scale-95');
-                submitBtn.classList.add('animate-shake');
-
-                formStatus.textContent = '❌ Failed to send. Please try again.';
-                formStatus.className = 'text-red-600 text-center text-sm mt-4 font-semibold';
+                formStatus.textContent = '❌ Échec de l\'envoi. Veuillez réespérer.';
+                formStatus.className = 'text-rose-400 text-center text-xs mt-4 font-semibold';
                 formStatus.classList.remove('hidden');
 
-                btnText.textContent = 'Send Suggestion';
+                btnText.textContent = 'Envoyer la Suggestion';
                 btnIcon.setAttribute('data-lucide', 'send');
                 btnIcon.classList.remove('animate-spin');
                 lucide.createIcons();
 
                 console.error('EmailJS Error:', error);
-
-                // Remove shake animation after it completes
-                setTimeout(() => {
-                    submitBtn.classList.remove('animate-shake');
-                }, 500);
             }).finally(() => {
                 submitBtn.disabled = false;
             });
